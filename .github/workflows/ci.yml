@@ -14,7 +14,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install dependencies
-        run: uv sync --dev
+        run: uv sync --dev --group benchmark
       - name: Run Ruff
         run: uv run ruff check .
       - name: Run Mypy
