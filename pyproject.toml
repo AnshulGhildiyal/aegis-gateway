@@ -12,8 +12,10 @@ description = "Fault-tolerant LLM gateway with a semantic cache"
 requires-python = ">=3.12,<3.13"
 dependencies = [
     "fastapi>=0.115",
+    "fastembed>=0.7",
     "httpx>=0.28",
     "pydantic>=2.10",
+    "qdrant-client>=1.13",
     "uvicorn>=0.34",
 ]
 
