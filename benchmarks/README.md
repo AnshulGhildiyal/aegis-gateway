@@ -9,6 +9,9 @@ uv sync --dev --group benchmark
 The evaluation scripts fetch datasets from Hugging Face at run time. They do not
 contain benchmark results or synthetic substitutes. Outputs are measured from the
 dataset split and thresholds supplied to each run.
+Recorded runs, insights, limitations, and follow-up actions are kept in
+[docs/results.md](../docs/results.md); append a dated entry whenever evaluation
+outputs change.
 
 ## STS-B threshold-sweep notebook
 

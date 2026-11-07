@@ -132,18 +132,26 @@ def threshold_sweep(
     """Evaluate cosine thresholds against fixed binary pair labels."""
     if len(labels) != len(similarities):
         raise ValueError("labels and similarities must have equal length")
-    if any(
-        not math.isfinite(similarity) or not -1 <= similarity <= 1
-        for similarity in similarities
-    ):
-        raise ValueError("cosine similarities must be finite values from -1 to 1")
+    if any(not math.isfinite(similarity) for similarity in similarities):
+        raise ValueError("cosine similarities must all be finite")
+    tolerance = 1e-6
+    minimum = min(similarities, default=0.0)
+    maximum = max(similarities, default=0.0)
+    if minimum < -1 - tolerance or maximum > 1 + tolerance:
+        raise ValueError(
+            "cosine similarities must be in [-1, 1]; "
+            f"observed range [{minimum:.9g}, {maximum:.9g}]"
+        )
+    bounded_similarities = [
+        min(1.0, max(-1.0, similarity)) for similarity in similarities
+    ]
     results: list[dict[str, int | float | None]] = []
     for threshold in thresholds:
         if not math.isfinite(threshold) or not -1 <= threshold <= 1:
             raise ValueError("cosine thresholds must be finite values from -1 to 1")
         metrics = binary_metrics(
             labels,
-            [similarity >= threshold for similarity in similarities],
+            [similarity >= threshold for similarity in bounded_similarities],
         )
         results.append({"threshold": threshold, **metrics})
     return results
@@ -185,7 +193,13 @@ async def score_pair_cosines(
     cosine_seconds: list[float] = []
     for index, example in enumerate(examples):
         started = time.perf_counter()
-        similarity = float(np.dot(normalized[index * 2], normalized[index * 2 + 1]))
+        similarity = float(
+            np.clip(
+                np.dot(normalized[index * 2], normalized[index * 2 + 1]),
+                -1.0,
+                1.0,
+            )
+        )
         cosine_seconds.append(time.perf_counter() - started)
         scores.append(PairScore(example, similarity))
     return scores, embedding_seconds, cosine_seconds

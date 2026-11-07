@@ -2,6 +2,7 @@
 
 from collections.abc import Sequence
 
+import numpy as np
 import pytest
 
 from aegis.engine.nli_reranker import NliDecision
@@ -94,6 +95,18 @@ def test_threshold_sweep_rejects_mismatched_data() -> None:
 def test_threshold_sweep_rejects_invalid_cosine_similarity() -> None:
     with pytest.raises(ValueError, match="similarities"):
         threshold_sweep([True], [float("nan")], [0.8])
+
+
+@pytest.mark.parametrize("similarity", [1.0000001, -1.0000001])
+def test_threshold_sweep_bounds_small_cosine_roundoff(similarity: float) -> None:
+    results = threshold_sweep([True], [similarity], [1.0])
+
+    assert results[0]["true_positive"] == int(similarity > 0)
+
+
+def test_threshold_sweep_reports_materially_invalid_similarity_range() -> None:
+    with pytest.raises(ValueError, match=r"\[0.2, 1.1\]"):
+        threshold_sweep([True, False], [0.2, 1.1], [0.8])
 
 
 def test_pair_dataset_rows_map_binary_labels() -> None:
@@ -199,6 +212,22 @@ async def test_pair_cosine_scoring_reports_one_score_per_example() -> None:
     assert embedding_seconds >= 0
     assert len(cosine_seconds) == 2
     assert all(value >= 0 for value in cosine_seconds)
+
+
+async def test_pair_cosine_scores_are_clamped_to_valid_range(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class OvershootEmbedder:
+        async def embed(self, texts: list[str]) -> list[list[float]]:
+            return [[1.0, 0.0] for _ in texts]
+
+    monkeypatch.setattr(np, "dot", lambda left, right: 1.0000001)
+    scores, _, _ = await score_pair_cosines(
+        [PairExample("candidate", "query", True)],
+        OvershootEmbedder(),
+    )
+
+    assert scores[0].cosine_similarity == 1.0
 
 
 async def test_pair_eval_reports_cosine_and_full_pipeline_latency_separately() -> None:

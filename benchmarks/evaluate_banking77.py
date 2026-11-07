@@ -49,7 +49,7 @@ class BankingVectorCache:
         if limit < 1:
             raise ValueError("limit must be at least 1")
         started = time.perf_counter()
-        similarities = self.vectors @ self.query_vector
+        similarities = np.clip(self.vectors @ self.query_vector, -1.0, 1.0)
         indices = np.argsort(similarities)[::-1][:limit]
         self.last_search_seconds = time.perf_counter() - started
         return [
