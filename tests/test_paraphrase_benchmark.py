@@ -5,11 +5,11 @@ import pytest
 from benchmarks.evaluate_paraphrase import dataset_spec
 
 
-def test_paws_uses_labeled_test_split() -> None:
+def test_paws_uses_labeled_validation_split() -> None:
     assert dataset_spec("paws") == (
         "google-research-datasets/paws",
         "labeled_final",
-        "test",
+        "validation",
         "sentence1",
         "sentence2",
     )

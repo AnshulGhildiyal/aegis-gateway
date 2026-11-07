@@ -1,0 +1,3358 @@
+{
+  "configuration": "labeled_final",
+  "configurations": [
+    "cosine_only",
+    "cosine_stage0",
+    "cosine_stage0_nli"
+  ],
+  "cosine_thresholds": [
+    0.85,
+    0.88,
+    0.9,
+    0.92,
+    0.95
+  ],
+  "dataset": "paws",
+  "dataset_repository": "google-research-datasets/paws",
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "embedding_model_source": "Qdrant/bge-small-en-v1.5-onnx-Q",
+  "example_count": 8000,
+  "fastembed_package_version": "0.9.1",
+  "files": {
+    "false_positives_csv": "paraphrase_ablation_paws_validation_false_positives.csv",
+    "metrics_csv": "paraphrase_ablation_paws_validation_metrics.csv"
+  },
+  "git_commit": "0d132f58abd2e26eeefa9d77ef032cd12271b833",
+  "git_worktree_dirty_at_run": true,
+  "label_meaning": "1=paraphrase, 0=not paraphrase",
+  "limit": null,
+  "metrics": [
+    {
+      "configuration": "cosine_only",
+      "cosine_threshold": 0.85,
+      "f1": 0.6118792938516392,
+      "false_negative": 21,
+      "false_positive": 4442,
+      "hits": 7960,
+      "nli_pairs_sent": null,
+      "nli_pairs_sent_percent": null,
+      "nli_threshold": null,
+      "precision": 0.4419597989949749,
+      "recall": 0.9940661203729867,
+      "true_positive": 3518
+    },
+    {
+      "configuration": "cosine_stage0",
+      "cosine_threshold": 0.85,
+      "f1": 0.6119521912350597,
+      "false_negative": 83,
+      "false_positive": 4300,
+      "hits": 7756,
+      "nli_pairs_sent": null,
+      "nli_pairs_sent_percent": null,
+      "nli_threshold": null,
+      "precision": 0.44559051057246,
+      "recall": 0.9765470471884713,
+      "true_positive": 3456
+    },
+    {
+      "configuration": "cosine_stage0_nli",
+      "cosine_threshold": 0.85,
+      "f1": 0.6945719082260773,
+      "false_negative": 436,
+      "false_positive": 2293,
+      "hits": 5396,
+      "nli_pairs_sent": 7756,
+      "nli_pairs_sent_percent": 96.95,
+      "nli_threshold": 0.89,
+      "precision": 0.5750555967383247,
+      "recall": 0.8768013563153433,
+      "true_positive": 3103
+    },
+    {
+      "configuration": "cosine_only",
+      "cosine_threshold": 0.88,
+      "f1": 0.6109751835022719,
+      "false_negative": 43,
+      "false_positive": 4409,
+      "hits": 7905,
+      "nli_pairs_sent": null,
+      "nli_pairs_sent_percent": null,
+      "nli_threshold": null,
+      "precision": 0.4422517394054396,
+      "recall": 0.987849675049449,
+      "true_positive": 3496
+    },
+    {
+      "configuration": "cosine_stage0",
+      "cosine_threshold": 0.88,
+      "f1": 0.6108689851463133,
+      "false_negative": 105,
+      "false_positive": 4270,
+      "hits": 7704,
+      "nli_pairs_sent": null,
+      "nli_pairs_sent_percent": null,
+      "nli_threshold": null,
+      "precision": 0.445742471443406,
+      "recall": 0.9703306018649336,
+      "true_positive": 3434
+    },
+    {
+      "configuration": "cosine_stage0_nli",
+      "cosine_threshold": 0.88,
+      "f1": 0.6933004152171474,
+      "false_negative": 450,
+      "false_positive": 2283,
+      "hits": 5372,
+      "nli_pairs_sent": 7704,
+      "nli_pairs_sent_percent": 96.3,
+      "nli_threshold": 0.89,
+      "precision": 0.5750186150409531,
+      "recall": 0.8728454365640012,
+      "true_positive": 3089
+    },
+    {
+      "configuration": "cosine_only",
+      "cosine_threshold": 0.9,
+      "f1": 0.6096896157566165,
+      "false_negative": 72,
+      "false_positive": 4367,
+      "hits": 7834,
+      "nli_pairs_sent": null,
+      "nli_pairs_sent_percent": null,
+      "nli_threshold": null,
+      "precision": 0.4425580801633904,
+      "recall": 0.9796552698502402,
+      "true_positive": 3467
+    },
+    {
+      "configuration": "cosine_stage0",
+      "cosine_threshold": 0.9,
+      "f1": 0.6095749440715884,
+      "false_negative": 133,
+      "false_positive": 4230,
+      "hits": 7636,
+      "nli_pairs_sent": null,
+      "nli_pairs_sent_percent": null,
+      "nli_threshold": null,
+      "precision": 0.4460450497642745,
+      "recall": 0.9624187623622492,
+      "true_positive": 3406
+    },
+    {
+      "configuration": "cosine_stage0_nli",
+      "cosine_threshold": 0.9,
+      "f1": 0.6920391847764891,
+      "false_negative": 466,
+      "false_positive": 2269,
+      "hits": 5342,
+      "nli_pairs_sent": 7636,
+      "nli_pairs_sent_percent": 95.45,
+      "nli_threshold": 0.89,
+      "precision": 0.5752527143391988,
+      "recall": 0.8683243854196101,
+      "true_positive": 3073
+    },
+    {
+      "configuration": "cosine_only",
+      "cosine_threshold": 0.92,
+      "f1": 0.6096237658987815,
+      "false_negative": 112,
+      "false_positive": 4277,
+      "hits": 7704,
+      "nli_pairs_sent": null,
+      "nli_pairs_sent_percent": null,
+      "nli_threshold": null,
+      "precision": 0.44483385254413293,
+      "recall": 0.9683526419892625,
+      "true_positive": 3427
+    },
+    {
+      "configuration": "cosine_stage0",
+      "cosine_threshold": 0.92,
+      "f1": 0.6093410572049239,
+      "false_negative": 173,
+      "false_positive": 4143,
+      "hits": 7509,
+      "nli_pairs_sent": null,
+      "nli_pairs_sent_percent": null,
+      "nli_threshold": null,
+      "precision": 0.4482620854974031,
+      "recall": 0.9511161345012715,
+      "true_positive": 3366
+    },
+    {
+      "configuration": "cosine_stage0_nli",
+      "cosine_threshold": 0.92,
+      "f1": 0.6906654553713378,
+      "false_negative": 498,
+      "false_positive": 2226,
+      "hits": 5267,
+      "nli_pairs_sent": 7509,
+      "nli_pairs_sent_percent": 93.86250000000001,
+      "nli_threshold": 0.89,
+      "precision": 0.5773685209796848,
+      "recall": 0.8592822831308279,
+      "true_positive": 3041
+    },
+    {
+      "configuration": "cosine_only",
+      "cosine_threshold": 0.95,
+      "f1": 0.6079278602291941,
+      "false_negative": 303,
+      "false_positive": 3871,
+      "hits": 7107,
+      "nli_pairs_sent": null,
+      "nli_pairs_sent_percent": null,
+      "nli_threshold": null,
+      "precision": 0.4553257351906571,
+      "recall": 0.9143825939530941,
+      "true_positive": 3236
+    },
+    {
+      "configuration": "cosine_stage0",
+      "cosine_threshold": 0.95,
+      "f1": 0.6072348954853488,
+      "false_negative": 358,
+      "false_positive": 3757,
+      "hits": 6938,
+      "nli_pairs_sent": null,
+      "nli_pairs_sent_percent": null,
+      "nli_threshold": null,
+      "precision": 0.4584894782358028,
+      "recall": 0.8988414806442497,
+      "true_positive": 3181
+    },
+    {
+      "configuration": "cosine_stage0_nli",
+      "cosine_threshold": 0.95,
+      "f1": 0.6835115759783759,
+      "false_negative": 631,
+      "false_positive": 2062,
+      "hits": 4970,
+      "nli_pairs_sent": 6938,
+      "nli_pairs_sent_percent": 86.725,
+      "nli_threshold": 0.89,
+      "precision": 0.5851106639839034,
+      "recall": 0.8217010454930771,
+      "true_positive": 2908
+    }
+  ],
+  "nli_model": "Xenova/nli-deberta-v3-small",
+  "nli_model_revision": "6bc2a55c7c0f7e2bc68de60bb248e523e2612abb",
+  "nli_threshold_selection": {
+    "calibration_curve": [
+      {
+        "mean_f1": 0.6097944146286468,
+        "nli_threshold": 0.0
+      },
+      {
+        "mean_f1": 0.6581809630807506,
+        "nli_threshold": 0.01
+      },
+      {
+        "mean_f1": 0.6648685036092734,
+        "nli_threshold": 0.02
+      },
+      {
+        "mean_f1": 0.6668193271072667,
+        "nli_threshold": 0.03
+      },
+      {
+        "mean_f1": 0.6693901552229419,
+        "nli_threshold": 0.04
+      },
+      {
+        "mean_f1": 0.6709743904842809,
+        "nli_threshold": 0.05
+      },
+      {
+        "mean_f1": 0.6716519356857594,
+        "nli_threshold": 0.06
+      },
+      {
+        "mean_f1": 0.6732439856550063,
+        "nli_threshold": 0.07
+      },
+      {
+        "mean_f1": 0.6741489109651607,
+        "nli_threshold": 0.08
+      },
+      {
+        "mean_f1": 0.6749698884709939,
+        "nli_threshold": 0.09
+      },
+      {
+        "mean_f1": 0.676278154404393,
+        "nli_threshold": 0.1
+      },
+      {
+        "mean_f1": 0.6771173431005656,
+        "nli_threshold": 0.11
+      },
+      {
+        "mean_f1": 0.6780236113518142,
+        "nli_threshold": 0.12
+      },
+      {
+        "mean_f1": 0.6788551672160134,
+        "nli_threshold": 0.13
+      },
+      {
+        "mean_f1": 0.679264406807612,
+        "nli_threshold": 0.14
+      },
+      {
+        "mean_f1": 0.6794401167730785,
+        "nli_threshold": 0.15
+      },
+      {
+        "mean_f1": 0.6802916396593373,
+        "nli_threshold": 0.16
+      },
+      {
+        "mean_f1": 0.680663847827634,
+        "nli_threshold": 0.17
+      },
+      {
+        "mean_f1": 0.6812765722332192,
+        "nli_threshold": 0.18
+      },
+      {
+        "mean_f1": 0.6815927084950831,
+        "nli_threshold": 0.19
+      },
+      {
+        "mean_f1": 0.6820314702810784,
+        "nli_threshold": 0.2
+      },
+      {
+        "mean_f1": 0.6821936589602293,
+        "nli_threshold": 0.21
+      },
+      {
+        "mean_f1": 0.6825457206970125,
+        "nli_threshold": 0.22
+      },
+      {
+        "mean_f1": 0.682502567728319,
+        "nli_threshold": 0.23
+      },
+      {
+        "mean_f1": 0.6825464909826314,
+        "nli_threshold": 0.24
+      },
+      {
+        "mean_f1": 0.6827165328634851,
+        "nli_threshold": 0.25
+      },
+      {
+        "mean_f1": 0.6832317674019464,
+        "nli_threshold": 0.26
+      },
+      {
+        "mean_f1": 0.6834559805796248,
+        "nli_threshold": 0.27
+      },
+      {
+        "mean_f1": 0.683383307113254,
+        "nli_threshold": 0.28
+      },
+      {
+        "mean_f1": 0.6837921947549269,
+        "nli_threshold": 0.29
+      },
+      {
+        "mean_f1": 0.6840987386201085,
+        "nli_threshold": 0.3
+      },
+      {
+        "mean_f1": 0.6840600555119446,
+        "nli_threshold": 0.31
+      },
+      {
+        "mean_f1": 0.6839246843771685,
+        "nli_threshold": 0.32
+      },
+      {
+        "mean_f1": 0.6841254334543554,
+        "nli_threshold": 0.33
+      },
+      {
+        "mean_f1": 0.6844771305047888,
+        "nli_threshold": 0.34
+      },
+      {
+        "mean_f1": 0.6845505387498297,
+        "nli_threshold": 0.35
+      },
+      {
+        "mean_f1": 0.6847615237222734,
+        "nli_threshold": 0.36
+      },
+      {
+        "mean_f1": 0.6851396896243391,
+        "nli_threshold": 0.37
+      },
+      {
+        "mean_f1": 0.6852929254737358,
+        "nli_threshold": 0.38
+      },
+      {
+        "mean_f1": 0.6856462742959629,
+        "nli_threshold": 0.39
+      },
+      {
+        "mean_f1": 0.6858295119231712,
+        "nli_threshold": 0.4
+      },
+      {
+        "mean_f1": 0.6858998949843275,
+        "nli_threshold": 0.41
+      },
+      {
+        "mean_f1": 0.6859418822086554,
+        "nli_threshold": 0.42
+      },
+      {
+        "mean_f1": 0.6861929671828971,
+        "nli_threshold": 0.43
+      },
+      {
+        "mean_f1": 0.6863765782662661,
+        "nli_threshold": 0.44
+      },
+      {
+        "mean_f1": 0.6868057870263764,
+        "nli_threshold": 0.45
+      },
+      {
+        "mean_f1": 0.687183222074571,
+        "nli_threshold": 0.46
+      },
+      {
+        "mean_f1": 0.6868826826107873,
+        "nli_threshold": 0.47
+      },
+      {
+        "mean_f1": 0.6871121169628482,
+        "nli_threshold": 0.48
+      },
+      {
+        "mean_f1": 0.6872294277325615,
+        "nli_threshold": 0.49
+      },
+      {
+        "mean_f1": 0.6871404048606242,
+        "nli_threshold": 0.5
+      },
+      {
+        "mean_f1": 0.6871450473840403,
+        "nli_threshold": 0.51
+      },
+      {
+        "mean_f1": 0.6869106795039517,
+        "nli_threshold": 0.52
+      },
+      {
+        "mean_f1": 0.6870510025143586,
+        "nli_threshold": 0.53
+      },
+      {
+        "mean_f1": 0.6869808783198555,
+        "nli_threshold": 0.54
+      },
+      {
+        "mean_f1": 0.6867164993001642,
+        "nli_threshold": 0.55
+      },
+      {
+        "mean_f1": 0.6868107702727099,
+        "nli_threshold": 0.56
+      },
+      {
+        "mean_f1": 0.6861167857517769,
+        "nli_threshold": 0.57
+      },
+      {
+        "mean_f1": 0.686406783293392,
+        "nli_threshold": 0.58
+      },
+      {
+        "mean_f1": 0.686312708053317,
+        "nli_threshold": 0.59
+      },
+      {
+        "mean_f1": 0.6866694443232809,
+        "nli_threshold": 0.6
+      },
+      {
+        "mean_f1": 0.6870424579474772,
+        "nli_threshold": 0.61
+      },
+      {
+        "mean_f1": 0.6871969065450644,
+        "nli_threshold": 0.62
+      },
+      {
+        "mean_f1": 0.687292382402352,
+        "nli_threshold": 0.63
+      },
+      {
+        "mean_f1": 0.6877572305062144,
+        "nli_threshold": 0.64
+      },
+      {
+        "mean_f1": 0.6874604874520621,
+        "nli_threshold": 0.65
+      },
+      {
+        "mean_f1": 0.6872476676555349,
+        "nli_threshold": 0.66
+      },
+      {
+        "mean_f1": 0.687625212725375,
+        "nli_threshold": 0.67
+      },
+      {
+        "mean_f1": 0.6875134830164203,
+        "nli_threshold": 0.68
+      },
+      {
+        "mean_f1": 0.6877774578339363,
+        "nli_threshold": 0.69
+      },
+      {
+        "mean_f1": 0.6876849338739237,
+        "nli_threshold": 0.7
+      },
+      {
+        "mean_f1": 0.6879019949212564,
+        "nli_threshold": 0.71
+      },
+      {
+        "mean_f1": 0.6877712242184086,
+        "nli_threshold": 0.72
+      },
+      {
+        "mean_f1": 0.6874477802909873,
+        "nli_threshold": 0.73
+      },
+      {
+        "mean_f1": 0.6875282775928457,
+        "nli_threshold": 0.74
+      },
+      {
+        "mean_f1": 0.6879847819673345,
+        "nli_threshold": 0.75
+      },
+      {
+        "mean_f1": 0.6883334747841456,
+        "nli_threshold": 0.76
+      },
+      {
+        "mean_f1": 0.6887060065181085,
+        "nli_threshold": 0.77
+      },
+      {
+        "mean_f1": 0.688519294707141,
+        "nli_threshold": 0.78
+      },
+      {
+        "mean_f1": 0.6887140310060917,
+        "nli_threshold": 0.79
+      },
+      {
+        "mean_f1": 0.6889878769149927,
+        "nli_threshold": 0.8
+      },
+      {
+        "mean_f1": 0.6890862919852766,
+        "nli_threshold": 0.81
+      },
+      {
+        "mean_f1": 0.6897100753364107,
+        "nli_threshold": 0.82
+      },
+      {
+        "mean_f1": 0.6904269464607459,
+        "nli_threshold": 0.83
+      },
+      {
+        "mean_f1": 0.6905748353054356,
+        "nli_threshold": 0.84
+      },
+      {
+        "mean_f1": 0.6903566312659389,
+        "nli_threshold": 0.85
+      },
+      {
+        "mean_f1": 0.689993123219598,
+        "nli_threshold": 0.86
+      },
+      {
+        "mean_f1": 0.690230395788905,
+        "nli_threshold": 0.87
+      },
+      {
+        "mean_f1": 0.6905277892332752,
+        "nli_threshold": 0.88
+      },
+      {
+        "mean_f1": 0.6908177079138855,
+        "nli_threshold": 0.89
+      },
+      {
+        "mean_f1": 0.6907781638491115,
+        "nli_threshold": 0.9
+      },
+      {
+        "mean_f1": 0.6904483118960023,
+        "nli_threshold": 0.91
+      },
+      {
+        "mean_f1": 0.6897168616103644,
+        "nli_threshold": 0.92
+      },
+      {
+        "mean_f1": 0.6906731341084924,
+        "nli_threshold": 0.93
+      },
+      {
+        "mean_f1": 0.6907393595359288,
+        "nli_threshold": 0.94
+      },
+      {
+        "mean_f1": 0.6898036586033474,
+        "nli_threshold": 0.95
+      },
+      {
+        "mean_f1": 0.6876906259242543,
+        "nli_threshold": 0.96
+      },
+      {
+        "mean_f1": 0.6804559206775065,
+        "nli_threshold": 0.97
+      },
+      {
+        "mean_f1": 0.6650296079927975,
+        "nli_threshold": 0.98
+      },
+      {
+        "mean_f1": 0.6036183736440116,
+        "nli_threshold": 0.99
+      },
+      {
+        "mean_f1": 0.0,
+        "nli_threshold": 1.0
+      }
+    ],
+    "criterion": "maximum mean F1 across the five requested cosine thresholds on this validation split; ties select the higher threshold",
+    "selected_threshold": 0.89
+  },
+  "run_date_utc": "2026-11-07T04:18:45.595105+00:00",
+  "sampled_false_positives": [
+    {
+      "candidate": "Curtis LaForche -- `` Take Shelter K as Michael Shannon",
+      "candidate_to_query_entailment": 0.020861627097227706,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9763949777232592,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 4455,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Michael Shannon -- `` Take Shelter '' as Curtis LaForche",
+      "query_to_candidate_entailment": 0.0057139656270847545
+    },
+    {
+      "candidate": "They also published the second track on the album , `` Vices '' , as the 5th single from the album on June 13th .",
+      "candidate_to_query_entailment": 0.9948950259212589,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9688952914726402,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 4709,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "They also released the 5th track on the album , `` Vices '' , as the second single of the album on June 13 .",
+      "query_to_candidate_entailment": 0.9917096685972377
+    },
+    {
+      "candidate": "On 17 August 1865 , the 3rd New York Volunteer - Cavalry with the 16th New York Volunteer Cavalry was consolidated into the 13th New York Provisional Cavalry .",
+      "candidate_to_query_entailment": 0.9965712969844535,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9799153361572345,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 3689,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "On August 17 , 1865 , the 13th New York Volunteer Cavalry was consolidated with the 16th New York Volunteer Cavalry to form the 3rd New York Provisional Cavalry .",
+      "query_to_candidate_entailment": 0.9910945309396636
+    },
+    {
+      "candidate": "He died in Milwaukee , Wisconsin , where on 5 May 1903 he retired .",
+      "candidate_to_query_entailment": 0.9961798070168263,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9894030298884651,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 160,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "He retired in Milwaukee , Wisconsin , where he died on May 5 , 1903 .",
+      "query_to_candidate_entailment": 0.9956035957513732
+    },
+    {
+      "candidate": "Joe married Ruth Marie Brinkmeyer of Indianapolis on October 15 , 1914 .",
+      "candidate_to_query_entailment": 0.9886015924762963,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9161614023356757,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 6410,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "On October 15 , 1914 , Ruth Marie Brinkmeyer married of Indianapolis Ruth .",
+      "query_to_candidate_entailment": 0.14017441905042677
+    },
+    {
+      "candidate": "Cai Feng had also a son , Cai Mao .",
+      "candidate_to_query_entailment": 0.9808570827440167,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9918532210236681,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 3066,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Cai Mao also had a son , Cai Feng .",
+      "query_to_candidate_entailment": 0.06138675014281135
+    },
+    {
+      "candidate": "Dr. Lisa Moya has been superintendent since June 1 , 2017 . Chief Academic Officer is Marshall Scott III . Chief Technology Officer is Josh Solis .",
+      "candidate_to_query_entailment": 0.9932945971331102,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9568144919447308,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 6584,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Marshall Scott III has been a superintendent since June 1 , 2017 , Chief Academic Officer is Lisa Moya , Chief Technology Officer is Josh Solis .",
+      "query_to_candidate_entailment": 0.9920455185384515
+    },
+    {
+      "candidate": "For higher values of Formula 2 the previous average is more important .",
+      "candidate_to_query_entailment": 0.9949667094786143,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9597540547244812,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 1633,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The previous average is more high for important values of formula _ 2 .",
+      "query_to_candidate_entailment": 0.9979416203505255
+    },
+    {
+      "candidate": "Madiun is on the main road to Yogyakarta and Jakarta .",
+      "candidate_to_query_entailment": 0.4279678625426717,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9857953887119096,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 2096,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Yogyakarta and Jakarta is situated on the main road to Madiun .",
+      "query_to_candidate_entailment": 0.18669658298723982
+    },
+    {
+      "candidate": "He also donated US $ 34,000 to Mitt Romney and US $ 7,000 to Ted Cruz , including his 2016 presidential campaign .",
+      "candidate_to_query_entailment": 0.9414146093398489,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9936822273730161,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 1774,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "He also donated $ 34,000 to Ted Cruz and US $ 7,000 to Mitt Romney , including his 2016 presidential campaign .",
+      "query_to_candidate_entailment": 0.9851687989585087
+    },
+    {
+      "candidate": "The wounds of the dead man begin to bleed again , due to the presence of the killer , and thus a burlesque search for the invisible man begins .",
+      "candidate_to_query_entailment": 0.9691393219347973,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.986422506924112,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 2249,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The wounds of the invisible man begin to bleed again due to the presence of the murderer and thus a burlesque search for the dead begins .",
+      "query_to_candidate_entailment": 0.9592980084242809
+    },
+    {
+      "candidate": "It is an offshore island Baffin - island located in Cornelius Grinnell Bay .",
+      "candidate_to_query_entailment": 0.9951124639721822,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9922058758295944,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 6656,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "It is a Cornelius Grinnell Bay offshore island located in Baffin Island .",
+      "query_to_candidate_entailment": 0.9954682746621542
+    },
+    {
+      "candidate": "The Briquet Griffon Vend\u00e9en has a bushy double head , low-seated ears and a short coat .",
+      "candidate_to_query_entailment": 0.9892791227875246,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.983174796732333,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 1911,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The Briquet Griffon Vend\u00e9en has a short head , low-set ears and a bushy double coat .",
+      "query_to_candidate_entailment": 0.9935209989148025
+    },
+    {
+      "candidate": "If the 1983 local elections had been a parliamentary election , the Socialist Left would have received 8 seats in Parliament .",
+      "candidate_to_query_entailment": 0.9907172370148529,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.99760575783817,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 1476,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "If the parliamentary election in 1983 had been a local election , the Socialist Left would have received 8 seats in Parliament .",
+      "query_to_candidate_entailment": 0.9879920868215368
+    },
+    {
+      "candidate": "His future work in agriculture was mainly in Norfolk , but he also proposed extensive embankments in Lincolnshire , which were successfully carried out .",
+      "candidate_to_query_entailment": 0.9895007375875132,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9838597000447236,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 7229,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "His subsequent work in agriculture was primarily in Lincolnshire , but he also proposed extensive embankments in Norfolk , which were successfully carried out .",
+      "query_to_candidate_entailment": 0.034640168688082146
+    },
+    {
+      "candidate": "ACVM is headquartered in Edinburgh and has offices in Glasgow , Aberdeen , Newcastle , Manchester and Milton Keynes .",
+      "candidate_to_query_entailment": 0.8385725339580373,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9816820586119411,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 5692,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "ACVM is based in Glasgow and has offices in Edinburgh , Aberdeen , Newcastle , Manchester and Milton Keynes .",
+      "query_to_candidate_entailment": 0.9954839323020739
+    },
+    {
+      "candidate": "For two years , McMillan spent at the Royal Medical Corp. in Didcot -- and later in Tidworth , where he run an MRS for soldiers injured in the Korean War .",
+      "candidate_to_query_entailment": 0.9974741215429497,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9682205663993907,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 2425,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "McMillan spent two years at the Royal Medical Corp. in Tidworth -- and later at Didcot , where he operated an MRS for soldiers injured in Korean War .",
+      "query_to_candidate_entailment": 0.9961825367888314
+    },
+    {
+      "candidate": "The Chalchihuites - Mine is a large copper mine located in the centre of Zacatecas in Mexico .",
+      "candidate_to_query_entailment": 0.9970610856953297,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.989450243315276,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 3190,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The Chalchihuites mine is a large copper mine located in the center of Mexico in Zacatecas .",
+      "query_to_candidate_entailment": 0.9941917701666155
+    },
+    {
+      "candidate": "It is found in most of the South Island and from Westland to central banks Peninsula on the North Island .",
+      "candidate_to_query_entailment": 0.00184770249169227,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9844954135689769,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 3099,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "It is found in most of the north island and from the banks Peninsula to the central Westland on the South Island .",
+      "query_to_candidate_entailment": 0.0007006035971591658
+    },
+    {
+      "candidate": "Born in Israel , Lang migrated to Australia as a young man and settled there in 1961 .",
+      "candidate_to_query_entailment": 0.0030240871727741613,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9921272542205284,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 613,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Born in Australia , Lang moved to Israel as a young man and settled there in 1961 .",
+      "query_to_candidate_entailment": 0.7624844572796659
+    },
+    {
+      "candidate": "He was born on December 21 , 1965 in New Haven , Connecticut , and visited Oxon Hill High School in Oxon Hill , Maryland .",
+      "candidate_to_query_entailment": 0.9900822867677005,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9819271852455582,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 4660,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "He was born on 21 December 1965 in Oxon Hill , Maryland , and attended Oxon Hill High School in New Haven , Connecticut .",
+      "query_to_candidate_entailment": 0.984127625730509
+    },
+    {
+      "candidate": "Since 1984 Patricia Dale is married to Patricia Meyer and together they have two sons : Ryan ( born 1988 ) and Blake ( born 1992 ) .",
+      "candidate_to_query_entailment": 0.06123651593806799,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9604210239765764,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 4362,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Since 1984 , Blake has been married to Patricia Meyer and has two sons : Ryan ( born 1988 ) and Dale ( born 1992 ) .",
+      "query_to_candidate_entailment": 0.43839140745280974
+    },
+    {
+      "candidate": "In 1937 , Gerald Heard moved with his wife , Maria , son Huxley , and friend Matthew Huxley to Hollywood .",
+      "candidate_to_query_entailment": 0.9736508276094417,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9504863028331118,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 5937,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "In 1937 , Huxley moved to Hollywood with his wife Maria , son Matthew Huxley , and boyfriend Gerald Heard .",
+      "query_to_candidate_entailment": 0.03254410302466003
+    },
+    {
+      "candidate": "John Reed King was the announcer , and Ray Bloch directed the orchestra .",
+      "candidate_to_query_entailment": 0.6658713608978793,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9804502582100645,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 6552,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Ray Bloch was the announcer , and John Reed King led the orchestra .",
+      "query_to_candidate_entailment": 0.9211120489662424
+    },
+    {
+      "candidate": "In 1911 the town hall was rebuilt , partially destroyed in 1945 and restored in the 1960s .",
+      "candidate_to_query_entailment": 0.705858570662739,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9923601941220276,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 4022,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "In 1911 the town hall was destroyed , partially restored in 1945 and rebuilt in the 1960s .",
+      "query_to_candidate_entailment": 0.8772579655782091
+    },
+    {
+      "candidate": "His large sculptures can be seen in public spaces in Wanaka , from New Zealand to Kaitaia and many localities in between .",
+      "candidate_to_query_entailment": 0.8269515569245139,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9871485862535824,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 5970,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "His large sculptures can be seen in public spaces in New Zealand , from Kaitaia to Wanaka and many places in between .",
+      "query_to_candidate_entailment": 0.9836282021209086
+    },
+    {
+      "candidate": "If there are several grammatical categories in one sentence , only the first bears the plural marker .",
+      "candidate_to_query_entailment": 0.002497875477174595,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9962432047862477,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 1760,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "If there are several grammatical categories in one sentence , only the plural bears the first marker .",
+      "query_to_candidate_entailment": 0.0646972172029041
+    },
+    {
+      "candidate": "In early astronomy , his fame is due to the introduction of the mathematical globe and to his astronomical contributions to understanding the movement of the planets .",
+      "candidate_to_query_entailment": 0.9871971495934307,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9927728233345667,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 3515,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "In mathematical astronomy , his fame is due to the introduction of the astronomical globe , and his early contributions to understanding the movement of the planets .",
+      "query_to_candidate_entailment": 0.9826408376900047
+    },
+    {
+      "candidate": "It is sometimes used as reductio ad absurdum of the well-known argument of design , which runs as follows :",
+      "candidate_to_query_entailment": 0.9906713736543286,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9795415919296828,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 3711,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "It is sometimes known as a reductio ad absurdum of the well-used argument from design , which runs as follows :",
+      "query_to_candidate_entailment": 0.9842161101828076
+    },
+    {
+      "candidate": "After the wedding ceremony in his hometown Barcelona , Spain , the couple flew to Sakarya .",
+      "candidate_to_query_entailment": 0.004833481157609507,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9874993908068359,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 6622,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "After the wedding in his hometown Sakarya the couple flew to Barcelona , Spain .",
+      "query_to_candidate_entailment": 0.48169544611493714
+    },
+    {
+      "candidate": "Bhagyamudra is a 1968 Malayalam language film written by S. L. Puram Sadanandan and directed by M. A. V. Rajendran .",
+      "candidate_to_query_entailment": 0.9881245069094882,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9990499504681805,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 3424,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Bhagyamudra is a 1968 Malayalam language film by S. L. Puram Sadanandan and written by M. A. V. Rajendran .",
+      "query_to_candidate_entailment": 0.9201543577265132
+    },
+    {
+      "candidate": "`` Everything But You '' is a song of 1945 , composed by Duke Ellington and Harry James written with texts by Don George .",
+      "candidate_to_query_entailment": 0.9899846815035772,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9891944808113009,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 2553,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "`` Everything But You '' is a 1945 song composed by Don George with lyrics written by Duke Ellington and Harry James .",
+      "query_to_candidate_entailment": 0.9905561224679728
+    },
+    {
+      "candidate": "The pattern is that vowels are oral only when they progress to a nasal consonant within the same syllable , elsewhere nasal .",
+      "candidate_to_query_entailment": 0.992268396499236,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9726469627452351,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 1992,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "The pattern is that vowels are nasal only when preceding a nasal consonant within the same syllable ; elsewhere they are oral .",
+      "query_to_candidate_entailment": 0.9799689043061581
+    },
+    {
+      "candidate": "He has played professionally in Italy , Russia , Greece , France , Indonesia , and Greece , winning national championships in Puerto Rico , Portugal , and Indonesia .",
+      "candidate_to_query_entailment": 0.9917472766480977,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9969854404297274,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 5669,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "He has played professionally in Greece , Russia , Italy , France , Puerto Rico , Portugal , and Indonesia , winning national championships in Indonesia and Greece .",
+      "query_to_candidate_entailment": 0.9868927566666514
+    },
+    {
+      "candidate": "Its approximate borders were South Broad Street to Grier Avenue and Pearl Street to what is now US 1 & 9 .",
+      "candidate_to_query_entailment": 0.9926501789055757,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9481374615209939,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 1584,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Its approximate boundaries were Pearl Street to Grier Avenue and South Broad Street to what is now US 1 '9 .",
+      "query_to_candidate_entailment": 0.968682939725367
+    },
+    {
+      "candidate": "Dakota City is a part of the Metropolitan Statistical Area NE -- Sioux City , IA - SD .",
+      "candidate_to_query_entailment": 0.995266461569338,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9858354372139396,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 1346,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Dakota City is part of the Metropolitan Statistical Area of Sioux City , IA - NE , SD .",
+      "query_to_candidate_entailment": 0.9969537671515292
+    },
+    {
+      "candidate": "Propilidium pelseneeri is a species of sea snail , a true limpet , a true gastropod mollusk in the Lepetidae family , one of the families of the marine limpets .",
+      "candidate_to_query_entailment": 0.9902174405165874,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9986955038959051,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 2823,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Propilidium pelseneeri is a species of sea snail , a true limpet , a marine gastropod mollusk in the family Lepetidae , one of the families of true limpets .",
+      "query_to_candidate_entailment": 0.9892945379119511
+    },
+    {
+      "candidate": "The first section , from Hokitika to Ruatapu , was opened on November 9 , 1906 , and the full line to Ross was completed on April 1 , 1909 .",
+      "candidate_to_query_entailment": 0.9981268268027491,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9839138416400145,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 6845,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "The first section , from Hokitika to Ruatapu , was completed on 9 November 1906 , and on 1 April 1909 the complete line was opened for Ross .",
+      "query_to_candidate_entailment": 0.9976628424208276
+    },
+    {
+      "candidate": "Mei Shigenobu is the mother of Japanese national Fusako Shigenobu , a journalist .",
+      "candidate_to_query_entailment": 0.9822784138431505,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9756189729505185,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 2892,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Fusako Shigenobu is the mother of Japanese citizen Mei Shigenobu , a journalist .",
+      "query_to_candidate_entailment": 0.9495262707466658
+    },
+    {
+      "candidate": "Next appeared Iyer in Kannada - Film `` Darshan '' with actor Jaggu Dada .",
+      "candidate_to_query_entailment": 0.9762331593821812,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9931154746113705,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 6574,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Next Iyer appeared in Kannada - Film `` Jaggu Dada '' with the actor Darshan .",
+      "query_to_candidate_entailment": 0.9890839405190349
+    },
+    {
+      "candidate": "The music was composed by Vijayan and the lyrics by K. J. Yesudas and K. Raghavan were written .",
+      "candidate_to_query_entailment": 0.9948474299769507,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9953206513363322,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 7730,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "The music was composed by K. J. Yesudas and K. Raghavan and lyrics was written by Vijayan .",
+      "query_to_candidate_entailment": 0.9916210945643923
+    },
+    {
+      "candidate": "The series debuted on April 18th , 2009 in Australia on Nickelodeon ( New Zealand and New Zealand ) .",
+      "candidate_to_query_entailment": 0.9964579896994914,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9865351866126657,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 3423,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "The series debuted on April 18 , 2009 in New Zealand via Nickelodeon ( Australia and New Zealand ) .",
+      "query_to_candidate_entailment": 0.993788160991383
+    },
+    {
+      "candidate": "It is endemic to Hawaii , where it is now limited to the island of Hawaii and has been exterminated by Kauai and Maui .",
+      "candidate_to_query_entailment": 0.99622934207579,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9585097980704849,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 2439,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "It is endemic to Hawaii , where it is now limited to the island of Kauai and has been extirpated from Hawaii and Maui .",
+      "query_to_candidate_entailment": 0.9963827486686194
+    },
+    {
+      "candidate": "The Lost Boys is a docudrama miniseries produced by the BBC in 1978 , written by Andrew Birkin and directed by Rodney Bennett .",
+      "candidate_to_query_entailment": 0.9956509253790432,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9564219802109932,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 3115,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "The Lost Boys is a 1978 docudrama mini-series produced by the BBC , written by Rodney Bennett , and directed by Andrew Birkin .",
+      "query_to_candidate_entailment": 0.9960510099695993
+    },
+    {
+      "candidate": "Chandler viewed the computer as a tool for learning , but he rejected a dominant objectivism that recognized data as information and information as knowledge .",
+      "candidate_to_query_entailment": 0.9979180031625358,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9748686161141745,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 2226,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Chandler recognized the computer as a tool for learning , but he rejected a prevailing objectivism that considered data as information , and information as knowledge .",
+      "query_to_candidate_entailment": 0.998584148053337
+    },
+    {
+      "candidate": "Pearson 's strict stance against racial and political egalitarianism also manifested in a consistent opposition to Marxism and socialism .",
+      "candidate_to_query_entailment": 0.9897620543947985,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.986030568559525,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 1827,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Pearson 's racial and political stance against strict egalitarianism was also manifested in a consistent opposition to Marxism and socialism .",
+      "query_to_candidate_entailment": 0.9935306075209479
+    },
+    {
+      "candidate": "In 1993 , when Peter Joseph Whelihan opened his second restaurant in Allentown , he changed the name to P. J. Whelihan 's to honor his grandfather .",
+      "candidate_to_query_entailment": 0.21615130101803298,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9493955934646923,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 7005,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "In 1993 , when Platzer opened his second restaurant in Allentown , he changed the name to P. J. Whelihan 's in honor of his grandfather , Peter Joseph Whelihan .",
+      "query_to_candidate_entailment": 0.8480302733412128
+    },
+    {
+      "candidate": "The Cancer Genome Project was launched by Peter Campbell in 2000 , and Michael Stratton is now the group leader of the project .",
+      "candidate_to_query_entailment": 0.05824696173209783,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9897146130199541,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 909,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The Cancer Genome - project was launched by Michael Stratton in 2000 , and Peter Campbell is now the leader of the project .",
+      "query_to_candidate_entailment": 0.14922170179609553
+    },
+    {
+      "candidate": "Phase transition from a ferromagnet to a paramagnet is continuous and has a second order .",
+      "candidate_to_query_entailment": 0.9965682696427421,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9836100738250553,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 214,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "A phase transition from a ferromagnet to a paramagnetic is the second and is of continuous order .",
+      "query_to_candidate_entailment": 0.9972182643442784
+    },
+    {
+      "candidate": "Mohnia blakei is a species of sea snail , a marine gastropod mollusk in the family Buccinidae , the true whelks .",
+      "candidate_to_query_entailment": 0.9956232073702006,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9882422311104816,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 4360,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Mohnia blakei is a sea snail species , a true gastropod mollusc in the Buccinidae family , the whelks marine .",
+      "query_to_candidate_entailment": 0.9969040332427607
+    },
+    {
+      "candidate": "It was sunk in 1943 -- in 1944 by the Germans and scrapped twice by allied bombers and finally raised in 1946 -- in 1947 .",
+      "candidate_to_query_entailment": 0.017779438772608812,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9913825064665249,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 5385,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "It was raised in 1943 -- in 1944 by the Germans and sunk twice by allied bombers and finally scrapped in 1946 -- in 1947 .",
+      "query_to_candidate_entailment": 0.0058189417576079185
+    },
+    {
+      "candidate": "Lang was born in Australia , migrated to Israel as a young man and settled there in 1961 .",
+      "candidate_to_query_entailment": 0.0008646693115984046,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.997998029707928,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 2585,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Lang was born in Israel , migrated to Australia as a young man and settled there in 1961 .",
+      "query_to_candidate_entailment": 0.0006242707189654044
+    },
+    {
+      "candidate": "With a primary listing on the Nigerian Stock Exchange , it 's the first African company to have a cross-border inward listing on the Johannesburg Stock Exchange .",
+      "candidate_to_query_entailment": 0.9884004911243959,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9726837773889214,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 5838,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "With a cross-border stock exchange listing on the Johannesburg Stock Exchange , it is the first African company to have a primary listing on the Nigerian stock market .",
+      "query_to_candidate_entailment": 0.9032411776022424
+    },
+    {
+      "candidate": "Previous host cities of the SiriusDecisions Summit include Orlando ( 2014 ) , San Diego ( 2013 ) and Scottsdale ( 2012 ) .",
+      "candidate_to_query_entailment": 0.992116037896768,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9595600914213395,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 2421,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The previous host cities of the Sirius Decisions Summit include Orlando ( 2014 ) , Scottsdale ( 2013 ) , and San Diego ( 2012 ) .",
+      "query_to_candidate_entailment": 0.9903411121744532
+    },
+    {
+      "candidate": "Mehta has two children with wife Juhi Chawla , a girl , Jahnavi Mehta ( born 2001 ) and a boy Arjun Mehta ( born in 2003 ) .",
+      "candidate_to_query_entailment": 0.9911410709835622,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9692975572210938,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 5087,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Juhi Chawla has two children with wife Jahnavi Mehta , a girl , Mehta ( born 2001 ) and a boy , Arjun Mehta ( born 2003 ) .",
+      "query_to_candidate_entailment": 0.9636895051179366
+    },
+    {
+      "candidate": "In 1911 the town hall was rebuilt , partially destroyed in 1945 and restored in the 1960s .",
+      "candidate_to_query_entailment": 0.705858570662739,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9923601941220276,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 4022,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "In 1911 the town hall was destroyed , partially restored in 1945 and rebuilt in the 1960s .",
+      "query_to_candidate_entailment": 0.8772579655782091
+    },
+    {
+      "candidate": "The clubhouse was built by Curtis , for the then-large sum of $ 60,000 , and rented it to the club for a nominal fee .",
+      "candidate_to_query_entailment": 0.9960549582545172,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9644595496930797,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 6414,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The clubhouse was built by Curtis , for the then sum of $ 60,000 , and let it for a large fee to the club .",
+      "query_to_candidate_entailment": 0.8892351321221359
+    },
+    {
+      "candidate": "Seiders was born in Winchester , Massachusetts and grew up in Derry , New Hampshire .",
+      "candidate_to_query_entailment": 0.9955139183690315,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9716731888839587,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 3258,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Seiders was born in Derry , New Hampshire . He grew up in Winchester , Massachusetts .",
+      "query_to_candidate_entailment": 0.9946599904388294
+    },
+    {
+      "candidate": "In 1977 , Rob Taylor travelled with Barber to Scotland and Norway to climb waterfalls .",
+      "candidate_to_query_entailment": 0.8959804681655866,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.983448434080765,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 796,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "In 1977 , Barber traveled to Scotland and Norway with Rob Taylor to climb waterfalls .",
+      "query_to_candidate_entailment": 0.9946465830279694
+    },
+    {
+      "candidate": "Sahib Khan was born in the Tiwana family of Shahpur , son of Ahmad Yar Khan .",
+      "candidate_to_query_entailment": 0.7721797353683278,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9752643944095515,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 713,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Ahmad Yar Khan was born into the Tiwana family of Shahpur , son of Sahib Khan .",
+      "query_to_candidate_entailment": 0.008773170975541911
+    },
+    {
+      "candidate": "A fourth daughter , Leonora , was the step-great-grandmother of astronomer and astrophysicist Cecilia Payne-Gaposchkin .",
+      "candidate_to_query_entailment": 0.8168497101342842,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9436233749494205,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 3530,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "A fourth daughter , Leonora , was the stepmother of astronomer and astrophysicist Cecilia Payne-Gaposchkin .",
+      "query_to_candidate_entailment": 0.4078407868754645
+    },
+    {
+      "candidate": "Balluta Bay is a bay on the northeast coast of Malta within St. Julian .",
+      "candidate_to_query_entailment": 0.04740336626640969,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9614010976037485,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 4035,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Malta is a bay on the northeast coast of Balluta Bay within St. Julian .",
+      "query_to_candidate_entailment": 0.9876766621040561
+    },
+    {
+      "candidate": "On June 25 , 1866 , he was appointed titular bishop of `` Nisa in Lycia , and the Bishop of Velletri .",
+      "candidate_to_query_entailment": 0.929201109471643,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9554087598132919,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 1839,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "He was appointed as auxiliary bishop of `` Nisa in Lycia '' and titular bishop of Velletri on 25 June 1866 .",
+      "query_to_candidate_entailment": 0.9975449327462825
+    },
+    {
+      "candidate": "Three days Jesus spent in the belly of the fish , Jonas will spend three days in the grave .",
+      "candidate_to_query_entailment": 0.007177521228270356,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9965009150987214,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 1209,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Three days Jonas spent in the belly of fish , Jesus will spend three days in the grave .",
+      "query_to_candidate_entailment": 0.10521130666806994
+    },
+    {
+      "candidate": "In 1937 , Donald became the owner of the baseball team Toronto Maple Leafs , his son Ross became club president .",
+      "candidate_to_query_entailment": 0.9516164006286617,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9612575323569156,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 5320,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "In 1937 , Ross became co-owner of the Toronto Maple Leafs baseball team . His son Donald became club president .",
+      "query_to_candidate_entailment": 0.9776387913617797
+    },
+    {
+      "candidate": "Norman Melancton Geddes , born Norman Bel Geddes ( 27 April 1893 - 8 May 1958 ) , was an American theatre and industrial designer .",
+      "candidate_to_query_entailment": 0.9967797753522685,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9711035663942765,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 3370,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Norman Bel Geddes , born Norman Melancton Geddes ( April 27 , 1893 - May 8 , 1958 ) , was an American theatrical and industrial designer .",
+      "query_to_candidate_entailment": 0.9953712143235505
+    },
+    {
+      "candidate": "Santa Cruz Sky Park was an airport in Scotts Valley , California , within Santa Cruz County .",
+      "candidate_to_query_entailment": 0.0027266443483671197,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9849900428370081,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 3907,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Santa Cruz County was an airport in Scotts Valley , California , within Santa Cruz Sky Park .",
+      "query_to_candidate_entailment": 0.019279346605583732
+    },
+    {
+      "candidate": "The guitar was mastered by Bettencourt and Chris Gehringer played it at the Sterling Sound Studios in New York City .",
+      "candidate_to_query_entailment": 0.997835580255196,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.982328545867211,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 4727,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Bettencourt played the guitar and Chris Gehringer mastered it at the Sterling Sound Studios in New York City .",
+      "query_to_candidate_entailment": 0.9973893897104957
+    },
+    {
+      "candidate": "Abu Halifa or Abu Hulayfah or Abu Huleifa or Abu Haleifah is a small town in the Abu Halifa District of the Al Ahmadi Governorate in southern Kuwait",
+      "candidate_to_query_entailment": 0.9879330440202637,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9962061793889134,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 6660,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Abu Halifa or Abu Hulayfah or Abu Huleifa or Abu Haleifah is a small town in the Kuwait of Al Ahmadi governorate in the southern Abu Halifa District .",
+      "query_to_candidate_entailment": 0.9907393382516562
+    },
+    {
+      "candidate": "Hans Gildemeister defeated Eddie Dibbs 6 -- 4 , 6 -- 3 , 6 -- 1",
+      "candidate_to_query_entailment": 0.00022446485070469756,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.960719023416515,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 1879,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Eddie Dibbs defeated Hans Gildemeister with 6 -- 4 , 6 -- 3 , 6 -- 1 .",
+      "query_to_candidate_entailment": 0.00016887468521722653
+    },
+    {
+      "candidate": "The above examples of the singular theme `` -m '' were possessive for the first person .",
+      "candidate_to_query_entailment": 0.9832138379706594,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.983843235189577,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 7103,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The above examples for the possessive theme `` -m '' were for the first person singular .",
+      "query_to_candidate_entailment": 0.9768052352468922
+    },
+    {
+      "candidate": "In 2010 , another woman became a Pritzker Prize winner , Kazuyo Sejima from Japan , in partnership with Ryue Nishizawa .",
+      "candidate_to_query_entailment": 0.3134180334814326,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9909335875432128,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 3724,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "In 2010 , another woman Pritzker Prize winner , Ryue Nishizawa from Japan , was in partnership with Kazuyo Sejima .",
+      "query_to_candidate_entailment": 0.9782152163607275
+    },
+    {
+      "candidate": "Prudential Building ( HMB ) formerly called the Houston Main Building , was a skyscraper in Texas Medical Center , Houston , Texas .",
+      "candidate_to_query_entailment": 0.21473119072255792,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9922068330543845,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 7943,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The Houston Main Building ( HMB ) formerly the Prudential Building , was a skyscraper in the Texas Medical Center , Houston , Texas .",
+      "query_to_candidate_entailment": 0.9928986001619352
+    },
+    {
+      "candidate": "The Italian television series AleX was written by Alfredo Castelli , Guglielmo Duccoli and Giorgio Schottler and produced by videotime .",
+      "candidate_to_query_entailment": 0.12473913680927491,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9913266240553646,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 2729,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The Italian television series AleX was produced by Giorgio Schottler , Guglielmo Duccoli and Alfredo Castelli and written by videotime .",
+      "query_to_candidate_entailment": 0.7815045687257852
+    },
+    {
+      "candidate": "Gavin Carr is the orchestra 's Artistic Director , Peter Donohoe the Principal Guest Conductor and Jason Thornton the Associate Conductor .",
+      "candidate_to_query_entailment": 0.030481614775012593,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9756831894767662,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 3581,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Jason Thornton is the artistic director of the orchestra , Peter Donohoe , the principal guest conductor and Gavin Carr of the Associate Conductor .",
+      "query_to_candidate_entailment": 0.010287513369146363
+    },
+    {
+      "candidate": "When a higher number of different IEs is required , this often results in more capacity planning problems and inherently leads to a non-delivery of the IP .",
+      "candidate_to_query_entailment": 0.9943065931173986,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9908083565443904,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 4950,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "When a higher number of different IEs are required , it inherently results in more planning problems in capacity and often leads to a non-delivery of the IP .",
+      "query_to_candidate_entailment": 0.993706722828576
+    },
+    {
+      "candidate": "The group played extensively , became famous in Israel and even toured in New York City in 2007 .",
+      "candidate_to_query_entailment": 0.9965336862737028,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.997021629086064,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 3314,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "The group toured extensively and became famous in Israel , and even played in New York City in 2007 .",
+      "query_to_candidate_entailment": 0.9952790473897413
+    },
+    {
+      "candidate": "Rainbach im Innkreis is a municipality in the district of Sch\u00e4rding in the state of Upper Austria .",
+      "candidate_to_query_entailment": 0.9661313565936914,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9938836826988382,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 2594,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Rainbach im Innkreis is a municipality in the district of Upper Austria in the Austrian state of Sch\u00e4rding .",
+      "query_to_candidate_entailment": 0.986131954382303
+    },
+    {
+      "candidate": "It then crosses over the Washita River arm of Lake Texoma .",
+      "candidate_to_query_entailment": 0.9914136617114508,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9858964113758385,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 6972,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Then it crosses the Lake Texoma arm of the Washita River .",
+      "query_to_candidate_entailment": 0.9888407746770915
+    },
+    {
+      "candidate": "Lloyd expanded his business to begin selling toys and gifts , and he founded and directed the House of Lloyd , based in Grandview , Missouri , when the gift business grew .",
+      "candidate_to_query_entailment": 0.9982783317679086,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9688675633818719,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 2841,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Lloyd founded and led his business to begin selling toys and gifts , and he expanded the Grandview , Missouri based House of Lloyd as the gift business grew .",
+      "query_to_candidate_entailment": 0.9977447563385243
+    },
+    {
+      "candidate": "He played in 1993 with the A - Level Portland Sea Dogs and the AA Kane County Cougars .",
+      "candidate_to_query_entailment": 0.997133780381554,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9929063099799698,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 6682,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "In 1993 , he played with the A - Level Kane County Cougars and the AA Portland Sea Dogs .",
+      "query_to_candidate_entailment": 0.9600626155425237
+    },
+    {
+      "candidate": "Roy joined the Communist Party of India in 1963 and led trade union movements in Bansdroni in Kolkata .",
+      "candidate_to_query_entailment": 0.9888582250189942,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9955307613632642,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 1589,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Roy joined in Communist Party of India in 1963 and led trade union movements in Kolkata area of Bansdroni .",
+      "query_to_candidate_entailment": 0.9935875343835696
+    },
+    {
+      "candidate": "The next release was created by Ron 's brother Robert Fuller in 1986 .",
+      "candidate_to_query_entailment": 0.994311769333528,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9380997576731878,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 5507,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "The next version was produced in 1986 by Robert Fuller 's brother Ron .",
+      "query_to_candidate_entailment": 0.9782084660701054
+    },
+    {
+      "candidate": "Warren Haynes joined the touring and recording band by David Allan Coe in 1980 , when he was 20 years old .",
+      "candidate_to_query_entailment": 0.9896489201526597,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9241229548376624,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 6266,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "In 1980 , when he was 20 years old , David David Allan joined Warren Haynes ' touring and recording band .",
+      "query_to_candidate_entailment": 0.9628612838311014
+    },
+    {
+      "candidate": "The ships of the Siegfried class were overall long and long on the waterline .",
+      "candidate_to_query_entailment": 0.9931809723359477,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9782959763835727,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 5007,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "The ships of the `` Siegfried '' class were long at the waterline and long overall .",
+      "query_to_candidate_entailment": 0.9963549627797568
+    },
+    {
+      "candidate": "Mei Shigenobu is the mother of the Japanese national Fusako Shigenobu , a journalist .",
+      "candidate_to_query_entailment": 0.9441643167529125,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9777386085018576,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 4646,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Fusako Shigenobu is the mother of Japanese journalist Mei Shigenobu .",
+      "query_to_candidate_entailment": 0.9472341554993694
+    },
+    {
+      "candidate": "Ashte is a village in Palghar - district of Maharashtra , India It is located in the Dahanu - Taluka .",
+      "candidate_to_query_entailment": 0.9892741697539954,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9985012130370019,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 2469,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Ashte is a village in Dahanu - District of Maharashtra , India It is located in the Palghar Taluka .",
+      "query_to_candidate_entailment": 0.981632583781744
+    },
+    {
+      "candidate": "He was married to Elisabeth Young ( 1854 -- 1932 ) and was the father of the ship 's magnate N. O . Young Fearnley and landowner Thomas Fearnley .",
+      "candidate_to_query_entailment": 0.9970042399611111,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9876635414679956,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 6943,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "He was married to Elisabeth Young ( 1854 -- 1932 ) and was the father of shipping magnate Thomas Fearnley and landowner N. O . Young Fearnley .",
+      "query_to_candidate_entailment": 0.9969379102353318
+    },
+    {
+      "candidate": "The next town hall built in 1627 , in a Baroque architectural style , and was damaged in 1650 , 1653 , 1735 , and 1779 .",
+      "candidate_to_query_entailment": 0.9943646405397265,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9885141423397791,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 4307,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "The next town hall was damaged in the Baroque style in 1627 and was built in 1650 , 1653 , 1735 and 1779 .",
+      "query_to_candidate_entailment": 0.9970259454754027
+    },
+    {
+      "candidate": "Vempati Chinna Satyam ( October 15 , 1929 -- July 29 , 2012 ) was an Indian dancer and a guru of the Kuchipudi dance form .",
+      "candidate_to_query_entailment": 0.9829279133890058,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9922294694536228,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 4910,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Vempati Chinna Satyam ( 15 October 1929 -- 29 July 2012 ) was a Kuchipudi dancer and a guru of Indian dance .",
+      "query_to_candidate_entailment": 0.9537106628268521
+    },
+    {
+      "candidate": "The original team was created by writer Roy Thomas and artist Sal Buscema in `` The Avengers '' # 71 ( December 1969 ) .",
+      "candidate_to_query_entailment": 0.9903705593925074,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9863883979649126,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 7765,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The original team was produced by the writer Sal Buscema and artist Roy Thomas in `` The Avengers '' # 71 ( December 1969 ) .",
+      "query_to_candidate_entailment": 0.988932601729587
+    },
+    {
+      "candidate": "Lake Georgetown is also a source of drinking water for Georgetown and the nearby city of Round Rock .",
+      "candidate_to_query_entailment": 0.9792107719071184,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9858452669985253,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 7923,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Georgetown is also a drinking water source for Lake Georgetown and the nearby town of Round Rock .",
+      "query_to_candidate_entailment": 0.9938683421237072
+    },
+    {
+      "candidate": "During the First World War , he studied in Geneva , where he worked with Willi M\u00fcnzenberg .",
+      "candidate_to_query_entailment": 0.9926589296908789,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9482739346144606,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 4882,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "During the First World War he worked in Geneva , where he studied with Willy M\u00fcnzenberg .",
+      "query_to_candidate_entailment": 0.9959050995782078
+    },
+    {
+      "candidate": "The largest mosque , Al Farooq Masjid of Atlanta , is located on the 14th street in Midtown Atlanta .",
+      "candidate_to_query_entailment": 0.9943038622491398,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9980647942245989,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 4070,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The largest mosque , Al Farooq Masjid of Midtown Atlanta , is located on 14th Street in Atlanta .",
+      "query_to_candidate_entailment": 0.9938299613641444
+    },
+    {
+      "candidate": "The loveland occupied the first floor as its mercantile and the second floor served as the Masonic temple .",
+      "candidate_to_query_entailment": 0.0010580318077572422,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9936576333368776,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 250,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The loveland occupied the second floor as its mercantile and the first floor served as a Masonic temple .",
+      "query_to_candidate_entailment": 0.0007535276364248064
+    },
+    {
+      "candidate": "At the age of 19 she moved to New York , 2011 to Stockholm .",
+      "candidate_to_query_entailment": 0.8871421400972547,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9896155873737088,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 1771,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "She moved to Stockholm at the age of 19 , and moved to New York in 2011 .",
+      "query_to_candidate_entailment": 0.15861527948071028
+    },
+    {
+      "candidate": "Frank James joined a local society recruited for the secessionist Drew Lobbs Army , and fought in August 1861 at the Battle of Wilson 's Creek .",
+      "candidate_to_query_entailment": 0.9855049208520159,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9738757082544414,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 4236,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Frank James joined a secessionist company , recruited for the local Drew Lobbs Army , and fought in August 1861 in the Battle of Wilson 's Creek .",
+      "query_to_candidate_entailment": 0.9835339762740636
+    },
+    {
+      "candidate": "The energetic space in relation to the operator formula 26 is then the Sobolev space formula 96 We see that motivated the elastic energy of the string that motivated this study",
+      "candidate_to_query_entailment": 0.9976454199043832,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9637180961415079,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 4138,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The elastic space in respect to the operator formula _ 26 is then the Sobolev space formula _ 96 . We see that the energetic energy of the string which motivated this study is",
+      "query_to_candidate_entailment": 0.9958404131331953
+    },
+    {
+      "candidate": "It is an offshore island Baffin - island located in Cornelius Grinnell Bay .",
+      "candidate_to_query_entailment": 0.9951124639721822,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9922058758295944,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 6656,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "It is a Cornelius Grinnell Bay offshore island located in Baffin Island .",
+      "query_to_candidate_entailment": 0.9954682746621542
+    },
+    {
+      "candidate": "Previous secretaries include John MacKay , who received an MBE for services to Scottish Horticulture , Alison Murison , Tom Mabbott and Dr. John MacLennan .",
+      "candidate_to_query_entailment": 0.23722818273135227,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9705497061486498,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 3275,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Previous secretaries include Alison Murison , Tom Mabbott , who received an MBE for services to Scottish gardening , John MacLennan and Dr. John MacKay .",
+      "query_to_candidate_entailment": 0.005371466917574473
+    },
+    {
+      "candidate": "Navarro is a partido in the northeast of Argentina in the province of Buenos Aires .",
+      "candidate_to_query_entailment": 0.9912770278333942,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.997096070453938,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 6737,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Navarro is a partido in the northeast of the province of Buenos Aires in Argentina .",
+      "query_to_candidate_entailment": 0.9917730393459278
+    },
+    {
+      "candidate": "In Cuba its cultivation was introduced in 1880 , by Fernando Heydrich in Matanzas .",
+      "candidate_to_query_entailment": 0.9966389722711086,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9549544477761205,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 6543,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Its cultivation was introduced by Fernando Heydrich in Cuba in 1880 .",
+      "query_to_candidate_entailment": 0.0010392474716030946
+    },
+    {
+      "candidate": "The piece was published in 1631 under the subtitle \u201c The School of Complement \u201d in a Quarto printed by Elizabeth Allde for bookseller Francis Constable .",
+      "candidate_to_query_entailment": 0.9852688979509998,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9954000015419839,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 3364,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The piece was printed in 1631 under the subtitle `` The School of Complement '' in a Quarto published by Elizabeth Allde for bookseller Francis Constable .",
+      "query_to_candidate_entailment": 0.9782905717864141
+    },
+    {
+      "candidate": "It was bought in 1834 by Robert Curzon in the monastery of Saba and saw in 1883 by C. R. Gregory .",
+      "candidate_to_query_entailment": 0.5539281489831549,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9900245118124735,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 7109,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "It was bought in 1834 by C. R. Gregory in the monastery of Saba , in 1883 by Robert Curzon .",
+      "query_to_candidate_entailment": 0.038695004915462954
+    },
+    {
+      "candidate": "In Alcamo the 12 verses are alternated in this way : one is sung , the other is said .",
+      "candidate_to_query_entailment": 0.9482006074778645,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9915034129169462,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 730,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "In Alcamo the 12 verses are sung in this way : one is alternated , the other said .",
+      "query_to_candidate_entailment": 0.5212808639099489
+    },
+    {
+      "candidate": "In Sri Lanka , the title of Chartered Accountant ( CA Sri Lanka ) can be used by only members of the Institute of Chartered Accountants of Sri Lanka .",
+      "candidate_to_query_entailment": 0.9954301446268753,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9340749202174592,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 1516,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "In CA , the title of the accountant ( Sri Lanka Sri Lanka ) can only be used by members of the Institute of Accountants in Sri Lanka .",
+      "query_to_candidate_entailment": 0.9680876861503253
+    },
+    {
+      "candidate": "Where `` e '' the magnetic charge of the particle and A is the electrical vector potential of the electromagnetic field .",
+      "candidate_to_query_entailment": 0.7964561795744265,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9908437281017193,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 2244,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Where `` e '' is the electric charge of the particle and A the magnetic vector potential of the electromagnetic field .",
+      "query_to_candidate_entailment": 0.47797466788503484
+    },
+    {
+      "candidate": "In the ratings below , the lowest rating for the show will be in red , and the highest rating for the show will be in blue episode .",
+      "candidate_to_query_entailment": 0.026066735462291074,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9387096844019484,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 4718,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "In the reviews below will be the highest evaluation for the show in red , and the lowest rating for the show will be in blue episode .",
+      "query_to_candidate_entailment": 0.01755833294210388
+    },
+    {
+      "candidate": "`` gravityWall '' was used as the second opening motif for the Anime television series , while `` sh0ut '' was used as the first opening motif .",
+      "candidate_to_query_entailment": 0.0026714270655312736,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9177209425677012,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 6771,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "`` gravityWall '' was used as the first opening topic for the Anime - TV series '' , while `` sh0ut '' was used as the second opening theme .",
+      "query_to_candidate_entailment": 0.0020904589885099435
+    },
+    {
+      "candidate": "A biblical doom is a negative blessing in its most formal sense .",
+      "candidate_to_query_entailment": 0.9578374730172877,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9915667851856453,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 7838,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "A biblical doom is a formal blessing in its most negative sense .",
+      "query_to_candidate_entailment": 0.9473503978027795
+    },
+    {
+      "candidate": "In practice are mesquite `` modules '' Java - classes , usually abstract subclasses of concrete class definitions .",
+      "candidate_to_query_entailment": 0.6072485439704561,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9888820476828374,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 766,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "In practice , Mesquite `` modules '' Java - classes are usually concrete subclasses of abstract class definitions .",
+      "query_to_candidate_entailment": 0.00671629899843813
+    },
+    {
+      "candidate": "The Tabaci River is a tributary of the River Leurda in Romania .",
+      "candidate_to_query_entailment": 0.024784195347018777,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9526359857017956,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 3259,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The Leurda River is a tributary of the Tabaci River in Romania .",
+      "query_to_candidate_entailment": 0.009704580251736367
+    },
+    {
+      "candidate": "Hardy participated and lost in his first match ( his final departure ) against The Rock .",
+      "candidate_to_query_entailment": 0.1015296745111356,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9814167047399085,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 2493,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Hardy competed in his final match ( his first departure ) against The Rock and lost .",
+      "query_to_candidate_entailment": 0.9905278155667115
+    },
+    {
+      "candidate": "A CD with themes from fourteen of his films was published by Philip Powers in 2008 and produced by 1M1 records .",
+      "candidate_to_query_entailment": 0.1821105881490838,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9983393993988334,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 6370,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "A CD with themes from fourteen of his films was produced by Philip Powers in 2008 and published by 1M1 Records .",
+      "query_to_candidate_entailment": 0.8765400869729556
+    },
+    {
+      "candidate": "The team also toured in Australia in 1953 and Asia in August 1959 .",
+      "candidate_to_query_entailment": 0.16080419922345485,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9974702498730981,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 7169,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The team toured also in Asia in 1953 and Australia in August 1959 .",
+      "query_to_candidate_entailment": 0.9777489839013168
+    },
+    {
+      "candidate": "Ringo Sheena is the leader of the Saito Neko Quartet , and is known for his many collaborations with musician Saito .",
+      "candidate_to_query_entailment": 0.0028566915695515333,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9766924849232704,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 675,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Saito is the head of the Saito Neko Quartet and is well known for his many collaborations with the musician Ringo Sheena .",
+      "query_to_candidate_entailment": 0.10932043038770399
+    },
+    {
+      "candidate": "`` Pure '' very means simply , and `` Belter '' or `` Belta '' means great or good .",
+      "candidate_to_query_entailment": 0.9070327518806414,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9685560824901085,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 243,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "`` Pure '' means simply very and `` Belter '' or `` Belta '' means good or big .",
+      "query_to_candidate_entailment": 0.9922404714146608
+    },
+    {
+      "candidate": "Leigh Court Barn is a cruck framed tithe barn at Leigh , Worcestershire , England , built in the early fourteenth century to store produce for Pershore Abbey .",
+      "candidate_to_query_entailment": 0.5560737820960133,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9853966347517789,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 3475,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Leigh Court Barn is a cruck framed tithe barn at the Pershore Abbey , built in the early fourteenth century to store products for Leigh , Worcestershire , England .",
+      "query_to_candidate_entailment": 0.9759137285235937
+    },
+    {
+      "candidate": "Emily Ann Lloyd ( born March 27 , 1984 in Emily Ann Morelli ) is an American American actress .",
+      "candidate_to_query_entailment": 0.9813986944167625,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9626329237066223,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 5334,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Emily Ann Morelli ( born Emily Ann Lloyd ; March 27 , 1984 ) is an American actress .",
+      "query_to_candidate_entailment": 0.9859100067634651
+    },
+    {
+      "candidate": "Aldro was founded at Meads in Eastbourne in 1898 and moved to its former home , the present residence of Sir Edgar Horne , 1st Baronet , in 1940 .",
+      "candidate_to_query_entailment": 0.9954188203293712,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9967275651855776,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 2721,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Aldro was founded in 1898 in Meads in Eastbourne and moved to its present home in 1940 , the former residence of Sir Edgar Horne , 1st Baronet .",
+      "query_to_candidate_entailment": 0.9467204593099736
+    },
+    {
+      "candidate": "He attended Seton Hall Preparatory School in nearby West Orange ( now located in South Orange , New Jersey ) .",
+      "candidate_to_query_entailment": 0.9889469772387899,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9959961694815045,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 7289,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "He attended Seton Hall Preparatory School in the nearby South Orange , New Jersey ( now in West Orange ) .",
+      "query_to_candidate_entailment": 0.9888940859334604
+    },
+    {
+      "candidate": "The cards are dealt as shown in the bridge hand diagram ; North is the dealer and starts the auction which proceeds as shown in the bidding table .",
+      "candidate_to_query_entailment": 0.9976409416008901,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9834910784730507,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 7522,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "The cards are shown as in the Bridge Hand diagram , North is the dealer and executes the auction that starts as dealt in the bidding table .",
+      "query_to_candidate_entailment": 0.9934341660760309
+    },
+    {
+      "candidate": "Suggestions from Met to extend from Paddington to South Kensington and east from Moorgate to Tower Hill to the south were accepted and received royal consent on July 29 , 1864 .",
+      "candidate_to_query_entailment": 0.9950252307042534,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9420961069418271,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 7244,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Proposals from the Met to extend east from Paddington to South Kensington and south from Moorgate to Tower Hill were accepted and received royal assent on 29 July 1864 .",
+      "query_to_candidate_entailment": 0.9974197955321796
+    },
+    {
+      "candidate": "The groups '' Air `` , Howie B , Mars IV , Les N\u00e9gresses Vertes and FFF and Manu Chao also participated in the album .",
+      "candidate_to_query_entailment": 0.9542304229985892,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.96249307580548,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 4431,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Manu Chao , the groups '' Air `` , Cassius , Mars IV , Les N\u00e9gresses Vertes and FFF and Howie B also participated on the album .",
+      "query_to_candidate_entailment": 0.9883084785188878
+    },
+    {
+      "candidate": "It serves the south-eastern Edithvale suburb of Melbourne opening on September 20 , 1919 .",
+      "candidate_to_query_entailment": 0.9922082449558781,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9642911200069677,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 4957,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "It serves the southeasternmost Melbourne suburb of Edithvale opening on 20 September 1919 .",
+      "query_to_candidate_entailment": 0.9935051981438245
+    },
+    {
+      "candidate": "Sikhism is a religion that began in India in the first century with the center of the fifteenth guru , known as Guru Nanak Dev Ji ( 1469-1539 C.E . ) .",
+      "candidate_to_query_entailment": 0.9608284764060011,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9852233916501036,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 5492,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Sikhism is a religion that began in India in the mid-fifteenth century with the first Guru , known as Guru Nanak Dev Ji ( 1469-1539 C.E . ) .",
+      "query_to_candidate_entailment": 0.9036416977784901
+    },
+    {
+      "candidate": "Some historians say that the ruling class in Holland wanted Holland to integrate with the Flemish economic system and adopt Flemish legal institutions .",
+      "candidate_to_query_entailment": 0.982472963030798,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9964294504204351,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 6131,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Some historians say that the ruling class in Holland wanted Holland to integrate into the Flemish legal system and adopt Flemish economic institutions .",
+      "query_to_candidate_entailment": 0.992736095429792
+    },
+    {
+      "candidate": "An EP called Dido Live with three of the seventeen live tracks on the DVD was released exclusively via the iTunes Store digitally on June 21 , 2005 .",
+      "candidate_to_query_entailment": 0.9898850285483817,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.998966114302594,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 2680,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "An EP called Dido Live with three of the seventeen live tracks on the DVD was digitally released exclusively on the iTunes Store on June 21 , 2005 .",
+      "query_to_candidate_entailment": 0.9962820585170987
+    },
+    {
+      "candidate": "The wounds of the dead man begin to bleed again , due to the presence of the killer , and thus a burlesque search for the invisible man begins .",
+      "candidate_to_query_entailment": 0.9691393219347973,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.986422506924112,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 2249,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "The wounds of the invisible man begin to bleed again due to the presence of the murderer and thus a burlesque search for the dead begins .",
+      "query_to_candidate_entailment": 0.9592980084242809
+    },
+    {
+      "candidate": "In 1963 Kjeld Deichmann died suddenly and Erica closed the studio and gave up the pottery art .",
+      "candidate_to_query_entailment": 0.9395241610738118,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.985692406247539,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 4580,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Erica died suddenly in 1963 and Kjeld Deichmann closed the studio and gave up pottery .",
+      "query_to_candidate_entailment": 0.9826152209259759
+    },
+    {
+      "candidate": "It serves Chandimandir Cantonment area of Panchkula city .",
+      "candidate_to_query_entailment": 0.9185203534115015,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9925035021763673,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 927,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "It serves Panchkula area of the city Chandimandir Cantonment .",
+      "query_to_candidate_entailment": 0.9945656811278862
+    },
+    {
+      "candidate": "( 1 ) Minneapolis Lakers vs. ( 1 ) Syracuse Nationals : `` Lakers win 4 -- 3 '' Series",
+      "candidate_to_query_entailment": 0.9960916432613671,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9792824517514436,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 5046,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "( 1 ) Lakers versus ( 1 ) Syracuse Nationals : `` Minneapolis Lakers win 4 -- 3 '' Series .",
+      "query_to_candidate_entailment": 0.9895106692353299
+    },
+    {
+      "candidate": "Ibn Amira was born at Alzira in the province of Valencia .",
+      "candidate_to_query_entailment": 0.996315527061141,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9959085689571838,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 1230,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Ibn Amira was born in Valencia , the province of Alzira .",
+      "query_to_candidate_entailment": 0.9916704836928187
+    },
+    {
+      "candidate": "The plant can have some medical properties and has been used in traditional Chinese medicine in South Asia and traditional medicine .",
+      "candidate_to_query_entailment": 0.9979859132145276,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9867822160764251,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 1499,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "The plant may have some medicinal properties and has been used in traditional medicine in South Asia and traditional Chinese medicine .",
+      "query_to_candidate_entailment": 0.997690894171277
+    },
+    {
+      "candidate": "ZipSIP-ZipSIP is a new service that helps investors with paperless processes to invest in investment funds in a few minutes .",
+      "candidate_to_query_entailment": 0.9882492777434293,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9942016547824781,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 2950,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "ZipSIP-ZipSIP is a paperless service that helps investors invest in investment funds with new processes in a few minutes .",
+      "query_to_candidate_entailment": 0.9887031492400954
+    },
+    {
+      "candidate": "The single was sent to Radio Airplay in Italy on October 12 , 2012 and published worldwide on December 3 , 2012 .",
+      "candidate_to_query_entailment": 0.9979075705781789,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9593613298195729,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 5276,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The single was released on Radio Airplay in Italy on October 12 , 2012 , and was shipped worldwide on December 3 , 2012 .",
+      "query_to_candidate_entailment": 0.9970492751830067
+    },
+    {
+      "candidate": "Among them are Marie Teresa Rios , a composer of boleros , Julita Ross , an author , and Sylvia Rexach , a singer .",
+      "candidate_to_query_entailment": 0.7201944004483198,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9868217004059237,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 686,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Among them are Sylvia Rexach , a composer of Boleros , Marie Teresa Rios , author , and Julita Ross , a singer .",
+      "query_to_candidate_entailment": 0.9758153702022656
+    },
+    {
+      "candidate": "In 1974 , the present district was merged with Repton Rural District and part of the South East Derbyshire Rural District to form the urban South Derbyshire District .",
+      "candidate_to_query_entailment": 0.9951907471036029,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9794623289518147,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 5584,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "In 1974 , the district was merged with Repton Rural District and part of the South East Derbyshire Rural District to form today 's South Derbyshire District .",
+      "query_to_candidate_entailment": 0.9564759448198301
+    },
+    {
+      "candidate": "Don Driggs was born in 1907 in Driggs , Idaho , to Junius , who founded the city , and May Jerusha Robison .",
+      "candidate_to_query_entailment": 0.17139765849130967,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9738024542604924,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 1372,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Junius was born in 1907 in Driggs , Idaho , to create Don Carlos Driggs , who founded the city , and May Jerusha Robison .",
+      "query_to_candidate_entailment": 0.011934170898406224
+    },
+    {
+      "candidate": "Mary , married on April 26 , 1646 , Claude Simon Brancion , daughter of Beaufort , Lord of S. Quentin , whom he had .",
+      "candidate_to_query_entailment": 0.055511477122832546,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9513508177825967,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 1382,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "III Claude Simon Brancion , married on April 26 , 1646 , Mary , daughter of Beaufort , the Lord of S. Quentin , whom he had :",
+      "query_to_candidate_entailment": 0.6859841388103237
+    },
+    {
+      "candidate": "The first category is monovalent verbs , where there is only one semantic argument and it consists of both unergative verbs and unaccusative verbs .",
+      "candidate_to_query_entailment": 0.2608318151870538,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9767009676614609,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 3107,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The first category is unergative verbs , where there is only one unaccountable argument and consists of both semantic verbs and monovalent verbs .",
+      "query_to_candidate_entailment": 0.8083851301094661
+    },
+    {
+      "candidate": "On June 3rd , 1961 , Emile Griffith lost to Gaspar , the bout would be his first shot at a World Championship .",
+      "candidate_to_query_entailment": 0.0019129798001780354,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9656617125494998,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 6228,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "On June 3 , 1961 , Gaspar lost to Emile Griffith , the struggle would be his first shot at a World Championship .",
+      "query_to_candidate_entailment": 0.003267819471536008
+    },
+    {
+      "candidate": "It serves the southeasternmost Melbourne suburb of Edithvale opening on 20 September 1919 .",
+      "candidate_to_query_entailment": 0.9906497921450539,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9709789331325402,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 268,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "It serves to the south-eastern Edithvale suburb of Melbourne opening on 20 September 1919 .",
+      "query_to_candidate_entailment": 0.9946227940209409
+    },
+    {
+      "candidate": "In April 1942 , Britten returned to England , and soon after returning he asked Montagu Slater to be his librettist for Peter Grimes .",
+      "candidate_to_query_entailment": 0.004721913364038182,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9887874356030475,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 2300,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "In April 1942 , Montagu Slater returned to England and asked Britten to be his librettist for `` Peter Grimes '' shortly after his return .",
+      "query_to_candidate_entailment": 0.018755833614481018
+    },
+    {
+      "candidate": "Lieutenant John Gedge commissioned her to the North Sea in May 1805 , and Lieutenant Robert Ramsey replaced him in 1806 .",
+      "candidate_to_query_entailment": 0.9056362736528965,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9800049117957967,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 2825,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Lieutenant Robert Ramsey commissioned them for the North Sea in May 1805 , and Lieutenant John Gedge replaced him in 1806 .",
+      "query_to_candidate_entailment": 0.012320709898820718
+    },
+    {
+      "candidate": "Born was born in Germany to Jewish parents , the son of Hedwig Ehrenberg and the scientist Max Born .",
+      "candidate_to_query_entailment": 0.9916906841912383,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9877038125077037,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 6750,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Born in Germany was born to Jewish parent , the son of Max Born and scientist Hedwig Ehrenberg .",
+      "query_to_candidate_entailment": 0.9952053215711398
+    },
+    {
+      "candidate": "Brewarrina includes Brewarrina Shire and the villages of Gongolgon , Angledool and Goodooga and the ghost town of Tarcoon .",
+      "candidate_to_query_entailment": 0.9982386807076944,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9876555905662938,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 7163,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Brewarrina Shire comprises Brewarrina and the villages of Gongolgon , Angledool and Goodooga and the ghost town of Tarcoon .",
+      "query_to_candidate_entailment": 0.9979842195279666
+    },
+    {
+      "candidate": "After moving to Salt Lake City in the 1920s and then Ogden Utah , Robertson and his family settled in Mapleton Utah in 1937 .",
+      "candidate_to_query_entailment": 0.8568366108471482,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9965071207018246,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 3806,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "After the move to Ogden Utah in the 1920s and then to Salt Lake City , Robertson and his family settled in Mapleton Utah in 1937 .",
+      "query_to_candidate_entailment": 0.4121372286499872
+    },
+    {
+      "candidate": "In 1991 before 1995 he was a master ( together with Dzhigarkhanyan Armen ) acting course at VGIK , he taught at GITIS .",
+      "candidate_to_query_entailment": 0.9937100320659423,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.994641989373996,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 5709,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "In 1991 before 1995 he taught a master ( together with Armen Dzhigarkhanyan ) acting course at VGIK , he was at GITIS .",
+      "query_to_candidate_entailment": 0.9921769236426574
+    },
+    {
+      "candidate": "Round Island is currently uninhabited and is owned by the U.S. Forest Service in its entirety , and is managed as part of the Hiawatha National Forest .",
+      "candidate_to_query_entailment": 0.9980544839581119,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9555993835588827,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 7980,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Round Island is currently uninhabited and is administered in its entirety by the U.S. Forest Service , and is part of the Hiawatha National Forest .",
+      "query_to_candidate_entailment": 0.9968184002860452
+    },
+    {
+      "candidate": "Slough High School was a selective school for girls in Berkshire , now Slough , Buckinghamshire .",
+      "candidate_to_query_entailment": 0.01926638702132668,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9968251694539979,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 4087,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Slough High School was a selective school for girls in Slough , Buckinghamshire , now Berkshire .",
+      "query_to_candidate_entailment": 0.48668303262050744
+    },
+    {
+      "candidate": "The normalization factor makes absolute over the entire space of the square of the integral value equal to 1 .",
+      "candidate_to_query_entailment": 0.8888091293517716,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.985809055703724,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 4782,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The normalization factor makes the integral equal to 1 over the entire space of the square of the absolute value .",
+      "query_to_candidate_entailment": 0.0341611277781529
+    },
+    {
+      "candidate": "Later , during the attack on Andrew , Count of Angoul\u00eame , Richard would be Adhemar 's troops .",
+      "candidate_to_query_entailment": 0.21873887726310182,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9616961220957805,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 3020,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Later , Andrew Richard \u2019 s forces would be during the attack on Adhemar , Count of Angoul\u00eame .",
+      "query_to_candidate_entailment": 0.0038742357969099406
+    },
+    {
+      "candidate": "The agency has its headquarters in Paris , France , and its overseas office - Operations - Office in Arlington , Virginia .",
+      "candidate_to_query_entailment": 0.6445838617037463,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9916629089950675,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 1638,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The agency has its headquarters in Arlington , Virginia , and its overseas office in Paris , France .",
+      "query_to_candidate_entailment": 0.0033075290159148138
+    },
+    {
+      "candidate": "Vermont is bordered to the north of Mitcham , to the west by Nunawading and Forest Hill , to the south by Vermont and to the east by Wantirna and Ringwood .",
+      "candidate_to_query_entailment": 0.9725153982920297,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9847385834957106,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 1374,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Vermont South is bordered to the north by Mitcham , to the west by Nunawading and Forest Hill , to the south of Vermont and to the east by Wantirna and Ringwood .",
+      "query_to_candidate_entailment": 0.17984705298512163
+    },
+    {
+      "candidate": "Westlake is a city in Louisiana , USA , in the western Calcasieu Parish , and is part of Lake Charles Metropolitan Statistical Area .",
+      "candidate_to_query_entailment": 0.9976720762723541,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.989644929798783,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 295,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Westlake is a city in Calcasieu Parish , in western Louisiana , United States , and is part of the Lake Charles Metropolitan Statistical Area .",
+      "query_to_candidate_entailment": 0.997237097588223
+    },
+    {
+      "candidate": "The new year , the spring , the wine and the joyful are also loved .",
+      "candidate_to_query_entailment": 0.9698202974237903,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9651210203715888,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 1471,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Also , `` The new year , the spring , the wine and the beloved are joyful .",
+      "query_to_candidate_entailment": 0.9586157099690847
+    },
+    {
+      "candidate": "On May 8 , 2015 , Michel Soro lost to Tapia .",
+      "candidate_to_query_entailment": 0.012355579028377627,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9646178707611686,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 2936,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "On 8 May 2015 , Tapia lost Michel Soro .",
+      "query_to_candidate_entailment": 0.050978971389684075
+    },
+    {
+      "candidate": "In August 2017 , Team Prakash Raj joined the team to play the role of producer Aluri Chakrapani .",
+      "candidate_to_query_entailment": 0.0011609524006762576,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9811320697867987,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 4243,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "In August 2017 , Aluri Chakrapani joined the team to supposedly play the role of producer Prakash Raj .",
+      "query_to_candidate_entailment": 0.0006069025060244816
+    },
+    {
+      "candidate": "The film was photographed by A. Sreekar Prasad and edited by Rajiv Menon .",
+      "candidate_to_query_entailment": 0.9785333813179456,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9904676713354268,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 4470,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The movie was photographed by Rajiv Menon and edited by A. Sreekar Prasad .",
+      "query_to_candidate_entailment": 0.989152089360737
+    },
+    {
+      "candidate": "In 1977 , Barber traveled to Scotland and Norway with Rob Taylor to climb waterfalls .",
+      "candidate_to_query_entailment": 0.08246518323760788,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9885387232747019,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 1890,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "In 1977 , Rob Taylor traveled to Scotland and Norway with Barber to climb waterfalls .",
+      "query_to_candidate_entailment": 0.0028180721661140717
+    },
+    {
+      "candidate": "Three years later he won a silver medal in the same competition at the European Championships in Hahnenklee for western Germany .",
+      "candidate_to_query_entailment": 0.9944350743086372,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9840775571893072,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 1568,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Three years later , he won a silver medal in the same event for Hahnenklee at the European championships in West Germany .",
+      "query_to_candidate_entailment": 0.9942751715236293
+    },
+    {
+      "candidate": "It was handed over to Lord Cromwell in 1605 , and in 1636 sold to Sir Francis Blundell .",
+      "candidate_to_query_entailment": 0.9986559673485356,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.978427217883584,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 6121,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "In 1605 , it was sold to Lord Cromwell and moved to Sir Francis Blundell in 1636 .",
+      "query_to_candidate_entailment": 0.9973878345867979
+    },
+    {
+      "candidate": "Born in Jersey City , New Jersey , Longo attended Marist High School in Bayonne , New Jersey and the University of Rhode Island .",
+      "candidate_to_query_entailment": 0.9923582692627901,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9759050616332594,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 4890,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Longo , born in Bayonne , New Jersey , visited the Marist High School in Jersey City , New Jersey and the University of Rhode Island .",
+      "query_to_candidate_entailment": 0.9963176781020217
+    },
+    {
+      "candidate": "In 1920 and 1921 in Venice the Italians won -- no other nation entered in 1920 , and in 1921 the French did not start .",
+      "candidate_to_query_entailment": 0.9910455993500226,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9643671570109147,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 3297,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "In 1920 and 1921 in Venice the Italians joined -- in 1920 no other nation won and in 1921 the French entry did not start .",
+      "query_to_candidate_entailment": 0.9931399565286413
+    },
+    {
+      "candidate": "A biblical doom is , in its most negative sense , a formal blessing .",
+      "candidate_to_query_entailment": 0.9882294461684948,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9860853359353126,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 4071,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "A biblical doom is a negative blessing in its most formal sense .",
+      "query_to_candidate_entailment": 0.9916480709349296
+    },
+    {
+      "candidate": "Until 1951 , he was active as a socialist in post-war legislation when he decided to focus on local politics .",
+      "candidate_to_query_entailment": 0.9946693624648661,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9717199376086443,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 3598,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "He was active as a socialist in the local legislature until 1951 , when he decided to focus on post-war politics .",
+      "query_to_candidate_entailment": 0.9978983116231079
+    },
+    {
+      "candidate": "A A Khap is a clan or group of related clans , mainly under the jats of the western Uttar Pradesh and eastern Haryana .",
+      "candidate_to_query_entailment": 0.9970879755335122,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9895651975813349,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 3549,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "A Khap is a clan , or a group of related clans , mainly among the Jats of eastern Uttar Pradesh and western Haryana .",
+      "query_to_candidate_entailment": 0.9951488967965447
+    },
+    {
+      "candidate": "Enoteche spread to Austria north of the Alps under the German name of \u2018 Vinothek `` \u2019 and from Germany to Austria .",
+      "candidate_to_query_entailment": 0.9961472935317652,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9592316140373152,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 3291,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Under the German name `` Vinothek '' and from Austria to Germany the enoteches north of the Alps have spread to Austria .",
+      "query_to_candidate_entailment": 0.9958398760896491
+    },
+    {
+      "candidate": "Following the invasion of Poland by Nazi - Germany and the Soviet Union in 1939 , Osterwa was active in underground education , but was also ill .",
+      "candidate_to_query_entailment": 0.9956951811844942,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9949063850212627,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 2753,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Following the invasion of Poland by Nazi - Germany and the Soviet Union in 1939 , Osterwa became active in underground education , but also became ill .",
+      "query_to_candidate_entailment": 0.9965714347021588
+    },
+    {
+      "candidate": "On May 8 , 2015 , Tapia lost to Michel Soro .",
+      "candidate_to_query_entailment": 0.942840684728442,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9604290527600301,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 3976,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "On 8 May 2015 , Michel Soro Tapia lost .",
+      "query_to_candidate_entailment": 0.9937818568529324
+    },
+    {
+      "candidate": "Vermont South is bordered to the north of Mitcham , to the west by Nunawading and Forest Hill , to the south by Vermont and to the east by Wantirna and Ringwood .",
+      "candidate_to_query_entailment": 0.9919163188421545,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9880408871766582,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 4526,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Vermont is bordered to the north of Mitcham , to the west by Nunawading and Forest Hill , to the south by Vermont and to the east by Wantirna and Ringwood .",
+      "query_to_candidate_entailment": 0.9625489912889192
+    },
+    {
+      "candidate": "Jo\u00e3o Martins Pena and Francisca de Paula Julieta Pena was born in Rio de Janeiro to Pena Martins .",
+      "candidate_to_query_entailment": 0.9940581698291492,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9750775832645024,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 4176,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Martins Pena was born in Rio de Janeiro to Pena Jo\u00e3o Martins and Francisca de Paula Julieta Pena .",
+      "query_to_candidate_entailment": 0.9777886398261215
+    },
+    {
+      "candidate": "The compound was developed by Dr. Patrick Page and his team and was patented by Genkyotex in 2007 .",
+      "candidate_to_query_entailment": 0.9952626609624065,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9823917461148656,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 661,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "The compound was patented by Dr. Patrick Page and his team and was invented by Genkyotex in 2007 .",
+      "query_to_candidate_entailment": 0.9975968813706441
+    },
+    {
+      "candidate": "He played with his local club Adrigole Gaelic football and was a member of the Cork Senior Intercounty Team in the 1960s and 1970s .",
+      "candidate_to_query_entailment": 0.9972938425006991,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.977845891662489,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 634,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "He played senior inter-county football with his local club Adrigole and was a member of the Cork Gaelic team in the 1960s and 1970s .",
+      "query_to_candidate_entailment": 0.996862997145239
+    },
+    {
+      "candidate": "The reniform stigma is yellow and black outlined .",
+      "candidate_to_query_entailment": 0.9943770346458107,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9796785364431686,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 582,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "The yellow and black stigma is outlined in reniform .",
+      "query_to_candidate_entailment": 0.9934827852609622
+    },
+    {
+      "candidate": "After moving to Salt Lake City in the 1920s and then setting up Ogden Utah , Robertson and his family in Mapleton Utah in 1937 .",
+      "candidate_to_query_entailment": 0.9492434439708131,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9750012745415138,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 5063,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "After moving to Ogden Utah in the 1920s and then Salt Lake City , Robertson and his family settled in Mapleton Utah in 1937 .",
+      "query_to_candidate_entailment": 0.9608943864837152
+    },
+    {
+      "candidate": "The school has well maintained classrooms and an intelligent faculty , most of the classes are good classes .",
+      "candidate_to_query_entailment": 0.9972387219354826,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9759147550800278,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 2509,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "The school has well maintained classrooms and good faculty . Most of the classes are smart classes .",
+      "query_to_candidate_entailment": 0.9916234691389244
+    },
+    {
+      "candidate": "After the move to Ogden Utah in the 1920s and then to Salt Lake City , Robertson and his family settled in Mapleton Utah in 1937 .",
+      "candidate_to_query_entailment": 0.9620167506071826,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9775699862683195,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 2398,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "After moving to Salt Lake City in the 1920s and then setting up Ogden Utah , Robertson and his family in Mapleton Utah in 1937 .",
+      "query_to_candidate_entailment": 0.9952669587115304
+    },
+    {
+      "candidate": "The species are members of different ecological groups , including tropical shrubs , lianas and trees , xerophytic plants , mycoheterotrophic as well as various herbal representatives .",
+      "candidate_to_query_entailment": 0.9977768970432072,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9789054357527958,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 618,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "The species are members of various ecological groups , including xerophytic shrubs , lianas and trees , tropical plants , mycoheterotrophs , as well as different herbaceous representatives .",
+      "query_to_candidate_entailment": 0.996615830611178
+    },
+    {
+      "candidate": "Sparrow was a right-handed player and played 4 innings in 2 first-class matches with an average of 18.75 and a top rating of 64 .",
+      "candidate_to_query_entailment": 0.827795444755303,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9707815871092449,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 4409,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Sparrow was a right-first batsman and played 4 innings in 2 handed-class matches with an average of 18.75 and a top score of 64 .",
+      "query_to_candidate_entailment": 0.9718407822013692
+    },
+    {
+      "candidate": "Josiah Warren was an individualist anarchist and close associate of Stephen Pearl Andrews .",
+      "candidate_to_query_entailment": 0.30548778665662024,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9666087646249599,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 4340,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Stephen Pearl Andrews was an individualist anarchist and close partner of Josiah Warren .",
+      "query_to_candidate_entailment": 0.10284373608515865
+    },
+    {
+      "candidate": "Roy joined the Communist Party of India in 1963 and led trade union movements in Bansdroni in Kolkata .",
+      "candidate_to_query_entailment": 0.9937578029505997,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9927792748472122,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 642,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "In 1963 , Roy joined the Communist Party of India and led trade union movements in the Kolkata area of Bansdroni .",
+      "query_to_candidate_entailment": 0.9956305766215402
+    },
+    {
+      "candidate": "Podkriv\u00e1\u0148 is a village and municipality in Detva District , in the Bansk\u00e1 Bystrica Region of central Slovakia .",
+      "candidate_to_query_entailment": 0.9963661990973692,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9911194465900304,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 6420,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Podkriv\u00e1\u0148 is a village and municipality in the region Bansk\u00e1 Bystrica , in the district of Detva in Central Slovakia .",
+      "query_to_candidate_entailment": 0.9929303219143145
+    },
+    {
+      "candidate": "The first or `` narrow '' system consists of red lines from ( O III ) and other ionized elements at a redshift of z = 0.712 .",
+      "candidate_to_query_entailment": 0.9889563138485314,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9889465183263562,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 6501,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The first or `` red '' system consists of narrow lines of ( O III ) and other ionized elements with a redshift of z = 0.712 .",
+      "query_to_candidate_entailment": 0.9720811778378852
+    },
+    {
+      "candidate": "The MacCormack method is a widely used discretization scheme for the numerical solution of partial hyperbolic differential equations .",
+      "candidate_to_query_entailment": 0.000936767925645633,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9705849867548415,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 2487,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "In computer fluid dynamics , the MacCormack method is a commonly used discretization scheme for the hyperbolic partial differential solution of numerical equations .",
+      "query_to_candidate_entailment": 0.9957624000857739
+    },
+    {
+      "candidate": "It is unknown whether it is useless against other supernatural beings , although it is effective against angels .",
+      "candidate_to_query_entailment": 0.03146271775238569,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9923292594746865,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 5363,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "It is unknown whether it is effective against other supernatural beings , although it is useless against angels .",
+      "query_to_candidate_entailment": 0.10449993510840376
+    },
+    {
+      "candidate": "The last line of the third verse was modified during the reign of Alexander I of Yugoslavia in `` Kralja Aleksandra , Bo\u017ee hrani '' .",
+      "candidate_to_query_entailment": 0.9962134103382876,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9726377090699282,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 1489,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The third line of the last verse was changed to `` Kralja Aleksandra , Bo\u017ee hrani , '' during the reign of Alexander I of Yugoslavia .",
+      "query_to_candidate_entailment": 0.9973241926593329
+    },
+    {
+      "candidate": "The 1894 -- 95 season was Manchester City F.C . 's third season of league football and fourth season in the Football League .",
+      "candidate_to_query_entailment": 0.49158106471521246,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.986689871515363,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 7353,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The season 1894 -- 95 was Manchester City F.C . fourth season of league football and the third season in the soccer league .",
+      "query_to_candidate_entailment": 0.006054714643251635
+    },
+    {
+      "candidate": "In 1955 , the Anglican community was merged with another , and the Church of the Holy Trinity at Prince Consort Road became the new parish church .",
+      "candidate_to_query_entailment": 0.9925672368337745,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9876589222857786,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 7017,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "In 1955 the new parish was merged with another , and the Church of the Holy Trinity on the Prince Consort Road became the Anglican parish church .",
+      "query_to_candidate_entailment": 0.995464569988712
+    },
+    {
+      "candidate": "They also released the second track on the album , `` Vices '' , as the 5th single from the album on June 13 .",
+      "candidate_to_query_entailment": 0.9529765303742035,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9943294458852656,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 4541,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "They also released the 5th track on the album , `` Vices , '' on June 13 as the second single from the album .",
+      "query_to_candidate_entailment": 0.9431429594252281
+    },
+    {
+      "candidate": "On May 8 , 2015 , Michel Soro lost to Tapia .",
+      "candidate_to_query_entailment": 0.012355579028377627,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9646178707611686,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 2936,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "On 8 May 2015 , Tapia lost Michel Soro .",
+      "query_to_candidate_entailment": 0.050978971389684075
+    },
+    {
+      "candidate": "After his retirement , he remained in Krzemieniec and died there .",
+      "candidate_to_query_entailment": 0.9922104830588517,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9940926365075736,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 4670,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "After his retirement he died and remained in Krzemieniec .",
+      "query_to_candidate_entailment": 0.9942199661057496
+    },
+    {
+      "candidate": "Mark Knowles and Daniel Nestor won the title , defeating Jonathan Erlich and Andy Ram in the final with 5 : 3 , 5 : 4 .",
+      "candidate_to_query_entailment": 0.007170792462866539,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9829378734646915,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 7078,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Jonathan Erlich and Andy Ram won the title , defeating Mark Knowles and Daniel Nestor 5 -- 3 , 5 -- 4 in the final .",
+      "query_to_candidate_entailment": 0.001876565196057268
+    },
+    {
+      "candidate": "Furthermore , a triple threat match for the United States Championship was between Champion Kofi Kingston , The Miz and Jack Swagger .",
+      "candidate_to_query_entailment": 0.5108348084655396,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9950858037451645,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 6790,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Furthermore , a triple threat match for the United States Championship between Champion Jack Swagger , The Miz and Kofi Kingston was .",
+      "query_to_candidate_entailment": 0.562790521007377
+    },
+    {
+      "candidate": "It was bought by C. R. Gregory in 1834 in the monastery of Saba . Robert Curzon saw it in 1883 .",
+      "candidate_to_query_entailment": 0.9780715658042326,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9550258051830205,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 5483,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "It was bought by Robert Curzon in 1834 in the monastery of Saba and saw in 1883 by C. R. Gregory .",
+      "query_to_candidate_entailment": 0.985811089373205
+    },
+    {
+      "candidate": "In February 2014 , Network Ten announced that Hugh Riminton would replace Danielle Isdale as presenter and Victoria Murphy would replace the sports presenter .",
+      "candidate_to_query_entailment": 0.0003227340350838202,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9908793712608333,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 5002,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "In February 2014 , Network Ten announced that Danielle Isdale would replace Hugh Riminton as presenter , and Victoria Murphy would become the sports presenter .",
+      "query_to_candidate_entailment": 0.00040870632306261334
+    },
+    {
+      "candidate": "The single was released on Radio Airplay in Italy on October 12 , 2012 , and was shipped worldwide on 3 December 2012 .",
+      "candidate_to_query_entailment": 0.9975597040823307,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9775335665519223,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 283,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The single was sent to radio airplay on October 12 , 2012 in Italy and was released worldwide on December 3 , 2012 .",
+      "query_to_candidate_entailment": 0.9963439653502317
+    },
+    {
+      "candidate": "Dr. Adams married Miss Sarah Hunt , by whom he left a daughter , married , in 1788 , to B. Hyatt , esq .",
+      "candidate_to_query_entailment": 0.9849257162769754,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9831545296089504,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 6176,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Dr. Adams left Miss Sarah Hunt , with whom he married a daughter , in 1788 , to B. Hyatt , esq .",
+      "query_to_candidate_entailment": 0.9297100027576821
+    },
+    {
+      "candidate": "After Mitchell had returned to the main camp , Finch arrived with tragic news .",
+      "candidate_to_query_entailment": 0.0008494275913260234,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9945251556962946,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 4384,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "After Finch had returned to the main camp , Mitchell arrived with tragic news .",
+      "query_to_candidate_entailment": 0.0007346785335306715
+    },
+    {
+      "candidate": "In December 1969 , 49th Army Division became 29th Army Division .",
+      "candidate_to_query_entailment": 0.6324033089525912,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9904470760132702,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 4171,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "In December 1969 became the 29th Army - Division 49th Army - Division .",
+      "query_to_candidate_entailment": 0.9242994698682547
+    },
+    {
+      "candidate": "Its status as a satellite town of Kuala Lumpur is linked to its location in the heart of the Klang Valley in Malaysia .",
+      "candidate_to_query_entailment": 0.9950593617811109,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9840327684690047,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 5364,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Its status as a satellite town of Klang Valley is tied to its location in the heart of Kuala Lumpur in Malaysia .",
+      "query_to_candidate_entailment": 0.9972097155226449
+    },
+    {
+      "candidate": "The nexct owner was Steen Brahe , brother of the astronomer Tyge Brahe .",
+      "candidate_to_query_entailment": 0.0009941739661204997,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9955421425635975,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 6386,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The nexct owner was Tyge Brahe , a brother of the astronomer Steen Brahe .",
+      "query_to_candidate_entailment": 0.0009158623115573143
+    },
+    {
+      "candidate": "Acheson 's mother Alice was a painter , and his maternal grandparents were Louis Stanley , a railroad lawyer and Jane C. Stanley , was a watercolorist .",
+      "candidate_to_query_entailment": 0.9683168923816166,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9815664926621492,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 5655,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Acheson 's mother Alice was a painter , and his grandparents maternal were Jane C. Stanley , a railroad lawyer and Louis Stanley , was an aquarellist .",
+      "query_to_candidate_entailment": 0.5934658441780495
+    },
+    {
+      "candidate": "Using the new hypotheses the linguist can form analytical sentences and create a translation manual .",
+      "candidate_to_query_entailment": 0.9941006227877975,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9901089890888983,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 2988,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "The linguist can use the analytical hypotheses to form new sentences and create a translation manual .",
+      "query_to_candidate_entailment": 0.9962904712645948
+    },
+    {
+      "candidate": "These three fatherly dynasties ruled the Kingdom of Waalo with the maternal family Mbooj .",
+      "candidate_to_query_entailment": 0.003138448761038597,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9806717266510611,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 375,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "These three maternal dynasties ruled the kingdom of Waalo with the paternal family of the Mbooj .",
+      "query_to_candidate_entailment": 0.0028543971420145124
+    },
+    {
+      "candidate": "Both daughters died before he did , Tosca in 1976 and Janear in 1981 .",
+      "candidate_to_query_entailment": 0.96061334957196,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9819479977985307,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 2274,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Both daughters , before he died , did Tosca in 1976 and Janear 1981 .",
+      "query_to_candidate_entailment": 0.0018342239154331115
+    },
+    {
+      "candidate": "It was later released to be confirmed as a single for the album on 15 October in the UK and on October 23 in the USA .",
+      "candidate_to_query_entailment": 0.9942192483347786,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9895252769508255,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 5227,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "It was later confirmed to be released as a single for the album on October 15 in the UK , and October 23 in the US .",
+      "query_to_candidate_entailment": 0.9936397947894228
+    },
+    {
+      "candidate": "He was survived by his wife Carol Ober , daughter Viola and four grandchildren .",
+      "candidate_to_query_entailment": 0.6073272491363345,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.99513056379044,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 5438,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "He was survived by his wife , Viola , the daughter Carol Ober and four grandchildren .",
+      "query_to_candidate_entailment": 0.9895548855811631
+    },
+    {
+      "candidate": "Anderson was born in 1943 in Oakland , California and is from Redondo Beach , California .",
+      "candidate_to_query_entailment": 0.9929587141734167,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9885536775121315,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 6155,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Anderson was born in Redondo Beach , California in 1943 , and comes from Oakland , California .",
+      "query_to_candidate_entailment": 0.6790238530390719
+    },
+    {
+      "candidate": "Mass\u00e9 was born in Holland , Michigan , grew up in Westchester County , New York , and lived during her youth in Europe .",
+      "candidate_to_query_entailment": 0.9825431147207395,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9985337601737202,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 782,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Mass\u00e9 was born in Westchester County , New York , grew up in Holland , Michigan , and lived during her youth in Europe .",
+      "query_to_candidate_entailment": 0.9810639734460352
+    },
+    {
+      "candidate": "In the current continuity , Superman meets the true Zod in `` Last Son '' for the first time .",
+      "candidate_to_query_entailment": 0.9599442125079585,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9827527536644962,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 4263,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "In true continuity , Superman in `` Last Son '' meets the first time on the current Zod .",
+      "query_to_candidate_entailment": 0.9746054199568112
+    },
+    {
+      "candidate": "If the 1983 local elections had been a parliamentary election , the Socialist Left would have received 8 seats in Parliament .",
+      "candidate_to_query_entailment": 0.9907172370148529,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.99760575783817,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 1476,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "If the parliamentary election in 1983 had been a local election , the Socialist Left would have received 8 seats in Parliament .",
+      "query_to_candidate_entailment": 0.9879920868215368
+    },
+    {
+      "candidate": "This incident was later celebrated and is now being commemorated in Egypt as the National Police Day on 25 January of each year .",
+      "candidate_to_query_entailment": 0.9967295129439961,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9887041908517844,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 7253,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "This incident was later celebrated and is now celebrated in Egypt as the National Police Day on 25 January every year .",
+      "query_to_candidate_entailment": 0.99560017013579
+    },
+    {
+      "candidate": "The wrestler then jumps around and swings forward to fall back and let the opponent 's head drop into the mat .",
+      "candidate_to_query_entailment": 0.9969316405843448,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9829957222782375,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 1201,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "The wrestler then jumps forward and swings around to fall backwards and let the opponent 's head drop in the mat .",
+      "query_to_candidate_entailment": 0.9915537039790823
+    },
+    {
+      "candidate": "Hoppkorv was the last album of the American blues rock band Hot Tuna , and her seventh studio album was recorded as Grunt BFL1-1920 for Grunt Records .",
+      "candidate_to_query_entailment": 0.9963062168134769,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9799945990921848,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 2803,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Hoppkorv was the seventh album of the American blues - Rock - Band Hot Tuna and their last studio album for Grunt Records recorded as Grunt BFL1-1920 .",
+      "query_to_candidate_entailment": 0.9940030459941301
+    },
+    {
+      "candidate": "When a higher number of different IEs is required , this inherently leads to more capacity planning problems and often results in a non-delivery of the IP .",
+      "candidate_to_query_entailment": 0.9822706398127035,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9979174754111626,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 4714,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "When a higher number of different IEs is required , this often results in more capacity planning problems and inherently leads to a non-delivery of the IP .",
+      "query_to_candidate_entailment": 0.9905352994567591
+    },
+    {
+      "candidate": "Madu Kalas is a village and union council of Jhelum District in the Punjab Province of Pakistan . It is part of Jhelum Tehsil .",
+      "candidate_to_query_entailment": 0.996601629292713,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9971687536624193,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 5904,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Madu Kalas is a village and union council of Jhelum Tehsil in Pakistan 's Punjab province and is part of the Jhelum district .",
+      "query_to_candidate_entailment": 0.9957426191327049
+    },
+    {
+      "candidate": "Bettencourt played the guitar and was mastered by Chris Gehringer at the Sterling Sound Studios in New York City .",
+      "candidate_to_query_entailment": 0.995463095852386,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9889093070294773,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 1906,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Bettencourt mastered the guitar and Chris Gehringer played it at the Sterling Sound Studios in New York City .",
+      "query_to_candidate_entailment": 0.9972146475041588
+    },
+    {
+      "candidate": "They were developed by Namco Bandai and published by CyberConnect2 , beginning with `` Naruto : Ultimate Ninja '' in 2005 .",
+      "candidate_to_query_entailment": 0.9982972362154379,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.99536030695176,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 1431,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "They were developed by CyberConnect2 and published by Namco Bandai , starting with `` Naruto : Ultimate Ninja '' 2005 .",
+      "query_to_candidate_entailment": 0.9986092777029539
+    },
+    {
+      "candidate": "Worcester is a city and county of the town of Worcestershire in England .",
+      "candidate_to_query_entailment": 0.9970553479986952,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9915091974246274,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 2069,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Worcestershire is a city and county town of Worcester , England .",
+      "query_to_candidate_entailment": 0.9968673073573665
+    },
+    {
+      "candidate": "AleX is an Italian television series . The series was produced by Giorgio Schottler , Guglielmo Duccoli and Alfredo Castelli and written by Videotime .",
+      "candidate_to_query_entailment": 0.9919949091274611,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.973359257646342,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 1318,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "AleX is an Italian television series , written by Alfredo Castelli , Guglielmo Duccoli and Giorgio Schottler , produced by videotime .",
+      "query_to_candidate_entailment": 0.9931821277926814
+    },
+    {
+      "candidate": "Wyoming Highway 330 is a fairly short east-west Wyoming State Road located in central Sheridan County that serves the northwestern part of Sheridan .",
+      "candidate_to_query_entailment": 0.9929357772743735,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9943914000770351,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 4711,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Wyoming Highway 330 is a fairly short east - West Wyoming State Road in northwestern Sheridan County that serves the central part of Sheridan .",
+      "query_to_candidate_entailment": 0.9967385107630276
+    },
+    {
+      "candidate": "Ibn Amira was born at Alzira in the province of Valencia .",
+      "candidate_to_query_entailment": 0.996315527061141,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9959085689571838,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 1230,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Ibn Amira was born in Valencia , the province of Alzira .",
+      "query_to_candidate_entailment": 0.9916704836928187
+    },
+    {
+      "candidate": "Piper City was designed by Samuel Cross of New York and William A. Piper of Philadelphia in 1867 ( March 5 , 1820 - July 6 , 1896 ) .",
+      "candidate_to_query_entailment": 0.9956460184214523,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.959239842376762,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 6766,
+      "gold_label": 0,
+      "nli_threshold": 0.89,
+      "query": "Piper City was laid out in 1867 by Samuel Cross of Philadelphia and William A. Piper ( 5 March 1820 -- 6 July 1896 ) of New York .",
+      "query_to_candidate_entailment": 0.9947082257658048
+    }
+  ],
+  "split": "validation",
+  "test_split_used": false
+}

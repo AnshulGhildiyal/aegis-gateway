@@ -152,6 +152,111 @@ The 0.85 best-F1 point is a narrow improvement over the earlier coarse sweep's
    runner, dependencies, and output metadata together (or rerun from a clean
    commit) for a fully source-reproducible result.
 
+## 2026-11-07 — PAWS/QQP ablation (validation only)
+
+### PAWS labeled_final
+
+- Dataset: `google-research-datasets/paws`, configuration `labeled_final`,
+  `validation` split only; 8,000 labeled pairs.
+- Positive label: dataset label `1` means paraphrase.
+- Cosine thresholds: 0.85, 0.88, 0.90, 0.92, and 0.95.
+- NLI threshold: **0.89**, selected on this validation split by maximizing
+  mean F1 across the five requested cosine thresholds; ties select the higher
+  NLI threshold. This uses the same validation split for calibration and
+  reported ablation metrics, so the results are not an independent estimate.
+- Models: `BAAI/bge-small-en-v1.5` (FastEmbed 0.9.1) and
+  `Xenova/nli-deberta-v3-small` at revision
+  `6bc2a55c7c0f7e2bc68de60bb248e523e2612abb`.
+- Run date: 2026-11-07 UTC. Git HEAD:
+  `0d132f58abd2e26eeefa9d77ef032cd12271b833`; the worktree was dirty.
+- The test split was not evaluated. Outputs:
+  [PAWS JSON](../benchmarks/results/paraphrase_ablation_paws_validation.json),
+  [metrics CSV](../benchmarks/results/paraphrase_ablation_paws_validation_metrics.csv),
+  [false-positive samples CSV](../benchmarks/results/paraphrase_ablation_paws_validation_false_positives.csv).
+
+| Cosine | Configuration | Hits | TP | FP | FN | Precision | Recall | F1 | NLI sent (count, % of split) |
+|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| 0.85 | Cosine only | 7,960 | 3,518 | 4,442 | 21 | 0.4420 | 0.9941 | 0.6119 | — |
+| 0.85 | Cosine + Stage-0 | 7,756 | 3,456 | 4,300 | 83 | 0.4456 | 0.9765 | 0.6120 | — |
+| 0.85 | Cosine + Stage-0 + NLI | 5,396 | 3,103 | 2,293 | 436 | 0.5751 | 0.8768 | 0.6946 | 7,756; 96.95% |
+| 0.88 | Cosine only | 7,905 | 3,496 | 4,409 | 43 | 0.4423 | 0.9878 | 0.6110 | — |
+| 0.88 | Cosine + Stage-0 | 7,704 | 3,434 | 4,270 | 105 | 0.4457 | 0.9703 | 0.6109 | — |
+| 0.88 | Cosine + Stage-0 + NLI | 5,372 | 3,089 | 2,283 | 450 | 0.5750 | 0.8728 | 0.6933 | 7,704; 96.30% |
+| 0.90 | Cosine only | 7,834 | 3,467 | 4,367 | 72 | 0.4426 | 0.9797 | 0.6097 | — |
+| 0.90 | Cosine + Stage-0 | 7,636 | 3,406 | 4,230 | 133 | 0.4460 | 0.9624 | 0.6096 | — |
+| 0.90 | Cosine + Stage-0 + NLI | 5,342 | 3,073 | 2,269 | 466 | 0.5753 | 0.8683 | 0.6920 | 7,636; 95.45% |
+| 0.92 | Cosine only | 7,704 | 3,427 | 4,277 | 112 | 0.4448 | 0.9684 | 0.6096 | — |
+| 0.92 | Cosine + Stage-0 | 7,509 | 3,366 | 4,143 | 173 | 0.4483 | 0.9511 | 0.6093 | — |
+| 0.92 | Cosine + Stage-0 + NLI | 5,267 | 3,041 | 2,226 | 498 | 0.5774 | 0.8593 | 0.6907 | 7,509; 93.86% |
+| 0.95 | Cosine only | 7,107 | 3,236 | 3,871 | 303 | 0.4553 | 0.9144 | 0.6079 | — |
+| 0.95 | Cosine + Stage-0 | 6,938 | 3,181 | 3,757 | 358 | 0.4585 | 0.8988 | 0.6072 | — |
+| 0.95 | Cosine + Stage-0 + NLI | 4,970 | 2,908 | 2,062 | 631 | 0.5851 | 0.8217 | 0.6835 | 6,938; 86.73% |
+
+False-positive sampling saved up to 15 examples for each cosine-threshold /
+configuration combination (75 per configuration over the five thresholds).
+Counts in the CSV are the measured values; displayed metric rates above are
+rounded to four decimal places.
+
+### QQP
+
+- Dataset: `nyu-mll/glue`, configuration `qqp`, `validation` split only; 40,430
+  labeled pairs. Positive label `1` means paraphrase.
+- NLI threshold: **0.00**, selected by the same mean-F1 calibration rule over
+  the five cosine thresholds on this validation split. At thresholds above
+  0.00, mean F1 decreased; the next-best grid point was 0.01 with mean F1
+  0.5646 versus 0.6060 at 0.00. At 0.00 every valid probability passes, so the
+  NLI configuration is identical to cosine + Stage-0 for this selection
+  criterion. This is a material issue, not evidence that NLI improves QQP.
+- Run date: 2026-11-07 UTC. Git HEAD:
+  `0d132f58abd2e26eeefa9d77ef032cd12271b833`; the worktree was dirty. The test
+  split was not evaluated.
+- Outputs:
+  [QQP JSON](../benchmarks/results/paraphrase_ablation_qqp_validation.json),
+  [metrics CSV](../benchmarks/results/paraphrase_ablation_qqp_validation_metrics.csv),
+  [false-positive samples CSV](../benchmarks/results/paraphrase_ablation_qqp_validation_false_positives.csv).
+
+| Cosine | Configuration | Hits | TP | FP | FN | Precision | Recall | F1 | NLI sent (count, % of split) |
+|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| 0.85 | Cosine only | 17,775 | 11,938 | 5,837 | 2,947 | 0.6716 | 0.8020 | 0.7310 | — |
+| 0.85 | Cosine + Stage-0 | 15,896 | 10,877 | 5,019 | 4,008 | 0.6843 | 0.7307 | 0.7067 | — |
+| 0.85 | Cosine + Stage-0 + NLI | 15,896 | 10,877 | 5,019 | 4,008 | 0.6843 | 0.7307 | 0.7067 | 15,896; 39.32% |
+| 0.88 | Cosine only | 13,976 | 10,095 | 3,881 | 4,790 | 0.7223 | 0.6782 | 0.6996 | — |
+| 0.88 | Cosine + Stage-0 | 12,789 | 9,387 | 3,402 | 5,498 | 0.7340 | 0.6306 | 0.6784 | — |
+| 0.88 | Cosine + Stage-0 + NLI | 12,789 | 9,387 | 3,402 | 5,498 | 0.7340 | 0.6306 | 0.6784 | 12,789; 31.63% |
+| 0.90 | Cosine only | 11,275 | 8,590 | 2,685 | 6,295 | 0.7619 | 0.5771 | 0.6567 | — |
+| 0.90 | Cosine + Stage-0 | 10,510 | 8,110 | 2,400 | 6,775 | 0.7716 | 0.5448 | 0.6387 | — |
+| 0.90 | Cosine + Stage-0 + NLI | 10,510 | 8,110 | 2,400 | 6,775 | 0.7716 | 0.5448 | 0.6387 | 10,510; 26.00% |
+| 0.92 | Cosine only | 8,707 | 6,978 | 1,729 | 7,907 | 0.8014 | 0.4688 | 0.5916 | — |
+| 0.92 | Cosine + Stage-0 | 8,212 | 6,677 | 1,535 | 8,208 | 0.8131 | 0.4486 | 0.5782 | — |
+| 0.92 | Cosine + Stage-0 + NLI | 8,212 | 6,677 | 1,535 | 8,208 | 0.8131 | 0.4486 | 0.5782 | 8,212; 20.31% |
+| 0.95 | Cosine only | 5,021 | 4,334 | 687 | 10,551 | 0.8632 | 0.2912 | 0.4354 | — |
+| 0.95 | Cosine + Stage-0 | 4,847 | 4,221 | 626 | 10,664 | 0.8708 | 0.2836 | 0.4278 | — |
+| 0.95 | Cosine + Stage-0 + NLI | 4,847 | 4,221 | 626 | 10,664 | 0.8708 | 0.2836 | 0.4278 | 4,847; 11.99% |
+
+False-positive sampling saved up to 15 examples for each cosine-threshold /
+configuration combination (75 per configuration over the five thresholds).
+Counts in the CSV are measured; displayed metric rates above are rounded to
+four decimal places.
+
+### Combined insights and next actions
+
+1. On PAWS, NLI at the validation-selected 0.89 threshold improves precision
+   from about 0.44–0.46 to 0.58–0.59, while reducing recall; false positives
+   remain substantial (2,062–2,293 at these operating points).
+2. On QQP, F1-based calibration selects 0.00 and NLI makes no change to the
+   Stage-0-only predictions. Do **not** treat 0.00 as a production-safe
+   entailment threshold: it accepts every scored candidate. The selected
+   objective exposes that F1 alone is not adequate for choosing an NLI
+   threshold for cache safety.
+3. Use a stated risk constraint (for example a minimum precision or a maximum
+   false-positive budget) for a future dev-only calibration pass. Keep the
+   test split untouched until explicitly authorized. Because calibration and
+   ablation were both run on validation, the reported metrics are not
+   independent generalization estimates.
+4. The PAWS and QQP runs both recorded a dirty worktree. Preserve the JSON
+   metadata and commit the source changes before treating the run as fully
+   source-reproducible.
+
 ## Future result entries
 
 For each new output, append another dated section with the exact command or

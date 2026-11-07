@@ -1,0 +1,3358 @@
+{
+  "configuration": "qqp",
+  "configurations": [
+    "cosine_only",
+    "cosine_stage0",
+    "cosine_stage0_nli"
+  ],
+  "cosine_thresholds": [
+    0.85,
+    0.88,
+    0.9,
+    0.92,
+    0.95
+  ],
+  "dataset": "qqp",
+  "dataset_repository": "nyu-mll/glue",
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "embedding_model_source": "Qdrant/bge-small-en-v1.5-onnx-Q",
+  "example_count": 40430,
+  "fastembed_package_version": "0.9.1",
+  "files": {
+    "false_positives_csv": "paraphrase_ablation_qqp_validation_false_positives.csv",
+    "metrics_csv": "paraphrase_ablation_qqp_validation_metrics.csv"
+  },
+  "git_commit": "0d132f58abd2e26eeefa9d77ef032cd12271b833",
+  "git_worktree_dirty_at_run": true,
+  "label_meaning": "1=paraphrase, 0=not paraphrase",
+  "limit": null,
+  "metrics": [
+    {
+      "configuration": "cosine_only",
+      "cosine_threshold": 0.85,
+      "f1": 0.7310471524800981,
+      "false_negative": 2947,
+      "false_positive": 5837,
+      "hits": 17775,
+      "nli_pairs_sent": null,
+      "nli_pairs_sent_percent": null,
+      "nli_threshold": null,
+      "precision": 0.6716174402250351,
+      "recall": 0.8020154517971112,
+      "true_positive": 11938
+    },
+    {
+      "configuration": "cosine_stage0",
+      "cosine_threshold": 0.85,
+      "f1": 0.7067346739871999,
+      "false_negative": 4008,
+      "false_positive": 5019,
+      "hits": 15896,
+      "nli_pairs_sent": null,
+      "nli_pairs_sent_percent": null,
+      "nli_threshold": null,
+      "precision": 0.68426019124308,
+      "recall": 0.7307356399059456,
+      "true_positive": 10877
+    },
+    {
+      "configuration": "cosine_stage0_nli",
+      "cosine_threshold": 0.85,
+      "f1": 0.7067346739871999,
+      "false_negative": 4008,
+      "false_positive": 5019,
+      "hits": 15896,
+      "nli_pairs_sent": 15896,
+      "nli_pairs_sent_percent": 39.31733860994311,
+      "nli_threshold": 0.0,
+      "precision": 0.68426019124308,
+      "recall": 0.7307356399059456,
+      "true_positive": 10877
+    },
+    {
+      "configuration": "cosine_only",
+      "cosine_threshold": 0.88,
+      "f1": 0.6995599598073525,
+      "false_negative": 4790,
+      "false_positive": 3881,
+      "hits": 13976,
+      "nli_pairs_sent": null,
+      "nli_pairs_sent_percent": null,
+      "nli_threshold": null,
+      "precision": 0.7223096737263881,
+      "recall": 0.678199529727914,
+      "true_positive": 10095
+    },
+    {
+      "configuration": "cosine_stage0",
+      "cosine_threshold": 0.88,
+      "f1": 0.678398496783985,
+      "false_negative": 5498,
+      "false_positive": 3402,
+      "hits": 12789,
+      "nli_pairs_sent": null,
+      "nli_pairs_sent_percent": null,
+      "nli_threshold": null,
+      "precision": 0.7339901477832512,
+      "recall": 0.63063486731609,
+      "true_positive": 9387
+    },
+    {
+      "configuration": "cosine_stage0_nli",
+      "cosine_threshold": 0.88,
+      "f1": 0.678398496783985,
+      "false_negative": 5498,
+      "false_positive": 3402,
+      "hits": 12789,
+      "nli_pairs_sent": 12789,
+      "nli_pairs_sent_percent": 31.63245115013604,
+      "nli_threshold": 0.0,
+      "precision": 0.7339901477832512,
+      "recall": 0.63063486731609,
+      "true_positive": 9387
+    },
+    {
+      "configuration": "cosine_only",
+      "cosine_threshold": 0.9,
+      "f1": 0.6567278287461774,
+      "false_negative": 6295,
+      "false_positive": 2685,
+      "hits": 11275,
+      "nli_pairs_sent": null,
+      "nli_pairs_sent_percent": null,
+      "nli_threshold": null,
+      "precision": 0.7618625277161862,
+      "recall": 0.5770910312395029,
+      "true_positive": 8590
+    },
+    {
+      "configuration": "cosine_stage0",
+      "cosine_threshold": 0.9,
+      "f1": 0.6387084071667651,
+      "false_negative": 6775,
+      "false_positive": 2400,
+      "hits": 10510,
+      "nli_pairs_sent": null,
+      "nli_pairs_sent_percent": null,
+      "nli_threshold": null,
+      "precision": 0.7716460513796385,
+      "recall": 0.5448438024857238,
+      "true_positive": 8110
+    },
+    {
+      "configuration": "cosine_stage0_nli",
+      "cosine_threshold": 0.9,
+      "f1": 0.6387084071667651,
+      "false_negative": 6775,
+      "false_positive": 2400,
+      "hits": 10510,
+      "nli_pairs_sent": 10510,
+      "nli_pairs_sent_percent": 25.99554786049963,
+      "nli_threshold": 0.0,
+      "precision": 0.7716460513796385,
+      "recall": 0.5448438024857238,
+      "true_positive": 8110
+    },
+    {
+      "configuration": "cosine_only",
+      "cosine_threshold": 0.92,
+      "f1": 0.5915564598168871,
+      "false_negative": 7907,
+      "false_positive": 1729,
+      "hits": 8707,
+      "nli_pairs_sent": null,
+      "nli_pairs_sent_percent": null,
+      "nli_threshold": null,
+      "precision": 0.8014241414953486,
+      "recall": 0.4687940880080618,
+      "true_positive": 6978
+    },
+    {
+      "configuration": "cosine_stage0",
+      "cosine_threshold": 0.92,
+      "f1": 0.5781703251504524,
+      "false_negative": 8208,
+      "false_positive": 1535,
+      "hits": 8212,
+      "nli_pairs_sent": null,
+      "nli_pairs_sent_percent": null,
+      "nli_threshold": null,
+      "precision": 0.8130784218217243,
+      "recall": 0.4485723883103796,
+      "true_positive": 6677
+    },
+    {
+      "configuration": "cosine_stage0_nli",
+      "cosine_threshold": 0.92,
+      "f1": 0.5781703251504524,
+      "false_negative": 8208,
+      "false_positive": 1535,
+      "hits": 8212,
+      "nli_pairs_sent": 8212,
+      "nli_pairs_sent_percent": 20.311649765025972,
+      "nli_threshold": 0.0,
+      "precision": 0.8130784218217243,
+      "recall": 0.4485723883103796,
+      "true_positive": 6677
+    },
+    {
+      "configuration": "cosine_only",
+      "cosine_threshold": 0.95,
+      "f1": 0.43544659901537225,
+      "false_negative": 10551,
+      "false_positive": 687,
+      "hits": 5021,
+      "nli_pairs_sent": null,
+      "nli_pairs_sent_percent": null,
+      "nli_threshold": null,
+      "precision": 0.8631746664011153,
+      "recall": 0.291165602955996,
+      "true_positive": 4334
+    },
+    {
+      "configuration": "cosine_stage0",
+      "cosine_threshold": 0.95,
+      "f1": 0.42783296168660045,
+      "false_negative": 10664,
+      "false_positive": 626,
+      "hits": 4847,
+      "nli_pairs_sent": null,
+      "nli_pairs_sent_percent": null,
+      "nli_threshold": null,
+      "precision": 0.8708479471838251,
+      "recall": 0.28357406785354383,
+      "true_positive": 4221
+    },
+    {
+      "configuration": "cosine_stage0_nli",
+      "cosine_threshold": 0.95,
+      "f1": 0.42783296168660045,
+      "false_negative": 10664,
+      "false_positive": 626,
+      "hits": 4847,
+      "nli_pairs_sent": 4847,
+      "nli_pairs_sent_percent": 11.988622310165718,
+      "nli_threshold": 0.0,
+      "precision": 0.8708479471838251,
+      "recall": 0.28357406785354383,
+      "true_positive": 4221
+    }
+  ],
+  "nli_model": "Xenova/nli-deberta-v3-small",
+  "nli_model_revision": "6bc2a55c7c0f7e2bc68de60bb248e523e2612abb",
+  "nli_threshold_selection": {
+    "calibration_curve": [
+      {
+        "mean_f1": 0.6059689729550006,
+        "nli_threshold": 0.0
+      },
+      {
+        "mean_f1": 0.5646439447260235,
+        "nli_threshold": 0.01
+      },
+      {
+        "mean_f1": 0.5491793702165265,
+        "nli_threshold": 0.02
+      },
+      {
+        "mean_f1": 0.5406455467355722,
+        "nli_threshold": 0.03
+      },
+      {
+        "mean_f1": 0.5335165833193993,
+        "nli_threshold": 0.04
+      },
+      {
+        "mean_f1": 0.5284575109879703,
+        "nli_threshold": 0.05
+      },
+      {
+        "mean_f1": 0.5243597900459903,
+        "nli_threshold": 0.06
+      },
+      {
+        "mean_f1": 0.5208105601870994,
+        "nli_threshold": 0.07
+      },
+      {
+        "mean_f1": 0.5176191317700214,
+        "nli_threshold": 0.08
+      },
+      {
+        "mean_f1": 0.5155302504428334,
+        "nli_threshold": 0.09
+      },
+      {
+        "mean_f1": 0.5132511929665057,
+        "nli_threshold": 0.1
+      },
+      {
+        "mean_f1": 0.5114535204091091,
+        "nli_threshold": 0.11
+      },
+      {
+        "mean_f1": 0.5100187866224211,
+        "nli_threshold": 0.12
+      },
+      {
+        "mean_f1": 0.5089347491643336,
+        "nli_threshold": 0.13
+      },
+      {
+        "mean_f1": 0.5077452014211684,
+        "nli_threshold": 0.14
+      },
+      {
+        "mean_f1": 0.5069677109034866,
+        "nli_threshold": 0.15
+      },
+      {
+        "mean_f1": 0.5055615848838226,
+        "nli_threshold": 0.16
+      },
+      {
+        "mean_f1": 0.5044268710466466,
+        "nli_threshold": 0.17
+      },
+      {
+        "mean_f1": 0.5031951663426657,
+        "nli_threshold": 0.18
+      },
+      {
+        "mean_f1": 0.5023251854249366,
+        "nli_threshold": 0.19
+      },
+      {
+        "mean_f1": 0.5014414198158209,
+        "nli_threshold": 0.2
+      },
+      {
+        "mean_f1": 0.5010017722992474,
+        "nli_threshold": 0.21
+      },
+      {
+        "mean_f1": 0.5002938951691458,
+        "nli_threshold": 0.22
+      },
+      {
+        "mean_f1": 0.49912035707287183,
+        "nli_threshold": 0.23
+      },
+      {
+        "mean_f1": 0.49833015608685793,
+        "nli_threshold": 0.24
+      },
+      {
+        "mean_f1": 0.4976541285976269,
+        "nli_threshold": 0.25
+      },
+      {
+        "mean_f1": 0.4967758710466966,
+        "nli_threshold": 0.26
+      },
+      {
+        "mean_f1": 0.4959585181340495,
+        "nli_threshold": 0.27
+      },
+      {
+        "mean_f1": 0.4952794894724387,
+        "nli_threshold": 0.28
+      },
+      {
+        "mean_f1": 0.494538406586616,
+        "nli_threshold": 0.29
+      },
+      {
+        "mean_f1": 0.4939079107553666,
+        "nli_threshold": 0.3
+      },
+      {
+        "mean_f1": 0.49376183255523304,
+        "nli_threshold": 0.31
+      },
+      {
+        "mean_f1": 0.492892914067217,
+        "nli_threshold": 0.32
+      },
+      {
+        "mean_f1": 0.49226687193388957,
+        "nli_threshold": 0.33
+      },
+      {
+        "mean_f1": 0.49196366528689045,
+        "nli_threshold": 0.34
+      },
+      {
+        "mean_f1": 0.49132196001403344,
+        "nli_threshold": 0.35
+      },
+      {
+        "mean_f1": 0.49076107655562906,
+        "nli_threshold": 0.36
+      },
+      {
+        "mean_f1": 0.49012210541585244,
+        "nli_threshold": 0.37
+      },
+      {
+        "mean_f1": 0.489547251455792,
+        "nli_threshold": 0.38
+      },
+      {
+        "mean_f1": 0.4890465461757458,
+        "nli_threshold": 0.39
+      },
+      {
+        "mean_f1": 0.4884092440822337,
+        "nli_threshold": 0.4
+      },
+      {
+        "mean_f1": 0.48808129246609366,
+        "nli_threshold": 0.41
+      },
+      {
+        "mean_f1": 0.48744572242387874,
+        "nli_threshold": 0.42
+      },
+      {
+        "mean_f1": 0.4870127290617826,
+        "nli_threshold": 0.43
+      },
+      {
+        "mean_f1": 0.4861950480376547,
+        "nli_threshold": 0.44
+      },
+      {
+        "mean_f1": 0.4852965057618607,
+        "nli_threshold": 0.45
+      },
+      {
+        "mean_f1": 0.48450809260385386,
+        "nli_threshold": 0.46
+      },
+      {
+        "mean_f1": 0.4840180703597535,
+        "nli_threshold": 0.47
+      },
+      {
+        "mean_f1": 0.4833700413098416,
+        "nli_threshold": 0.48
+      },
+      {
+        "mean_f1": 0.48298677532484613,
+        "nli_threshold": 0.49
+      },
+      {
+        "mean_f1": 0.48240333053418494,
+        "nli_threshold": 0.5
+      },
+      {
+        "mean_f1": 0.48170793602701484,
+        "nli_threshold": 0.51
+      },
+      {
+        "mean_f1": 0.4813743651474652,
+        "nli_threshold": 0.52
+      },
+      {
+        "mean_f1": 0.48093687565514465,
+        "nli_threshold": 0.53
+      },
+      {
+        "mean_f1": 0.48002914694746457,
+        "nli_threshold": 0.54
+      },
+      {
+        "mean_f1": 0.47915526402158404,
+        "nli_threshold": 0.55
+      },
+      {
+        "mean_f1": 0.4786468587568534,
+        "nli_threshold": 0.56
+      },
+      {
+        "mean_f1": 0.4782578602442521,
+        "nli_threshold": 0.57
+      },
+      {
+        "mean_f1": 0.4778786155402085,
+        "nli_threshold": 0.58
+      },
+      {
+        "mean_f1": 0.47727487025070403,
+        "nli_threshold": 0.59
+      },
+      {
+        "mean_f1": 0.47585855965879065,
+        "nli_threshold": 0.6
+      },
+      {
+        "mean_f1": 0.4752197561460112,
+        "nli_threshold": 0.61
+      },
+      {
+        "mean_f1": 0.47425401911399234,
+        "nli_threshold": 0.62
+      },
+      {
+        "mean_f1": 0.4735856810748259,
+        "nli_threshold": 0.63
+      },
+      {
+        "mean_f1": 0.4733007869388864,
+        "nli_threshold": 0.64
+      },
+      {
+        "mean_f1": 0.47262040050613824,
+        "nli_threshold": 0.65
+      },
+      {
+        "mean_f1": 0.47164839616583054,
+        "nli_threshold": 0.66
+      },
+      {
+        "mean_f1": 0.4707301515923805,
+        "nli_threshold": 0.67
+      },
+      {
+        "mean_f1": 0.46980062330286787,
+        "nli_threshold": 0.68
+      },
+      {
+        "mean_f1": 0.46911920732182005,
+        "nli_threshold": 0.69
+      },
+      {
+        "mean_f1": 0.46839175371038005,
+        "nli_threshold": 0.7
+      },
+      {
+        "mean_f1": 0.4678393209521096,
+        "nli_threshold": 0.71
+      },
+      {
+        "mean_f1": 0.4671849304873554,
+        "nli_threshold": 0.72
+      },
+      {
+        "mean_f1": 0.46647321715901213,
+        "nli_threshold": 0.73
+      },
+      {
+        "mean_f1": 0.46576282017658316,
+        "nli_threshold": 0.74
+      },
+      {
+        "mean_f1": 0.4650444671249641,
+        "nli_threshold": 0.75
+      },
+      {
+        "mean_f1": 0.46357173403236673,
+        "nli_threshold": 0.76
+      },
+      {
+        "mean_f1": 0.46194369336422125,
+        "nli_threshold": 0.77
+      },
+      {
+        "mean_f1": 0.46061389043986417,
+        "nli_threshold": 0.78
+      },
+      {
+        "mean_f1": 0.4592997945673858,
+        "nli_threshold": 0.79
+      },
+      {
+        "mean_f1": 0.45826793261556353,
+        "nli_threshold": 0.8
+      },
+      {
+        "mean_f1": 0.45626747258694894,
+        "nli_threshold": 0.81
+      },
+      {
+        "mean_f1": 0.4540024575275628,
+        "nli_threshold": 0.82
+      },
+      {
+        "mean_f1": 0.45145558508115025,
+        "nli_threshold": 0.83
+      },
+      {
+        "mean_f1": 0.4493315544149321,
+        "nli_threshold": 0.84
+      },
+      {
+        "mean_f1": 0.44715945058199313,
+        "nli_threshold": 0.85
+      },
+      {
+        "mean_f1": 0.4443754203090295,
+        "nli_threshold": 0.86
+      },
+      {
+        "mean_f1": 0.4421868485213493,
+        "nli_threshold": 0.87
+      },
+      {
+        "mean_f1": 0.4391282502549288,
+        "nli_threshold": 0.88
+      },
+      {
+        "mean_f1": 0.43598694953692707,
+        "nli_threshold": 0.89
+      },
+      {
+        "mean_f1": 0.43239498015964034,
+        "nli_threshold": 0.9
+      },
+      {
+        "mean_f1": 0.4278046015296405,
+        "nli_threshold": 0.91
+      },
+      {
+        "mean_f1": 0.4216448805267018,
+        "nli_threshold": 0.92
+      },
+      {
+        "mean_f1": 0.4144582557316757,
+        "nli_threshold": 0.93
+      },
+      {
+        "mean_f1": 0.4054092901328346,
+        "nli_threshold": 0.94
+      },
+      {
+        "mean_f1": 0.3924420990547689,
+        "nli_threshold": 0.95
+      },
+      {
+        "mean_f1": 0.372572417464709,
+        "nli_threshold": 0.96
+      },
+      {
+        "mean_f1": 0.3429573840838601,
+        "nli_threshold": 0.97
+      },
+      {
+        "mean_f1": 0.29248507682684416,
+        "nli_threshold": 0.98
+      },
+      {
+        "mean_f1": 0.17163570858158894,
+        "nli_threshold": 0.99
+      },
+      {
+        "mean_f1": 0.0,
+        "nli_threshold": 1.0
+      }
+    ],
+    "criterion": "maximum mean F1 across the five requested cosine thresholds on this validation split; ties select the higher threshold",
+    "selected_threshold": 0.0
+  },
+  "run_date_utc": "2026-11-07T04:39:09.311155+00:00",
+  "sampled_false_positives": [
+    {
+      "candidate": "Which companies sponsor H1B visa in Pasadena?",
+      "candidate_to_query_entailment": 0.9790672089276053,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9046553587598434,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 8275,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Which companies sponsor H1B visas?",
+      "query_to_candidate_entailment": 0.00028104699755170424
+    },
+    {
+      "candidate": "What is python language?",
+      "candidate_to_query_entailment": 0.26776473799837247,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.8670041621727824,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 22014,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What can we do with python language?",
+      "query_to_candidate_entailment": 0.8445833304811247
+    },
+    {
+      "candidate": "What is a suitable solar panel installation provider in Sun Valley, California CA?",
+      "candidate_to_query_entailment": 0.005127534189960613,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9076225961637822,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 28118,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is a suitable solar panel installation provider in Tivy Valley, California CA?",
+      "query_to_candidate_entailment": 0.014436825727819142
+    },
+    {
+      "candidate": "How can I apply for deloitte off campus interviews in DU?",
+      "candidate_to_query_entailment": 0.9143267426534517,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.8913400256428656,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 9504,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "How do I apply off campus to companies like Deloitte?",
+      "query_to_candidate_entailment": 0.00657457552668804
+    },
+    {
+      "candidate": "How does the rate of student happiness/unhappiness at Caltech differ from major to major?",
+      "candidate_to_query_entailment": 0.0004827394868156048,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.8819641268166412,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 36755,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "How does the rate of student happiness/unhappiness at Yale differ from major to major?",
+      "query_to_candidate_entailment": 0.00017180939647467656
+    },
+    {
+      "candidate": "Can I wash my hair everyday?",
+      "candidate_to_query_entailment": 0.8970964441062709,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9546873306125674,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 16413,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Should you wash your hair everyday?",
+      "query_to_candidate_entailment": 0.8821333577688276
+    },
+    {
+      "candidate": "What are the best transcription apps?",
+      "candidate_to_query_entailment": 0.0005193683418879973,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9287011872536455,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 37466,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is the best transcription app for the iPhone?",
+      "query_to_candidate_entailment": 0.9676352396655933
+    },
+    {
+      "candidate": "Which really are the benefits of reading?",
+      "candidate_to_query_entailment": 0.0011375111322200913,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9024141329236326,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 7368,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What are the benefits of reading and writing?",
+      "query_to_candidate_entailment": 0.9773841923113908
+    },
+    {
+      "candidate": "What is the greatest piece of classical music ever written?",
+      "candidate_to_query_entailment": 0.9938787371984147,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.896388565365112,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 25641,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What's the best classical music piece of all time?",
+      "query_to_candidate_entailment": 0.9937663762501961
+    },
+    {
+      "candidate": "What is the difference between centripetal and centrifugal force?",
+      "candidate_to_query_entailment": 0.8808302178265697,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.96480148201244,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 11459,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is the difference between centripetal acceleration and centrifugal force?",
+      "query_to_candidate_entailment": 0.9746051084188192
+    },
+    {
+      "candidate": "How can I attend Singularity University?",
+      "candidate_to_query_entailment": 0.9538657848569689,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.880125273950328,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 28952,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Why should someone attend Singularity University?",
+      "query_to_candidate_entailment": 0.021171803293322078
+    },
+    {
+      "candidate": "Is porn immoral?",
+      "candidate_to_query_entailment": 0.00043069996508563244,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.8880599532987534,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 39371,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Is war porn immoral?",
+      "query_to_candidate_entailment": 0.9279962241448673
+    },
+    {
+      "candidate": "Does vomiting cure a hangover?",
+      "candidate_to_query_entailment": 0.8551948133003521,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.8897711966900654,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 8885,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "How do you cure a hangover?",
+      "query_to_candidate_entailment": 0.0005445015333042836
+    },
+    {
+      "candidate": "How much do you love your best friend?",
+      "candidate_to_query_entailment": 0.9734000006680167,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.8997973904883969,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 29737,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What do you love the most about your best friend?",
+      "query_to_candidate_entailment": 0.987954433211502
+    },
+    {
+      "candidate": "What is the difference between for, while and do while loop in C?",
+      "candidate_to_query_entailment": 0.1799525779057768,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9177956594126946,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 29778,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is the difference between 'while' loop and 'for' loop? What is an example of this?",
+      "query_to_candidate_entailment": 0.0015274342470539674
+    },
+    {
+      "candidate": "What is automatic speech recognition?",
+      "candidate_to_query_entailment": 0.00041193289442418863,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.8756544570858107,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 10650,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is a Python code for automatic speech recognition?",
+      "query_to_candidate_entailment": 0.9001172996934452
+    },
+    {
+      "candidate": "What's the temperament of a Jack Russel/Cocker Spaniel mix?",
+      "candidate_to_query_entailment": 0.9923948994477856,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.8804677072136776,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 15451,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is the temperament of a cocker spaniel?",
+      "query_to_candidate_entailment": 0.004560439641737691
+    },
+    {
+      "candidate": "Where is the second moon of Earth?",
+      "candidate_to_query_entailment": 0.4720359058128173,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.8595901385813399,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 12654,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "When did Earth acquire a second moon?",
+      "query_to_candidate_entailment": 0.5175033163932038
+    },
+    {
+      "candidate": "How do you say happy birthday in Korean, both formally and informally?",
+      "candidate_to_query_entailment": 0.9837130351745765,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9031645749077495,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 7703,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "\"What is the translation of \"\"happy birthday\"\" to Korean?\"",
+      "query_to_candidate_entailment": 0.14495052268270397
+    },
+    {
+      "candidate": "Which is the best site to download English movies with subtitles?",
+      "candidate_to_query_entailment": 0.9518241002006703,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9263780354744948,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 22063,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Which is the best website to watch free English movies with subtitles?",
+      "query_to_candidate_entailment": 0.9914763433873502
+    },
+    {
+      "candidate": "What are the elements of Global Village?",
+      "candidate_to_query_entailment": 0.021653902729624773,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.859922869551993,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 25863,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is global village? What are some of the advantages/disadvantages of it?",
+      "query_to_candidate_entailment": 0.9819577978007976
+    },
+    {
+      "candidate": "How can make money while traveling through Canada?",
+      "candidate_to_query_entailment": 0.0016127475099821647,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.8534902275839891,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 18338,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What are some ways to make money while travelling through USA?",
+      "query_to_candidate_entailment": 0.0005741238147887112
+    },
+    {
+      "candidate": "\"How do you pronounce \"\"L\"\"?\"",
+      "candidate_to_query_entailment": 0.0014727937469160546,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.8874841685556085,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 26230,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "\"How do you pronounce the \"\"L\"\" of \"\"feel\"\"?\"",
+      "query_to_candidate_entailment": 0.9923749935191379
+    },
+    {
+      "candidate": "Which is the most expensive whey protein brand in India?",
+      "candidate_to_query_entailment": 0.0037763678769278295,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.858141865688213,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 21035,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Which is the best brand for unflavored whey protein in India?",
+      "query_to_candidate_entailment": 0.00014342126358185835
+    },
+    {
+      "candidate": "Which is the craziest place you ever had sex?",
+      "candidate_to_query_entailment": 0.9931462491771855,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9176895256334272,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 28537,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Where is the weirdest place you've had sex?",
+      "query_to_candidate_entailment": 0.973120311974507
+    },
+    {
+      "candidate": "How Quora generating revenues?",
+      "candidate_to_query_entailment": 0.5010992471591933,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9532984428176019,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 18585,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "How does Quora intend to generate revenue?",
+      "query_to_candidate_entailment": 0.9122791032966294
+    },
+    {
+      "candidate": "Can you make funnel cake batter with pancake mix?",
+      "candidate_to_query_entailment": 0.9803229447315233,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9452148477434477,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 34154,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "How can I make a funnel cake with pancake mix?",
+      "query_to_candidate_entailment": 0.9869609288547307
+    },
+    {
+      "candidate": "How many psychiatrists does it take to change a lightbulb?",
+      "candidate_to_query_entailment": 0.0001740305452359633,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.8582862628333465,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 28850,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "How many lawyers does it take to change a lightbulb?",
+      "query_to_candidate_entailment": 0.00013675570136419842
+    },
+    {
+      "candidate": "How much is expected cut off for HRM programme for TISSNET 2017?",
+      "candidate_to_query_entailment": 0.992985023295277,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.8959847591053562,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 19875,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is the expected cut off for TISSNET 2017?",
+      "query_to_candidate_entailment": 0.0006459033657868563
+    },
+    {
+      "candidate": "What is meant by dark energy?",
+      "candidate_to_query_entailment": 0.9552873767042855,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9407585916966525,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 30680,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is dark energy?",
+      "query_to_candidate_entailment": 0.9788334882112942
+    },
+    {
+      "candidate": "How can I develope positive attitudes?",
+      "candidate_to_query_entailment": 0.9248907565298875,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.8857590531160849,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 34146,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "What are the best ways to encourage a positive attitude?",
+      "query_to_candidate_entailment": 0.7027168661190362
+    },
+    {
+      "candidate": "How can I start learning PHP by myself?",
+      "candidate_to_query_entailment": 0.8854811472908191,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9227165581538083,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 25002,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "Where can I start learning PHP?",
+      "query_to_candidate_entailment": 0.12448556960968452
+    },
+    {
+      "candidate": "What can cause a woman's period to be late?",
+      "candidate_to_query_entailment": 0.004186057284861266,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.8745082797686717,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 15815,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "Why is my period late every month?",
+      "query_to_candidate_entailment": 0.17094828407334353
+    },
+    {
+      "candidate": "What is your biggest achievement in life?",
+      "candidate_to_query_entailment": 0.994839239807622,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9084828580927007,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 3317,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "What is the biggest Achievement you've made?",
+      "query_to_candidate_entailment": 0.9533625351469137
+    },
+    {
+      "candidate": "How do I prepare for NITIE interview for PGDIE?",
+      "candidate_to_query_entailment": 0.14545287175414107,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9019189817827823,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 12186,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "How was your interview experience for PGDIE course in NITIE?",
+      "query_to_candidate_entailment": 0.8739443411649451
+    },
+    {
+      "candidate": "How do you stop procrastinating on Facebook?",
+      "candidate_to_query_entailment": 0.841896886220048,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.8623597847480592,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 4617,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "How can I stop procrastinating?",
+      "query_to_candidate_entailment": 0.00015308208644109443
+    },
+    {
+      "candidate": "Can a black mamba kill an elephant with one bite?",
+      "candidate_to_query_entailment": 0.00016384349109904963,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.859976369381191,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 11437,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "Can a black mamba kill a rhino?",
+      "query_to_candidate_entailment": 0.0001179441475651355
+    },
+    {
+      "candidate": "Is it ok to drink your own cum after masturbation?",
+      "candidate_to_query_entailment": 0.005762454340725841,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.8743163874979609,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 13862,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "Can I eat/drink my own sperm after masturbation as a source of protein?",
+      "query_to_candidate_entailment": 0.8577289580548451
+    },
+    {
+      "candidate": "What is the best way to monetize an app?",
+      "candidate_to_query_entailment": 0.0011173266164123603,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.923465135545108,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 34987,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "What are the top ranking ways to monetize an iPhone app?",
+      "query_to_candidate_entailment": 0.9107621855256479
+    },
+    {
+      "candidate": "Where can I get best fire protection services in Sydney?",
+      "candidate_to_query_entailment": 0.0261437389928112,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9599963789615199,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 20868,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "Where can I get very easy & safe fire protection service in Sydney?",
+      "query_to_candidate_entailment": 0.955231360931786
+    },
+    {
+      "candidate": "Which is the best sex position?",
+      "candidate_to_query_entailment": 0.004661645151872867,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.860896658557997,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 9510,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "What is the best sexual position to achieve orgasm?",
+      "query_to_candidate_entailment": 0.9911952070546669
+    },
+    {
+      "candidate": "Which city is better Bangalore or Chennai for articleship?",
+      "candidate_to_query_entailment": 0.9955469254954541,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.8930368632130027,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 979,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "Which city is better, Bangalore or Chennai?",
+      "query_to_candidate_entailment": 0.0008738236678333668
+    },
+    {
+      "candidate": "what\u2019s your review of the Wuhan university of textile\uff1f",
+      "candidate_to_query_entailment": 0.8660668316165243,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.8965750062389106,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 5996,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "What is your review of Wuhan University (\u6b66\u6c49\u5927\u5b66)?",
+      "query_to_candidate_entailment": 0.005168842418508071
+    },
+    {
+      "candidate": "Is there a way to prevent Google Chrome from opening new tabs when clicking certain links?",
+      "candidate_to_query_entailment": 0.006807660970052345,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.8629459379085691,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 26802,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "How do I make Chrome open Google as new tab?",
+      "query_to_candidate_entailment": 0.0015045195526616818
+    },
+    {
+      "candidate": "What are some tips on making it through the job interview process at Omega Flex?",
+      "candidate_to_query_entailment": 0.006746765320355529,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9064428976605169,
+      "cosine_threshold": 0.85,
+      "dataset_row_index": 38469,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "What are some tips on making it through the job interview process at Alpha & Omega?",
+      "query_to_candidate_entailment": 0.009187944917967775
+    },
+    {
+      "candidate": "What is the difference between CSE and software engineering?",
+      "candidate_to_query_entailment": 0.04746778283092839,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.961953322411246,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 11018,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is the difference between CSE, IT and Software Engineering?",
+      "query_to_candidate_entailment": 0.9949018170671845
+    },
+    {
+      "candidate": "What are some tips on making it through the job interview process at Pacific Western Bank?",
+      "candidate_to_query_entailment": 0.032649755709066565,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9371245725085782,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 19417,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What are some tips on making it through the job interview process at Pacific Premier Bank?",
+      "query_to_candidate_entailment": 0.04786421804597323
+    },
+    {
+      "candidate": "What are some important things that some groups of people know, that others don't?",
+      "candidate_to_query_entailment": 0.80676474379134,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9037652459627781,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 36736,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What are some important things you know but others don't?",
+      "query_to_candidate_entailment": 0.5221429123206337
+    },
+    {
+      "candidate": "How do I prepare myself to crack the bank exam?",
+      "candidate_to_query_entailment": 0.9806648467822874,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9158983212192324,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 16079,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What are some tips for bank exams preparation?",
+      "query_to_candidate_entailment": 0.9829353139442106
+    },
+    {
+      "candidate": "As a white man, why am I so attracted to black women?",
+      "candidate_to_query_entailment": 0.0008621661861592924,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9413297175099313,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 3247,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Why am I so attracted to white women?",
+      "query_to_candidate_entailment": 0.00030053857153155975
+    },
+    {
+      "candidate": "Can the Supreme Court of India order the Union Government to dismiss the Karnataka Government for breaching its orders on Cauvery water release to TN?",
+      "candidate_to_query_entailment": 0.9804270269438827,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.8952731744550153,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 17541,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What should the Supreme Court do if Karnataka fails to abide by its orders on Cauvery water release to TN?",
+      "query_to_candidate_entailment": 0.0028889742371680277
+    },
+    {
+      "candidate": "What is a good inpatient drug and alcohol rehab center in Washington County NC?",
+      "candidate_to_query_entailment": 0.00012098959558341718,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.8961655044713804,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 39226,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is a good inpatient drug and alcohol rehab center in Washington County AL?",
+      "query_to_candidate_entailment": 0.0003289712203380289
+    },
+    {
+      "candidate": "Why is Malaysia wealthier than Indonesia and Philippines?",
+      "candidate_to_query_entailment": 0.0023340408481434404,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.8856665234472372,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 11861,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Why is Malaysia better than the Philippines for business?",
+      "query_to_candidate_entailment": 0.012764126293345234
+    },
+    {
+      "candidate": "I know PHP and C#. Should I learn Python?",
+      "candidate_to_query_entailment": 0.9912510747544562,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9000649227864991,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 17077,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Should I learn Python if I know PHP already?",
+      "query_to_candidate_entailment": 0.002284116008779433
+    },
+    {
+      "candidate": "What's dating in Seattle like? What is the dating culture in San Francisco like?",
+      "candidate_to_query_entailment": 0.15092928440717335,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9274099727849447,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 8194,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is the dating culture in San Francisco like?",
+      "query_to_candidate_entailment": 0.00034604113164641247
+    },
+    {
+      "candidate": "What are some things new employees should know going into their first day at Allied Motion?",
+      "candidate_to_query_entailment": 0.03106112162991283,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.8803013934492163,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 28580,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What are some things new employees should know going into their first day at Ally Financial?",
+      "query_to_candidate_entailment": 0.04794714750298171
+    },
+    {
+      "candidate": "Can you play Asian Playstation 4 games on a European Playstation?",
+      "candidate_to_query_entailment": null,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9968238167400594,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 11371,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Can you play Asian Playstation 4 games on a European Playstation 4?",
+      "query_to_candidate_entailment": null
+    },
+    {
+      "candidate": "Which colors match pink?",
+      "candidate_to_query_entailment": 0.8903797342264912,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.8870293159121205,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 3681,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What are the best colors to contrast pink?",
+      "query_to_candidate_entailment": 0.9124705181623282
+    },
+    {
+      "candidate": "What is the purpose of the Christian doctrine of the Trinity?",
+      "candidate_to_query_entailment": 0.9924245238649207,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9108068387698216,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 25020,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What was the motivation for incorporating the concept of the trinity into the Christian doctrine?",
+      "query_to_candidate_entailment": 0.9745699928910619
+    },
+    {
+      "candidate": "Who is the worst teacher you ever had?",
+      "candidate_to_query_entailment": 0.0032455878022595976,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9698945812098159,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 6529,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Who was the worst student you ever had as a teacher?",
+      "query_to_candidate_entailment": 0.20723432323476804
+    },
+    {
+      "candidate": "What is likely to happen to the poor manufacturing workers who voted for Trump?",
+      "candidate_to_query_entailment": 0.0006666925521232446,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9806613322257881,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 29693,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is likely to happen to the poor manufacturing workers who voted for Trump after losing their jobs?",
+      "query_to_candidate_entailment": 0.9595653200912391
+    },
+    {
+      "candidate": "What are the best reference books for computer applications class 9 ICSE?",
+      "candidate_to_query_entailment": 0.9895000344095188,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9659049540373662,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 31325,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What are the best reference books for icse class 9?",
+      "query_to_candidate_entailment": 0.0017190290967465252
+    },
+    {
+      "candidate": "What is more important, hard work or smart work?",
+      "candidate_to_query_entailment": 0.9864768692917428,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9409895771371523,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 33620,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Which pays more smart work or hard work?",
+      "query_to_candidate_entailment": 0.9019983373083857
+    },
+    {
+      "candidate": "What were the causes of Nationalism in Europe?",
+      "candidate_to_query_entailment": 0.9885152163779943,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9448751359347242,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 14753,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What were the causes of nationalism?",
+      "query_to_candidate_entailment": 0.0009518020871948993
+    },
+    {
+      "candidate": "Should psychiatry be reformed?",
+      "candidate_to_query_entailment": 0.04200838988952873,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9444640370528243,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 28636,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Can psychiatry be reformed much?",
+      "query_to_candidate_entailment": 0.9069176445472636
+    },
+    {
+      "candidate": "Where can I get music downloads?",
+      "candidate_to_query_entailment": 0.28621827960217205,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9105072188869776,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 9716,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Where can I download free music?",
+      "query_to_candidate_entailment": 0.9640137485228992
+    },
+    {
+      "candidate": "How do Sonia Gandhi and Rahul Gandhi spend their time?",
+      "candidate_to_query_entailment": 0.9467180089867199,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.8857776686561903,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 20473,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "How is Sonia Gandhi and Rahul Gandhi in person?",
+      "query_to_candidate_entailment": 0.8735626129124643
+    },
+    {
+      "candidate": "What are some tips on making it through the job interview process at Pacific Western Bank?",
+      "candidate_to_query_entailment": 0.032649755709066565,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9371245725085782,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 19417,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What are some tips on making it through the job interview process at Pacific Premier Bank?",
+      "query_to_candidate_entailment": 0.04786421804597323
+    },
+    {
+      "candidate": "What is the difference between whiskey, Whisky and Scotch?",
+      "candidate_to_query_entailment": 0.9960560312949259,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9713943626658196,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 38628,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What are the differences between Scotch and whiskey?",
+      "query_to_candidate_entailment": 0.9955273404405764
+    },
+    {
+      "candidate": "What is the best way to restore an iPhone back to factory settings?",
+      "candidate_to_query_entailment": 0.0027528061216634905,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9250412130432178,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 8418,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "How do you restore an iPhone to factory settings with iTunes?",
+      "query_to_candidate_entailment": 0.7285477149870191
+    },
+    {
+      "candidate": "What is kiss?",
+      "candidate_to_query_entailment": 0.9373453197501218,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9191104988123021,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 15777,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is in a kiss?",
+      "query_to_candidate_entailment": 0.9557649202031966
+    },
+    {
+      "candidate": "What was the significance of the battle of Somme, and how did this battle compare and contrast to the Battle of Tubruk?",
+      "candidate_to_query_entailment": 0.0017993027759977869,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.89527515665076,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 27395,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What was the significance of the battle of Somme, and how did this battle compare and contrast to the Battle of Mill?",
+      "query_to_candidate_entailment": 0.0005051378188257323
+    },
+    {
+      "candidate": "How do I strengthen immune system?",
+      "candidate_to_query_entailment": 0.0010018487002014505,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.8989504709126389,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 35817,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What are the best foods for strengthening your immune system?",
+      "query_to_candidate_entailment": 0.7759885622267935
+    },
+    {
+      "candidate": "How is heat transferred in solids?",
+      "candidate_to_query_entailment": 0.9880211299390759,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9117123483317869,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 31600,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "How is Heat transferred?",
+      "query_to_candidate_entailment": 0.0016134343980686115
+    },
+    {
+      "candidate": "What universities does Omega Protein recruit new grads from? What majors are they looking for?",
+      "candidate_to_query_entailment": 0.9341560526840498,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.8816829944226903,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 31744,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What universities does Alpha & Omega recruit new grads from? What majors are they looking for?",
+      "query_to_candidate_entailment": 0.008733995566936516
+    },
+    {
+      "candidate": "What are the most stressful things about directing films?",
+      "candidate_to_query_entailment": 0.9563379621418743,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9358250910913702,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 11836,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "What are the most stressful things about producing films?",
+      "query_to_candidate_entailment": 0.7250113989432737
+    },
+    {
+      "candidate": "What is the difference between a moral principle and a moral rule?",
+      "candidate_to_query_entailment": 0.9832875358005125,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.8851146966461549,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 22754,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "What is the difference between principles and morals?",
+      "query_to_candidate_entailment": 0.9423993716369874
+    },
+    {
+      "candidate": "How many days are required to get a UAE work visa?",
+      "candidate_to_query_entailment": 0.0018760651476409642,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9527996842556221,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 39135,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "How many days are required to get a UAE work visa online?",
+      "query_to_candidate_entailment": 0.9738373826619238
+    },
+    {
+      "candidate": "Is Hindi and Urdu same language?",
+      "candidate_to_query_entailment": 0.12415055528217961,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9040853942753483,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 2029,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "Urdu and Hindi are closely related languages. Are they mutually intelligble?",
+      "query_to_candidate_entailment": 0.698854036313101
+    },
+    {
+      "candidate": "Can I live in Manhattan on a yearly salary of $240,000?",
+      "candidate_to_query_entailment": 0.05421149731075287,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.8849483382806314,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 10009,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "Where can a couple live in Manhattan making all together $240,000?",
+      "query_to_candidate_entailment": 0.37114119990670497
+    },
+    {
+      "candidate": "What does innovation mean?",
+      "candidate_to_query_entailment": 0.5183470091601727,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9563823969809737,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 1721,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "\"What does \"\"innovation\"\" mean to you?\"",
+      "query_to_candidate_entailment": 0.9948691687089476
+    },
+    {
+      "candidate": "Who's the most popular supermodel of all time?",
+      "candidate_to_query_entailment": 0.8968879000149503,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.8990297509771439,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 37163,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "Who are some of the best supermodels of all time?",
+      "query_to_candidate_entailment": 0.008693995008210331
+    },
+    {
+      "candidate": "How I should prepare for ibps po 2016?",
+      "candidate_to_query_entailment": 0.993079328344181,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9726542492703012,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 23431,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "Should I prepare for IBPS PO 2016?",
+      "query_to_candidate_entailment": 0.9949142600207639
+    },
+    {
+      "candidate": "Where is the Bermuda triangle?",
+      "candidate_to_query_entailment": 0.01295289284569897,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9328792507736927,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 28489,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "What is the Bermuda Triangle?",
+      "query_to_candidate_entailment": 0.1129314071974109
+    },
+    {
+      "candidate": "Is the Bible a lie?",
+      "candidate_to_query_entailment": 0.9720990335554929,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9448731578472281,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 5166,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "Is there evidence the Bible is a lie?",
+      "query_to_candidate_entailment": 0.9714841418598742
+    },
+    {
+      "candidate": "What are the prerequisites to becoming an Android developer?",
+      "candidate_to_query_entailment": 0.9960323771171097,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9330336094633921,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 16592,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "What are the prerequisites for Android development?",
+      "query_to_candidate_entailment": 0.9777098169621562
+    },
+    {
+      "candidate": "Which is the best web hosting panel?",
+      "candidate_to_query_entailment": 0.9782795361365111,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9166493666028803,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 32630,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "Which is the best web hosting?",
+      "query_to_candidate_entailment": 0.007473982529456685
+    },
+    {
+      "candidate": "How can I reduce my weight and tummy?",
+      "candidate_to_query_entailment": 0.9470782229705174,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9199235139102417,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 22174,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "How do I reduce my tummy fat?",
+      "query_to_candidate_entailment": 0.9639663987044393
+    },
+    {
+      "candidate": "Are you free to believe in free will?",
+      "candidate_to_query_entailment": 0.9942584179698801,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9533365418612554,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 34695,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "Do you believe you have free will?",
+      "query_to_candidate_entailment": 0.9949943982871764
+    },
+    {
+      "candidate": "Where is the best place to buy a quality mattress?",
+      "candidate_to_query_entailment": 0.0002972764416245076,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9215587674937047,
+      "cosine_threshold": 0.88,
+      "dataset_row_index": 26594,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "Where is the best place to buy a quality mattress in Texas?",
+      "query_to_candidate_entailment": 0.9873507436513812
+    },
+    {
+      "candidate": "What does it mean when you have your menstrual cycle for two weeks?",
+      "candidate_to_query_entailment": 0.8438094879525533,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9525149121774935,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 37888,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What does it mean when you have two menstrual cycles within two weeks?",
+      "query_to_candidate_entailment": 0.9908283738580502
+    },
+    {
+      "candidate": "What's the best haircut for me and my beard?",
+      "candidate_to_query_entailment": 0.9958227281355011,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9772858631771464,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 14649,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What's the best haircut and beard for me?",
+      "query_to_candidate_entailment": 0.9927493842890712
+    },
+    {
+      "candidate": "Where can I sell old coins in India?",
+      "candidate_to_query_entailment": 0.9526063006376859,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9067134761623357,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 2970,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is the best place to sell a coin collection in india?",
+      "query_to_candidate_entailment": 0.9555318520762173
+    },
+    {
+      "candidate": "How can I interpret the formula of lift ratio in association rule?",
+      "candidate_to_query_entailment": 0.002689109950222692,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9180485232089234,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 20407,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "\"How can I interpret \"\"lift\"\" and \"\"odds ratio\"\" in association rules?\"",
+      "query_to_candidate_entailment": 0.9745023890304487
+    },
+    {
+      "candidate": "What does asthma do to the respiratory system?",
+      "candidate_to_query_entailment": 0.9836344783203737,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.939832033412928,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 19484,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Does asthma affect the respiratory system?",
+      "query_to_candidate_entailment": 0.9718077240852976
+    },
+    {
+      "candidate": "What's dating in Seattle like? What is the dating culture in San Francisco like?",
+      "candidate_to_query_entailment": 0.15092928440717335,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9274099727849447,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 8194,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is the dating culture in San Francisco like?",
+      "query_to_candidate_entailment": 0.00034604113164641247
+    },
+    {
+      "candidate": "How do I change my SBI register mobile number?",
+      "candidate_to_query_entailment": 0.9845381233281817,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9634573116848807,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 9724,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "How do I change my mobile number in SBI?",
+      "query_to_candidate_entailment": 0.9120826819699694
+    },
+    {
+      "candidate": "Are Parliament cigarettes safe? How are they manufactured?",
+      "candidate_to_query_entailment": 0.9759143584625264,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9427181631033099,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 36226,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Are Parliament cigarettes safe?",
+      "query_to_candidate_entailment": 0.0005204607374855223
+    },
+    {
+      "candidate": "Why do man love boobs?",
+      "candidate_to_query_entailment": 0.33311075168025356,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9234274192889564,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 18127,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Why do we love boobs?",
+      "query_to_candidate_entailment": 0.1333645422286833
+    },
+    {
+      "candidate": "How does one become a NFL agent?",
+      "candidate_to_query_entailment": 0.992839233871878,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9142153779561857,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 19361,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "How can I get an NFL agent?",
+      "query_to_candidate_entailment": 0.9927812034998669
+    },
+    {
+      "candidate": "Which is the best site to download English movies with subtitles?",
+      "candidate_to_query_entailment": 0.9518241002006703,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9263780354744948,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 22063,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Which is the best website to watch free English movies with subtitles?",
+      "query_to_candidate_entailment": 0.9914763433873502
+    },
+    {
+      "candidate": "How cold can the Gobi Desert get, and how do its average temperatures compare to the ones in the Gibson Desert?",
+      "candidate_to_query_entailment": 0.9698497211620506,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9321296034081403,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 27121,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "How cold can the Gobi Desert get, and how do its average temperatures compare to the ones in other deserts?",
+      "query_to_candidate_entailment": 0.039824393540878196
+    },
+    {
+      "candidate": "How can we get best Online Tutorials or educational videos or youtube videos or OpenCourseWare or mooc to learn MacBook repairing?",
+      "candidate_to_query_entailment": 0.8884726789791991,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9363712084641391,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 30949,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "How can we get best Online Tutorials or educational videos or youtube videos or OpenCourseWare or mooc to learn Laptop repairing?",
+      "query_to_candidate_entailment": 0.2736672909435842
+    },
+    {
+      "candidate": "Where can I learn data warehousing?",
+      "candidate_to_query_entailment": 0.2649826869490341,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9454470054212412,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 1645,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is the best way to learn data warehousing?",
+      "query_to_candidate_entailment": 0.7366224326217715
+    },
+    {
+      "candidate": "What career advice would you give to someone who wants to become an Operations Management?",
+      "candidate_to_query_entailment": 0.0024222470859823955,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9151665206506978,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 17844,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What career advice would you give to someone who wants to become a Global Operations Management?",
+      "query_to_candidate_entailment": 0.9232218904211867
+    },
+    {
+      "candidate": "How can I get more followers in fb?",
+      "candidate_to_query_entailment": 0.995224141843527,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9190453842495632,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 35214,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "How do I get more followers?",
+      "query_to_candidate_entailment": 0.0011563321440940545
+    },
+    {
+      "candidate": "Why should I learn OpenGL?",
+      "candidate_to_query_entailment": 0.9858995883805487,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.958251389383576,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 30069,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Should I learn OpenGL?",
+      "query_to_candidate_entailment": 0.5849146198550337
+    },
+    {
+      "candidate": "How is retribution better than rehabilitation in the criminal justice system?",
+      "candidate_to_query_entailment": 0.0007775792739132063,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9016371324236692,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 36407,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Should rehabilitation be prioritized over retribution in the criminal justice system?",
+      "query_to_candidate_entailment": 0.0002987017514053935
+    },
+    {
+      "candidate": "Why has the font of Quora changed?",
+      "candidate_to_query_entailment": 0.9211380366210908,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9228800363734015,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 30247,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "How do I change the font in Quora?",
+      "query_to_candidate_entailment": 0.9714949571882912
+    },
+    {
+      "candidate": "Is it necessary to uninstall Photo Locker to install Leo privacy guard?",
+      "candidate_to_query_entailment": 0.9625554766526354,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9751313398879978,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 6224,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "How do I uninstall Photo Locker to Install Leo privacy guard?",
+      "query_to_candidate_entailment": 0.9269182597664296
+    },
+    {
+      "candidate": "What does command line mean?",
+      "candidate_to_query_entailment": 0.9643158261387355,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9391726981099469,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 6910,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What does this command line command mean?",
+      "query_to_candidate_entailment": 0.9873344684659784
+    },
+    {
+      "candidate": "What is your dream in life currently?",
+      "candidate_to_query_entailment": 0.9902259437245011,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9270362198515838,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 35396,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is your DREAM of life?",
+      "query_to_candidate_entailment": 0.9793094337341941
+    },
+    {
+      "candidate": "Who has the best barcode scanning SDK for mobile apps?",
+      "candidate_to_query_entailment": 0.001998433330266664,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9024226815931886,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 37170,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is the best barcode scanner app for iPhone?",
+      "query_to_candidate_entailment": 0.012099276487686552
+    },
+    {
+      "candidate": "What do AAP supporters think of Kejriwal?",
+      "candidate_to_query_entailment": 0.03541516901356579,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9210561237838732,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 28274,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What do AAP supporters think of this statement by Kejriwal?",
+      "query_to_candidate_entailment": 0.9369745634231382
+    },
+    {
+      "candidate": "Which are the best places for river rafting in India?",
+      "candidate_to_query_entailment": 0.5497534686016882,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.950779481303033,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 15551,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is the best river rafting in India according to your experience?",
+      "query_to_candidate_entailment": 0.9922063908693787
+    },
+    {
+      "candidate": "What is consultancy?",
+      "candidate_to_query_entailment": 0.8845057522094147,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9203972482902603,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 27496,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is consultancy company???",
+      "query_to_candidate_entailment": 0.9913673755479582
+    },
+    {
+      "candidate": "Why do people do some certain things?",
+      "candidate_to_query_entailment": 0.99300141975082,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9558527973008848,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 7963,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Why do people do things?",
+      "query_to_candidate_entailment": 0.2658886668942444
+    },
+    {
+      "candidate": "Where can I find Trisha Yearwood recipes from Food Network?",
+      "candidate_to_query_entailment": 0.009661836121317997,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9076934865176076,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 34909,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "How good are the Trisha Yearwood recipes from Food Network?",
+      "query_to_candidate_entailment": 0.3821699208958886
+    },
+    {
+      "candidate": "How can I study quickly?",
+      "candidate_to_query_entailment": 0.008126661388040662,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9630476591598408,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 20430,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "How can I study quickly and effectively?",
+      "query_to_candidate_entailment": 0.9909624568444884
+    },
+    {
+      "candidate": "How is the Tesla Powerwall's portability?",
+      "candidate_to_query_entailment": 0.982029840928402,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9114918357125844,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 38835,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "How does Tesla's Powerwall work?",
+      "query_to_candidate_entailment": 0.010452674607324823
+    },
+    {
+      "candidate": "How can I jailbreak my iPhone 4 on my own?",
+      "candidate_to_query_entailment": 0.991148952763413,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9451583121227296,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 3693,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "How can I jailbreak my iPhone 4?",
+      "query_to_candidate_entailment": 0.01365156849933729
+    },
+    {
+      "candidate": "Is everything non-euclidean geometry?",
+      "candidate_to_query_entailment": 0.9570472955749226,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9099973494078112,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 4044,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "\"What is a \"\"non-euclidean geometry\"\"?\"",
+      "query_to_candidate_entailment": 0.9762829828176139
+    },
+    {
+      "candidate": "What is the difference between an app and a software?",
+      "candidate_to_query_entailment": 0.98819699050782,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9267532566616414,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 16404,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "What's the difference between an app and an application?",
+      "query_to_candidate_entailment": 0.9767350211901781
+    },
+    {
+      "candidate": "Where can i get basic knowledge of engineering?",
+      "candidate_to_query_entailment": 0.9775131453806223,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9272998617662511,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 14280,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "How can I learn about basic knowledge of engineer?",
+      "query_to_candidate_entailment": 0.967171776738161
+    },
+    {
+      "candidate": "How can I see who blocked me from hangout?",
+      "candidate_to_query_entailment": 0.9767763081466582,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9181332261376209,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 16852,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "How do I know if I'm blocked on Hangouts?",
+      "query_to_candidate_entailment": 0.9268810590512089
+    },
+    {
+      "candidate": "What does the open blue circle in Facebook Messenger mean?",
+      "candidate_to_query_entailment": 0.00233221537970604,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9099964850297779,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 18649,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "What is the white circle with blue check mark on Facebook messenger mean?",
+      "query_to_candidate_entailment": 0.0016744167927827726
+    },
+    {
+      "candidate": "What are the laws to change your status from a student visa to a green card in the US, how do they compare to the immigration laws in Spain?",
+      "candidate_to_query_entailment": 0.00010603736242168464,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9080384840814166,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 24625,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "What are the laws to change your status from a student visa to a green card in the US? How do they compare to the immigration laws in Japan?",
+      "query_to_candidate_entailment": 0.0003769394974592125
+    },
+    {
+      "candidate": "Should there be a character limit for answers on Quora?",
+      "candidate_to_query_entailment": 0.9828425069793058,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9403699395846676,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 13810,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "Is there a character limit to questions on Quora? ",
+      "query_to_candidate_entailment": 0.9947062450521742
+    },
+    {
+      "candidate": "What is the difference between 8085 and 8086?",
+      "candidate_to_query_entailment": 0.8660097499669882,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9384412094836281,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 13757,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "What is the difference between 8085 instruction set and 8086 instruction set?",
+      "query_to_candidate_entailment": 0.9936013546377491
+    },
+    {
+      "candidate": "How do I get ripped?",
+      "candidate_to_query_entailment": 0.005332991681922485,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9296257268113965,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 15686,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "How can I get ripped fast?",
+      "query_to_candidate_entailment": 0.9910971132329967
+    },
+    {
+      "candidate": "Malayalam language originated in which year?",
+      "candidate_to_query_entailment": 0.9822176205027289,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.938574210272858,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 33067,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "What is the origin of the language Malayalam?",
+      "query_to_candidate_entailment": 0.003991814327143764
+    },
+    {
+      "candidate": "What is the best programming language for IoT beginners?",
+      "candidate_to_query_entailment": 0.2334933742317647,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9335623735262005,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 27217,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "What are the best programming languages to learn for developing in the IoT space?",
+      "query_to_candidate_entailment": 0.9759724026745453
+    },
+    {
+      "candidate": "How can I become a psychotherapist in the US?",
+      "candidate_to_query_entailment": 0.9967846141756472,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9119472625686721,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 8897,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "How do I become a psychotherapist?",
+      "query_to_candidate_entailment": 0.0013286646632162497
+    },
+    {
+      "candidate": "How do I improve at drawing?",
+      "candidate_to_query_entailment": 0.9946653156565831,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.979950211365368,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 5565,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "How can I improve my drawing?",
+      "query_to_candidate_entailment": 0.9877210335657121
+    },
+    {
+      "candidate": "Is it possible to clear upsc in my first attempt if I work sincerely?",
+      "candidate_to_query_entailment": 0.9844480878160566,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9490477188079846,
+      "cosine_threshold": 0.9,
+      "dataset_row_index": 12253,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "Is it possible to clear upsc in my first attempt?",
+      "query_to_candidate_entailment": 0.0007077401601070239
+    },
+    {
+      "candidate": "What is the historical significance of the Summer Palace in St. Petersburg?",
+      "candidate_to_query_entailment": 0.9791530712308474,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9255804727516901,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 38047,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is so special of the of the Summer Palace in St. Petersburg?",
+      "query_to_candidate_entailment": 0.9247395603170507
+    },
+    {
+      "candidate": "What is the average in stock percentage for UK supermarkets?",
+      "candidate_to_query_entailment": 0.9709192881835261,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9355446765247422,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 5539,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is the average in stock percentage for a UK retailer?",
+      "query_to_candidate_entailment": 0.026163696436090865
+    },
+    {
+      "candidate": "Would it be possible for a planet to orbit two stars in a figure eight pattern?",
+      "candidate_to_query_entailment": null,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9460991272142478,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 10871,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Could a planet orbit two suns in a figure 8 pattern?",
+      "query_to_candidate_entailment": null
+    },
+    {
+      "candidate": "What colors go well with green?",
+      "candidate_to_query_entailment": 0.0033489742060163587,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9289520523403367,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 7019,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What colors go best with dark green?",
+      "query_to_candidate_entailment": 0.9946791358765051
+    },
+    {
+      "candidate": "What do you eat for breakfast usually?",
+      "candidate_to_query_entailment": 0.7145137737694803,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9350712928728478,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 1030,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What should I eat for breakfast?",
+      "query_to_candidate_entailment": 0.5579223053339747
+    },
+    {
+      "candidate": "What is your most embarrassing moment during your childhood life?",
+      "candidate_to_query_entailment": 0.9962129916422531,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9499717275176556,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 38467,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is the most embarrassing moment of your life when you were a kid?",
+      "query_to_candidate_entailment": 0.9734842329644969
+    },
+    {
+      "candidate": "Do Muslim women shave?",
+      "candidate_to_query_entailment": 0.013079655156925673,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9232349508267164,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 21968,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Do Muslim women shave their legs?",
+      "query_to_candidate_entailment": 0.9891353981256629
+    },
+    {
+      "candidate": "What do you think Brazilians think foreigners think about Brazil?",
+      "candidate_to_query_entailment": 0.653161666739091,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9738713014204197,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 34263,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What do you think foreigners think about Brazil?",
+      "query_to_candidate_entailment": 0.05552619108776131
+    },
+    {
+      "candidate": "Why did your parents choose to homeschool you?",
+      "candidate_to_query_entailment": 0.887796405535437,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9350112694699879,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 29669,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Why do some parents choose to homeschool their children?",
+      "query_to_candidate_entailment": 0.01208546515032924
+    },
+    {
+      "candidate": "Are there countries without debt? How?",
+      "candidate_to_query_entailment": null,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9206566251837945,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 14568,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Are there any countries with no national debt?",
+      "query_to_candidate_entailment": null
+    },
+    {
+      "candidate": "What is the best privacy guard for smartphone?",
+      "candidate_to_query_entailment": 0.025109938953197422,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9371282779092839,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 39152,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is the best privacy guard for android?",
+      "query_to_candidate_entailment": 0.8644725475598241
+    },
+    {
+      "candidate": "Who is/was your favourite cartoon character and why?",
+      "candidate_to_query_entailment": 0.9924016773335776,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9574095082254788,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 30621,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Who is your favourite cartoon character?",
+      "query_to_candidate_entailment": 0.22581090240173704
+    },
+    {
+      "candidate": "What is the notice period in EY India?",
+      "candidate_to_query_entailment": 0.9811617965755661,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9499544292974739,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 15873,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is the notice period for EY?",
+      "query_to_candidate_entailment": 0.0035105879683465114
+    },
+    {
+      "candidate": "Can I wash my hair everyday?",
+      "candidate_to_query_entailment": 0.8970964441062709,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9546873306125674,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 16413,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Should you wash your hair everyday?",
+      "query_to_candidate_entailment": 0.8821333577688276
+    },
+    {
+      "candidate": "Where can i get basic knowledge of engineering?",
+      "candidate_to_query_entailment": 0.9775131453806223,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9272998617662511,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 14280,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "How can I learn about basic knowledge of engineer?",
+      "query_to_candidate_entailment": 0.967171776738161
+    },
+    {
+      "candidate": "What will be the output of the following program?",
+      "candidate_to_query_entailment": 0.9870565616024433,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.964518598275797,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 10680,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is the output of the following program?",
+      "query_to_candidate_entailment": 0.9804798215080186
+    },
+    {
+      "candidate": "Where can you hire the best PHP, ASP.NET and iPhone apps developer at a low cost in India?",
+      "candidate_to_query_entailment": 0.9680054139172986,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9734986248100383,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 680,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Where can you hire the best PHP, Asp.net and mobile apps developer at a low cost in India?",
+      "query_to_candidate_entailment": 0.01191909029368492
+    },
+    {
+      "candidate": "How do I get money from you?",
+      "candidate_to_query_entailment": 0.990135783749261,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9263422160159415,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 29506,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "How can I get money?",
+      "query_to_candidate_entailment": 0.03614685969336783
+    },
+    {
+      "candidate": "Which is the best institute for Hadoop and gives placements in Bangalore?",
+      "candidate_to_query_entailment": 0.16214416677426374,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9965432152510951,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 9379,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Which is the best Institute for Hadoop and which gives good placements in Bangalore?",
+      "query_to_candidate_entailment": 0.9936635174536155
+    },
+    {
+      "candidate": "How do civil liberties different from civil rights?",
+      "candidate_to_query_entailment": 0.012503366038728883,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9347038944503642,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 25908,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "How do Constitutional Rights, Civil Rights, and Civil Liberties differ?",
+      "query_to_candidate_entailment": 0.9677983971461516
+    },
+    {
+      "candidate": "How long does it take for your nose piercing to heal?",
+      "candidate_to_query_entailment": 0.9881165766936029,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9412839606182958,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 16453,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is the healing time for a nose ring piercing?",
+      "query_to_candidate_entailment": 0.9325649837500046
+    },
+    {
+      "candidate": "What are the most stressful things about directing films?",
+      "candidate_to_query_entailment": 0.9563379621418743,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9358250910913702,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 11836,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What are the most stressful things about producing films?",
+      "query_to_candidate_entailment": 0.7250113989432737
+    },
+    {
+      "candidate": "What are the differences between Java, Core Java, Advanced Java and J2EE?",
+      "candidate_to_query_entailment": 0.9952130950361461,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9482107935796431,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 27744,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is difference between core java and j2ee?",
+      "query_to_candidate_entailment": 0.005954364369691021
+    },
+    {
+      "candidate": "What is the best college admissions consulting company?",
+      "candidate_to_query_entailment": 0.11718439565527364,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9333775141391102,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 20939,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Who is the best college admissions consultant?",
+      "query_to_candidate_entailment": 0.011805904204906048
+    },
+    {
+      "candidate": "How do I find the maximum area of a convex quadrilateral with equal diagonals and given perimeter?",
+      "candidate_to_query_entailment": 0.4027041463716988,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9474113349818669,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 22380,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "How do you find the maximum perimeter of a quadrilateral for a given diagonal?",
+      "query_to_candidate_entailment": 0.005253394975835089
+    },
+    {
+      "candidate": "How did Peter Singer become a Philosopher?",
+      "candidate_to_query_entailment": 0.69155918291488,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9416166450498448,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 12135,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Peter Singer: How do I become a philosopher?",
+      "query_to_candidate_entailment": 0.9803092818334881
+    },
+    {
+      "candidate": "How do you mix Disaronno?",
+      "candidate_to_query_entailment": 0.15358794868375916,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9310655804941921,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 12432,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What are some good things to mix with Disaronno?",
+      "query_to_candidate_entailment": 0.9587602843613506
+    },
+    {
+      "candidate": "When is it ok to make excuses?",
+      "candidate_to_query_entailment": 0.9814583970076812,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9538256306708702,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 16853,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Is it generally okay to make excuses?",
+      "query_to_candidate_entailment": 0.9696326015179476
+    },
+    {
+      "candidate": "Can I choose a different subject for my PhD from my PG subject?",
+      "candidate_to_query_entailment": 0.9758485882498482,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9310769513675787,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 14724,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Can I do a PhD in my graduation subject if I do my PG in a different subject?",
+      "query_to_candidate_entailment": 0.9945029083224955
+    },
+    {
+      "candidate": "What is the difference between an illiterate and uneducated person? Can a person be literate but uneducated?",
+      "candidate_to_query_entailment": 0.06905745580815492,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9390645616795223,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 10197,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is the difference between illiterate and uneducated?",
+      "query_to_candidate_entailment": 0.01942756002272364
+    },
+    {
+      "candidate": "How do you delete a picture from instagram on your computer?",
+      "candidate_to_query_entailment": 0.9939610261370763,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9605621854459012,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 19956,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "How do I delete a picture on Instagram?",
+      "query_to_candidate_entailment": 0.028299068071638796
+    },
+    {
+      "candidate": "Where can I find a Wii to HDMI converter?",
+      "candidate_to_query_entailment": 0.003636291294702956,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.950851350482449,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 2963,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "What is the best Wii to HDMI converter?",
+      "query_to_candidate_entailment": 0.7082770814316195
+    },
+    {
+      "candidate": "What is the Arizona bark scorpion, and how do animal species in the Sonoran Desert compare to species in the Simpson Desert?",
+      "candidate_to_query_entailment": 0.6501435311037858,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9212673689049655,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 10023,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "What is the Arizona bark scorpion, and how do animal species in the Sonoran Desert compare to species in the Kyzylkum Desert?",
+      "query_to_candidate_entailment": 0.6324237132548007
+    },
+    {
+      "candidate": "Where can I found a good quality wardrobe in Sydney?",
+      "candidate_to_query_entailment": 0.044549595607659837,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9401008181509068,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 6044,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "Where can I found best quality walk in wardrobes in Sydney?",
+      "query_to_candidate_entailment": 0.9573153285977711
+    },
+    {
+      "candidate": "What are differential forms?",
+      "candidate_to_query_entailment": 0.8257881698481484,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9734978544693451,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 35750,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "In simple terms, what are differential forms?",
+      "query_to_candidate_entailment": 0.9890211714131727
+    },
+    {
+      "candidate": "Which is the best private engineering college in india?",
+      "candidate_to_query_entailment": 0.0002649850738880063,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9309266303219326,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 8542,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "Which is the best cheap private engineering college in india?",
+      "query_to_candidate_entailment": 0.9793438662476384
+    },
+    {
+      "candidate": "What is the difference between visual communication design and communication design?",
+      "candidate_to_query_entailment": 0.9427228149175283,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9822266129024545,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 22431,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "What is the difference between visual communication and visual design?",
+      "query_to_candidate_entailment": 0.9256485308535326
+    },
+    {
+      "candidate": "How do I update my graphics drivers?",
+      "candidate_to_query_entailment": 0.10659948954457608,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9725060135260237,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 116,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "How do you update the graphics driver on your computer?",
+      "query_to_candidate_entailment": 0.886381411919805
+    },
+    {
+      "candidate": "Why do some people collect soda cans?",
+      "candidate_to_query_entailment": 0.15126503148253911,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9403506994733721,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 20277,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "Why do people collect the tabs of soda cans?",
+      "query_to_candidate_entailment": 0.9607619663878227
+    },
+    {
+      "candidate": "How can I transfer money to the USA from Nepal?",
+      "candidate_to_query_entailment": 0.0013244797210454423,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9425591736279972,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 35318,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "What is the Cheapest way to transfer money from USA to Nepal?",
+      "query_to_candidate_entailment": 0.9877855063574009
+    },
+    {
+      "candidate": "What is my weakness?",
+      "candidate_to_query_entailment": 0.0038131325632111035,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9365204017991471,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 30737,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "What is your weakness?",
+      "query_to_candidate_entailment": 0.0026844736866432984
+    },
+    {
+      "candidate": "Can you use shaving cream as hair conditioner?",
+      "candidate_to_query_entailment": 0.006890391599716844,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9866587865891211,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 4990,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "Can you use hair conditioner as shaving cream?",
+      "query_to_candidate_entailment": 0.3778169645110358
+    },
+    {
+      "candidate": "Why do BJP supporters hate Rajdeep Sardesai?",
+      "candidate_to_query_entailment": 0.9525757859734378,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9287053228771088,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 3103,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "Why do some people hate Rajdeep Sardesai?",
+      "query_to_candidate_entailment": 0.0005968710601213805
+    },
+    {
+      "candidate": "What was the significance of the battle of Somme, and how did this battle compare and contrast to the Battle of Dublin?",
+      "candidate_to_query_entailment": 0.0002504656373073798,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9363094112194921,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 23712,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "What was the significance of the battle of Somme, and how did this battle compare and contrast to the Battle of Kiev?",
+      "query_to_candidate_entailment": 0.000697507700789386
+    },
+    {
+      "candidate": "What is the greatest question and answer you've come across on Quora?",
+      "candidate_to_query_entailment": 0.9762054447433764,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9257730256561205,
+      "cosine_threshold": 0.92,
+      "dataset_row_index": 24188,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "What is the best question you have come across on Quora?",
+      "query_to_candidate_entailment": 0.9070871690504022
+    },
+    {
+      "candidate": "Can I find tutorial of PSD to HTML conversion?",
+      "candidate_to_query_entailment": 0.1622299875876338,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.951140251473567,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 1894,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is PSD to HTML conversion?",
+      "query_to_candidate_entailment": 0.01806590993411257
+    },
+    {
+      "candidate": "Is it good to do MBA or PGDM after electrical & electronics engineering with experience?",
+      "candidate_to_query_entailment": null,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9570440573145251,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 32496,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Is it good to do MBA or PGDM after electrical & electronics engineering with no experience?",
+      "query_to_candidate_entailment": null
+    },
+    {
+      "candidate": "\"Who is the Adam the lyrics to Blink-182's \"\"Adam's Song\"\" are written about?\"",
+      "candidate_to_query_entailment": 0.9218297694484642,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.95115776446113,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 29,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "\"Which Blink-182 band member wrote the lyrics to \"\"Adam's Song\"\"?\"",
+      "query_to_candidate_entailment": 0.8420533731480797
+    },
+    {
+      "candidate": "Why do we need deterministic finite automata?",
+      "candidate_to_query_entailment": 0.0005780848442090248,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9789755559516519,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 20324,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Why do we need non-deterministic finite automata?",
+      "query_to_candidate_entailment": 0.002005911298947023
+    },
+    {
+      "candidate": "What are the results of Saturn and Moon being conjunct in Scorpio in the 12th house?",
+      "candidate_to_query_entailment": null,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9537710301940533,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 26180,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What are the results of Saturn and Moon being conjunct in Scorpio in the 2nd house?",
+      "query_to_candidate_entailment": null
+    },
+    {
+      "candidate": "What are the uses of the push/pull theory?",
+      "candidate_to_query_entailment": 0.949272812492612,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9533983522717845,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 21223,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is the push/pull theory?",
+      "query_to_candidate_entailment": 0.33387518052320747
+    },
+    {
+      "candidate": "What is the difference between parliamentary and presidential form of government?",
+      "candidate_to_query_entailment": 0.9957326552034657,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9555158872662511,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 11394,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What are the differences between Parliamentarian and Presidential form of government?",
+      "query_to_candidate_entailment": 0.9964367031599699
+    },
+    {
+      "candidate": "Which are the best Hindi (Bollywood) romantic songs for a couple dance?",
+      "candidate_to_query_entailment": 0.01649638564519833,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9585533925841394,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 5617,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Which are the best old Hindi (Bollywood) romantic songs for a couple dance?",
+      "query_to_candidate_entailment": 0.9658409313096611
+    },
+    {
+      "candidate": "Is Hollywood better than Bollywood?",
+      "candidate_to_query_entailment": 0.959528224734324,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9734464225669032,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 8689,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "How is Hollywood better than Bollywood?",
+      "query_to_candidate_entailment": 0.9851026876038305
+    },
+    {
+      "candidate": "What are the disadvantages of reading books?",
+      "candidate_to_query_entailment": 0.9810385028984828,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9610798400983347,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 24829,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What are the disadvantages of reading?",
+      "query_to_candidate_entailment": 0.015657342563470743
+    },
+    {
+      "candidate": "What is the best thing about yourself, that has lead to your worst experiences in life?",
+      "candidate_to_query_entailment": 0.00043574663266863903,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9823083070033707,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 12576,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is the worst thing about yourself, that has lead to your best experiences in life?",
+      "query_to_candidate_entailment": 0.0003798341601439437
+    },
+    {
+      "candidate": "Which hair colour is this?",
+      "candidate_to_query_entailment": 0.9942868312355767,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9888610881274897,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 4004,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What hair colour is this?",
+      "query_to_candidate_entailment": 0.9941929745770895
+    },
+    {
+      "candidate": "Is free online cricket betting legal in India?",
+      "candidate_to_query_entailment": 0.9942975570964268,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9714143989019774,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 27931,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Is online cricket betting legal in India?",
+      "query_to_candidate_entailment": 0.04096141189116311
+    },
+    {
+      "candidate": "How do you make a call to a private number?",
+      "candidate_to_query_entailment": 0.9859415177343589,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.984945186932513,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 4688,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "How do you make a call from a private number?",
+      "query_to_candidate_entailment": 0.8449827181506204
+    },
+    {
+      "candidate": "What are the best Joshua Tree National Park hikes?",
+      "candidate_to_query_entailment": 0.9948335385363554,
+      "configuration": "cosine_only",
+      "cosine_similarity": 0.9851907647027703,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 19994,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What are some of the best hikes in Joshua Tree National Park?",
+      "query_to_candidate_entailment": 0.9943689878755454
+    },
+    {
+      "candidate": "What are the main reasons why students from Edison State College don't graduate on time?",
+      "candidate_to_query_entailment": 0.7997416100231721,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9775962328436091,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 13439,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What are the main reasons why students from Thomas Edison State College don't graduate on time?",
+      "query_to_candidate_entailment": 0.9855787780840903
+    },
+    {
+      "candidate": "Can I do CA after Bsc (maths) in India?",
+      "candidate_to_query_entailment": 0.979927941229703,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9557727297109277,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 9047,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Can I do CA after Bsc maths?",
+      "query_to_candidate_entailment": 0.0017685238713111623
+    },
+    {
+      "candidate": "What are some good ideas for the final year B.E CSE project?",
+      "candidate_to_query_entailment": 0.858634856390656,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9528580190543426,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 24077,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What are the best ideas for final year CSE projects?",
+      "query_to_candidate_entailment": 0.48679622322056837
+    },
+    {
+      "candidate": "Which toastmasters club is best in Hyderabad?",
+      "candidate_to_query_entailment": 0.9735722626638562,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9545881119557594,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 18483,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Where can I find a Toastmasters club in Hyderabad?",
+      "query_to_candidate_entailment": 0.7928978509100408
+    },
+    {
+      "candidate": "What is the difference between a Java applet and a Java?",
+      "candidate_to_query_entailment": 0.947396895468729,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9641460878546282,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 15864,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is the difference of Java applet and Java application?",
+      "query_to_candidate_entailment": 0.9882849958920217
+    },
+    {
+      "candidate": "Which hair colour is this?",
+      "candidate_to_query_entailment": 0.9942868312355767,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9888610881274897,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 4004,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What hair colour is this?",
+      "query_to_candidate_entailment": 0.9941929745770895
+    },
+    {
+      "candidate": "Where is world bank located?",
+      "candidate_to_query_entailment": 0.987251045933457,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9726324094874748,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 15189,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Where is the World Bank?",
+      "query_to_candidate_entailment": 0.9761455140879061
+    },
+    {
+      "candidate": "Which programming language should I focus on?",
+      "candidate_to_query_entailment": 0.9966834161959907,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9807093546368681,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 39542,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What programming languages should I focus on?",
+      "query_to_candidate_entailment": 0.9971509406310411
+    },
+    {
+      "candidate": "How can you inspire me?",
+      "candidate_to_query_entailment": 0.0016188499685032775,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9692943370156409,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 34476,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "How can I inspire you?",
+      "query_to_candidate_entailment": 0.0027240239430939427
+    },
+    {
+      "candidate": "Why is NDTV india and The Telegraph are so anti-Modi or so pro-Congress?",
+      "candidate_to_query_entailment": 0.9761371910061208,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.953153267296563,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 25782,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Why is NDTV (a news channel in India) so anti-Modi or so pro-Congress?",
+      "query_to_candidate_entailment": 0.0012336587166220376
+    },
+    {
+      "candidate": "What are the pros and cons of San Francisco Ballot Measure L (2014)?",
+      "candidate_to_query_entailment": 0.0005425104712740864,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.956092010181366,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 4666,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What are the pros and cons of San Francisco Ballot Measure F (2014)?",
+      "query_to_candidate_entailment": 0.0003937280195196517
+    },
+    {
+      "candidate": "Money Laundering: Are there ways to receive big deposits to my bank account, without being questioned about the origins of it and country is India?",
+      "candidate_to_query_entailment": 0.8831276360310258,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9572098586528603,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 34782,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "Money Laundering: Are there ways to receive big deposits to my bank account, without being questioned about the origins of it?",
+      "query_to_candidate_entailment": 0.0004458940775461202
+    },
+    {
+      "candidate": "What does a marketing coordinator do?",
+      "candidate_to_query_entailment": 0.9843393166531929,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9597884091147771,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 22307,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "What is a Marketing Coordinator?",
+      "query_to_candidate_entailment": 0.962533153331027
+    },
+    {
+      "candidate": "How much should I sell my domain name for?",
+      "candidate_to_query_entailment": 0.9944179078429103,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9831994027770423,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 31292,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "How much could I sell my domain name?",
+      "query_to_candidate_entailment": 0.9859661360271474
+    },
+    {
+      "candidate": "What are differential forms?",
+      "candidate_to_query_entailment": 0.8257881698481484,
+      "configuration": "cosine_stage0",
+      "cosine_similarity": 0.9734978544693451,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 35750,
+      "gold_label": 0,
+      "nli_threshold": null,
+      "query": "In simple terms, what are differential forms?",
+      "query_to_candidate_entailment": 0.9890211714131727
+    },
+    {
+      "candidate": "How do you know when someone is taking you for granted?",
+      "candidate_to_query_entailment": 0.03875790843547859,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.972299493409847,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 5572,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "How do I know if someone is taking me for granted?",
+      "query_to_candidate_entailment": 0.03172059821990717
+    },
+    {
+      "candidate": "How should I prepare for the chemical engineering technical test for UOP Honeywell?",
+      "candidate_to_query_entailment": 0.987732656762306,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9660719479295834,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 33274,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "How can I prepare for the chemical engineering technical test for Honeywell?",
+      "query_to_candidate_entailment": 0.003390112077967817
+    },
+    {
+      "candidate": "How do you start a career in politics?",
+      "candidate_to_query_entailment": 0.9886247643987055,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9607453264228958,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 8647,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "What is the best way to begin a career in politics?",
+      "query_to_candidate_entailment": 0.9937378882391078
+    },
+    {
+      "candidate": "How do you measure your success?",
+      "candidate_to_query_entailment": 0.9730924390178188,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.952532756874245,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 17383,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "How can we measure success?",
+      "query_to_candidate_entailment": 0.09826973412944542
+    },
+    {
+      "candidate": "Why is Kangana Ranaut so overrated?",
+      "candidate_to_query_entailment": 0.9639825288669575,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9679613731092042,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 15939,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "Do you think Kangana Ranaut is overrated?",
+      "query_to_candidate_entailment": 0.05509441005221532
+    },
+    {
+      "candidate": "How do you find the instantaneous rate of change?",
+      "candidate_to_query_entailment": 0.9821661251787301,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9545680764601882,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 12306,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "What is an instantaneous rate of change?",
+      "query_to_candidate_entailment": 0.9883229593091913
+    },
+    {
+      "candidate": "How much should be my percentile and score in AIMCATs at this time?",
+      "candidate_to_query_entailment": 0.9750774629935588,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9966854120733395,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 17325,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "How much should be my percentile and scores in AIMCATs at this time?",
+      "query_to_candidate_entailment": 0.949240608681204
+    },
+    {
+      "candidate": "What is Madge Saunders known for?",
+      "candidate_to_query_entailment": 0.00339160968455363,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9544002936855727,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 21371,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "Who is Madge Saunders?",
+      "query_to_candidate_entailment": 0.1841601527230719
+    },
+    {
+      "candidate": "How do you make a programming language?",
+      "candidate_to_query_entailment": 0.03417821161877482,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9931802265644116,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 6840,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "How do I make a programming language?",
+      "query_to_candidate_entailment": 0.1935613512560182
+    },
+    {
+      "candidate": "How do I conduct a usability test?",
+      "candidate_to_query_entailment": 0.9969666711782329,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9743372531560197,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 15663,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "How do I perform a usability test?",
+      "query_to_candidate_entailment": 0.9965565054844288
+    },
+    {
+      "candidate": "\"Who is the Adam the lyrics to Blink-182's \"\"Adam's Song\"\" are written about?\"",
+      "candidate_to_query_entailment": 0.9218297694484642,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.95115776446113,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 29,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "\"Which Blink-182 band member wrote the lyrics to \"\"Adam's Song\"\"?\"",
+      "query_to_candidate_entailment": 0.8420533731480797
+    },
+    {
+      "candidate": "Is it hard to find a job?",
+      "candidate_to_query_entailment": 0.996725174040954,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9565898588161048,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 23057,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "Is it hard to get a job?",
+      "query_to_candidate_entailment": 0.9943507849429185
+    },
+    {
+      "candidate": "What does it mean when a phone rings twice and then goes straight to voicemail?",
+      "candidate_to_query_entailment": 0.0034670592083015494,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9554000782986898,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 6170,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "What does it mean when a phone rings once and then goes straight to voicemail?",
+      "query_to_candidate_entailment": 0.002900664292506351
+    },
+    {
+      "candidate": "What are some good consultancies for mechanical engineering jobs in Pune?",
+      "candidate_to_query_entailment": 0.16450012207143092,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9703991491259245,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 34390,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "Which are the top consultancies for mechanical engineers in Pune?",
+      "query_to_candidate_entailment": 0.9717306079825102
+    },
+    {
+      "candidate": "What are the ranks in the National Guard?",
+      "candidate_to_query_entailment": 0.6991320365192694,
+      "configuration": "cosine_stage0_nli",
+      "cosine_similarity": 0.9713213282179193,
+      "cosine_threshold": 0.95,
+      "dataset_row_index": 12026,
+      "gold_label": 0,
+      "nli_threshold": 0.0,
+      "query": "What are the National Guard ranks in order?",
+      "query_to_candidate_entailment": 0.9951289227389092
+    }
+  ],
+  "split": "validation",
+  "test_split_used": false
+}

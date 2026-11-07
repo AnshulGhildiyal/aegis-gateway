@@ -1,8 +1,19 @@
 """Tests for bidirectional entailment filtering."""
 
-import pytest
+import asyncio
 
-from aegis.engine.nli_reranker import NliReranker, NliScorer, OnnxNliScorer
+import numpy as np
+import pytest
+from tokenizers import Tokenizer
+from tokenizers.models import WordLevel
+from tokenizers.pre_tokenizers import Whitespace
+
+from aegis.engine.nli_reranker import (
+    NliReranker,
+    NliScorer,
+    OnnxNliScorer,
+    _OnnxInput,
+)
 from aegis.storage.cache import CacheEntry
 
 
@@ -116,6 +127,62 @@ async def test_onnx_scorer_empty_pairs_do_not_download_model() -> None:
         assert await scorer.entailment_probabilities([]) == []
     finally:
         await scorer.close()
+
+
+def test_onnx_scorer_pads_variable_length_pairs_in_batch() -> None:
+    class FakeInput:
+        def __init__(self, name: str) -> None:
+            self.name = name
+
+    class FakeSession:
+        def get_inputs(self) -> list[_OnnxInput]:
+            return [
+                FakeInput("input_ids"),
+                FakeInput("attention_mask"),
+                FakeInput("token_type_ids"),
+            ]
+
+        def run(
+            self,
+            output_names: list[str] | None,
+            input_feed: dict[str, np.ndarray],
+        ) -> list[np.ndarray]:
+            del output_names
+            lengths = {array.shape[1] for array in input_feed.values()}
+            assert len(lengths) == 1
+            return [np.asarray([[0.0, 0.0, 1.0]] * len(input_feed["input_ids"]))]
+
+    tokenizer = Tokenizer(
+        WordLevel(
+            vocab={
+                "[PAD]": 0,
+                "[UNK]": 1,
+                "short": 2,
+                "premise": 3,
+                "much": 4,
+                "longer": 5,
+                "hypothesis": 6,
+            },
+            unk_token="[UNK]",
+        )
+    )
+    tokenizer.pre_tokenizer = Whitespace()
+    tokenizer.enable_padding(pad_id=0, pad_token="[PAD]")
+    scorer = OnnxNliScorer()
+    scorer._tokenizer = tokenizer
+    scorer._session = FakeSession()
+    scorer._entailment_index = 2
+    try:
+        probabilities = scorer._score_sync(
+            [
+                ("short premise", "short hypothesis"),
+                ("much longer premise", "longer hypothesis"),
+            ]
+        )
+    finally:
+        asyncio.run(scorer.close())
+
+    assert probabilities == pytest.approx([0.5761168847658291, 0.5761168847658291])
 
 
 @pytest.mark.parametrize(

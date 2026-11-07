@@ -108,9 +108,7 @@ class OnnxNliScorer:
         ):
             raise RuntimeError("NLI model failed to initialize")
 
-        encodings = [
-            self._tokenizer.encode(premise, hypothesis) for premise, hypothesis in pairs
-        ]
+        encodings = self._tokenizer.encode_batch(pairs)
         input_values: dict[str, np.ndarray] = {
             "input_ids": np.asarray(
                 [encoding.ids for encoding in encodings],

@@ -30,25 +30,35 @@ The same analysis can be run from a terminal:
 uv run --group benchmark python -m benchmarks.stsb_fine_sweep
 ```
 
-## PAWS and QQP
+## PAWS and QQP ablation
 
-Supply both calibrated thresholds explicitly. PAWS uses the `labeled_final`
-test split; QQP uses GLUE's validation split because its test labels are not
-available for supervised evaluation.
+The ablation runner uses only PAWS `labeled_final` validation and QQP GLUE
+validation. It calibrates one bidirectional NLI entailment threshold per
+dataset by maximizing mean F1 over the requested cosine thresholds on that
+same validation split (ties select the higher threshold), then reports
+cosine-only, cosine + Stage-0, and cosine + Stage-0 + NLI results at every
+cosine threshold. No test split is loaded.
+
+```bash
+uv run --group benchmark python -m benchmarks.evaluate_paraphrase_ablation
+```
+
+By default this evaluates both full validation splits. Use `--dataset paws` or
+`--dataset qqp` to run one dataset, or `--limit N` for a smaller validation-only
+smoke run. Each dataset writes a JSON report, a metrics CSV, and a sampled
+false-positive CSV to `benchmarks/results/`.
+
+The earlier single-operating-point evaluator is also validation-only:
 
 ```bash
 uv run python -m benchmarks.evaluate_paraphrase \
-  --dataset paws --cosine-threshold 0.8 --nli-threshold 0.9 --limit 100
+  --dataset paws --cosine-threshold 0.85 --nli-threshold 0.9 --limit 100
 uv run python -m benchmarks.evaluate_paraphrase \
-  --dataset qqp --cosine-threshold 0.8 --nli-threshold 0.9 --limit 100
+  --dataset qqp --cosine-threshold 0.85 --nli-threshold 0.9 --limit 100
 ```
 
-Omit `--limit` to evaluate the full labeled split. The threshold examples above
-are command syntax only, not validated Aegis settings. Output reports the
-cosine-only and full cosine + Stage-0 + NLI results separately, as well as
-embedding-batch, cosine-only, and full lookup latencies. Latencies exclude the
-dataset download; embedding time and first-use NLI model warmup are reported
-separately from per-pair scoring latency.
+These threshold examples are command syntax only, not validated Aegis settings.
+Do not use a test split until separately authorized.
 
 ## Banking77 intent evaluation
 

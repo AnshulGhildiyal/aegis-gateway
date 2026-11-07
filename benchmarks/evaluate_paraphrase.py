@@ -21,7 +21,7 @@ def dataset_spec(
         return (
             "google-research-datasets/paws",
             "labeled_final",
-            "test",
+            "validation",
             "sentence1",
             "sentence2",
         )
