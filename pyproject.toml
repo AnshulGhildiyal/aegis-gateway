@@ -33,6 +33,7 @@ dev = [
 benchmark = [
     "datasets>=3.2",
     "ipykernel>=6.29",
+    "matplotlib>=3.9",
 ]
 
 [tool.ruff]

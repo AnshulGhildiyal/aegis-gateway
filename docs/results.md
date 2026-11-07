@@ -84,6 +84,74 @@ recall (0.6250).
      distribution. Keep cosine-only, embedding, and cosine + Stage-0 + NLI
      costs separate.
 
+## 2026-11-07 — STS-B validation fine sweep
+
+### Run details
+
+- Dataset: Hugging Face `nyu-mll/glue`, configuration `stsb`, `validation` only.
+- Examples: 1,500 pairs; 264 positives using the same `score >= 4` rule.
+- Sweep: 20 thresholds, 0.80 through 0.99 in 0.01 increments.
+- Embeddings: `BAAI/bge-small-en-v1.5`, served from the FastEmbed registry's
+  `Qdrant/bge-small-en-v1.5-onnx-Q` source (`model_optimized.onnx`, 384
+  dimensions); FastEmbed package version `0.9.1`.
+- Run date: 2026-11-07 UTC. Git HEAD recorded as
+  `5f63dfc3b360b270f1b86e06101b2bd4c9b51553`; the worktree was dirty, so the
+  commit does not contain the uncommitted notebook/runner changes that produced
+  this output. The registry source is recorded, but an immutable model artifact
+  revision was not available in this run's metadata.
+- Scope: cosine-only baseline. The test split, Stage-0 guard, NLI reranker, and
+  cache retrieval were not evaluated.
+- Re-run with all notebook cells or
+  `uv run --group benchmark python -m benchmarks.stsb_fine_sweep`.
+- Measured timing: embedding batch 47.024462 seconds; mean cosine calculation
+  0.006497 milliseconds per pair. The latter excludes embedding time; neither
+  value includes NLI because this run did not execute NLI.
+- Artifacts:
+  [fine-sweep CSV](../benchmarks/results/sts_b_validation_fine_sweep.csv),
+  [error-analysis CSV](../benchmarks/results/sts_b_validation_error_analysis.csv),
+  [threshold plot](../benchmarks/results/sts_b_validation_metrics_vs_threshold.png),
+  [precision-recall plot](../benchmarks/results/sts_b_validation_precision_recall.png),
+  and [run metadata](../benchmarks/results/sts_b_validation_metadata.json).
+
+### Measured operating points
+
+| Selection | Threshold | Precision | Recall | F1 | Predicted hits | False positives |
+|---|---:|---:|---:|---:|---:|---:|
+| Best F1 in fine sweep | **0.85** | 0.5899 | 0.8826 | **0.7071** | 395 | 162 |
+| Lowest threshold with precision >= 0.90 | **0.95** | 0.9479 | 0.3447 | 0.5056 | 96 | 5 |
+| Lowest threshold with precision >= 0.95 | **0.96** | 0.9722 | 0.2652 | 0.4167 | 72 | 2 |
+
+The 0.85 best-F1 point is a narrow improvement over the earlier coarse sweep's
+0.88 result (F1 0.7067). At 0.88 in this run, precision was 0.6623, recall
+0.7576, with 302 predicted hits, 102 false positives, and 64 false negatives.
+
+### Error analysis
+
+- At 0.92, the requested 15 false positives were available and saved.
+- At 0.96, all 2 false positives were printed and saved.
+- At 0.88, 10 false negatives were printed and saved.
+- The false-positive examples include sentence pairs with highly overlapping
+  wording but meaningful added/removed details, as well as a role reversal
+  example. The false negatives include paraphrases close to the threshold.
+  This supports treating cosine as candidate retrieval, not as the final
+  acceptance decision.
+
+### Insights, issues, and actions
+
+1. **High precision costs recall on this labeled similarity task.** Reaching
+   precision >= 0.95 requires threshold 0.96 and leaves recall at 0.2652. Do not
+   choose a threshold from F1 alone for cache reuse.
+2. **Cosine-only false positives can change details or roles.** Continue to
+   enforce the Stage-0 number/negation guard and bidirectional NLI before
+   accepting semantic cache hits; validate those stages separately.
+3. **The embedding artifact is not fully revision-pinned.** The model name,
+   registry source, ONNX filename, FastEmbed version, date, and Git HEAD are
+   recorded, but no immutable artifact revision/hash was captured. Pin or record
+   an artifact checksum in a future reproducibility pass.
+4. **The worktree was dirty when this run was captured.** Commit the notebook,
+   runner, dependencies, and output metadata together (or rerun from a clean
+   commit) for a fully source-reproducible result.
+
 ## Future result entries
 
 For each new output, append another dated section with the exact command or

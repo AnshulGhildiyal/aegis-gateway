@@ -1,0 +1,28 @@
+error_group,candidate_sentence,query_sentence,cosine_score,gold_score,gold_label,threshold
+false_positive_at_0.92,"Just five months ago, Dean committed to accepting taxpayer money and vowed to attack any Democrat who didnt.","Just five months ago, Dean committed to accepting taxpayer money and the spending limits that come with it and vowed to attack any Democrat who didnt.",0.9736414441271819,3.5999999046325684,0,0.92
+false_positive_at_0.92,"Russia, China Veto UN Resolution on Syria","Russia, China veto UN resolution on Syria killings",0.9619995707804405,3.799999952316284,0,0.92
+false_positive_at_0.92,"Websites battle nasty comments, anonymity",Websites fight nasty comments by taking away anonymity,0.956697303937853,3.799999952316284,0,0.92
+false_positive_at_0.92,Executive recruiters say that finding a seasoned chief merchandising officer will perhaps be the trickiest of all hires because there is such a dearth of good ones.,Executive recruiters say that finding a seasoned chief merchandising officer perhaps will be the trickiest of all hires.,0.9560202156451164,3.75,0,0.92
+false_positive_at_0.92,"The world's largest software company said it recognized the difficulty the multiple patches posed for companies, and set out to make it easier for them to apply the updates.",The world's largest software company said it recognized the difficulty the multiple patches posed for companies trying to apply them.,0.9543584076786557,3.5,0,0.92
+false_positive_at_0.92,"Margaret Thatcher, former U.K. PM, dead at 87",Margaret Thatcher dies at 87,0.9473324782487689,3.799999952316284,0,0.92
+false_positive_at_0.92,A puppy plays with a plastic container.,The dog is playing with a plastic container.,0.9473278787890841,3.799999952316284,0,0.92
+false_positive_at_0.92,A black and white cat is sitting on a brown chair looking up.,Black and white cat sitting on wood chair looking up.,0.9471595986789489,3.5999999046325684,0,0.92
+false_positive_at_0.92,A man is carrying a canoe with a dog.,A dog is carrying a man in a canoe.,0.946801137008248,1.7999999523162842,0,0.92
+false_positive_at_0.92,A person is folding a square paper piece.,A person folds a piece of paper.,0.9451306516795221,3.75,0,0.92
+false_positive_at_0.92,A parrot is talking.,A parrot is talking into a microphone.,0.9444674586171699,3.0,0,0.92
+false_positive_at_0.92,'Desperate Housewives' Actress Kathryn Joosten Dies,'Housewives' actress Kathryn Joosten dies at 72,0.9428007525709299,3.799999952316284,0,0.92
+false_positive_at_0.92,"EU Ministers of Employment and Social policy will discuss how to boost employment, integrate social and economic policies",EU Ministers of Employment and Social policy to discuss employment boosting strategies,0.9407543300516937,3.0,0,0.92
+false_positive_at_0.92,A person is peeling shrimp.,A man is peeling shrimp.,0.9346993463374141,3.799999952316284,0,0.92
+false_positive_at_0.92,"Annan urges end to Syria violence, minister defects",Annan urges end to Syrian violence,0.9341799751701402,3.799999952316284,0,0.92
+false_positive_at_0.96,"Just five months ago, Dean committed to accepting taxpayer money and vowed to attack any Democrat who didnt.","Just five months ago, Dean committed to accepting taxpayer money and the spending limits that come with it and vowed to attack any Democrat who didnt.",0.9736414441271819,3.5999999046325684,0,0.96
+false_positive_at_0.96,"Russia, China Veto UN Resolution on Syria","Russia, China veto UN resolution on Syria killings",0.9619995707804405,3.799999952316284,0,0.96
+false_negative_at_0.88,"Earlier Thursday, PeopleSoft formally rejected the unsolicited bid from Oracle.","Thursday morning, PeopleSoft's board rejected the Oracle takeover offer.",0.8788191233584596,4.400000095367432,1,0.88
+false_negative_at_0.88,"At midnight on Wednesday, 68 percent of voters said ""no"" to the tax, with 97 percent of the votes counted.","With 97 percent of precincts counted tonight, 68 percent of voters opposed the tax.",0.8788169199352289,4.666999816894531,1,0.88
+false_negative_at_0.88,A woman is bungee jumping.,A girl is bungee jumping.,0.8786262435079852,4.199999809265137,1,0.88
+false_negative_at_0.88,A white plane on the runway.,A white Swiss airplane approaches the runway.,0.8776804973813127,4.0,1,0.88
+false_negative_at_0.88,a young girl smiling with her head upside down,A girl poses with her head upside down.,0.8766248569375354,4.599999904632568,1,0.88
+false_negative_at_0.88,A rabbit is playing with a toy rabbit.,A bunny is playing with a stuffed bunny.,0.8758891743793169,4.25,1,0.88
+false_negative_at_0.88,"He will be paid $395,000 per year, up from Atkinson's current salary of $361,400.","Dynes will be paid $395,000 a year; Atkinson's salary is $361,400.",0.8749326266246791,4.0,1,0.88
+false_negative_at_0.88,A red and white plane flying on a sunny day.,Red and white plane flying through the air.,0.8745595998637687,4.199999809265137,1,0.88
+false_negative_at_0.88,Boy lying on couch with small white dog.,A small boy laying on a sofa with a dog.,0.8744375877043802,4.0,1,0.88
+false_negative_at_0.88,The company claims it's the largest single Apple VAR Xserve sale to date.,The company claimed it is the largest sale of Xserves by an Apple retailer.,0.8738819780606099,5.0,1,0.88

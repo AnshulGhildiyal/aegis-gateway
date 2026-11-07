@@ -1,0 +1,73 @@
+{
+  "configuration": "stsb",
+  "cosine_scoring_mean_ms_per_pair": 0.006749453304413085,
+  "dataset": "nyu-mll/glue",
+  "embedding_batch_seconds": 45.85720435999974,
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "embedding_model_source": "Qdrant/bge-small-en-v1.5-onnx-Q",
+  "example_count": 1500,
+  "fastembed_package_version": "0.9.1",
+  "files": {
+    "error_analysis_csv": "sts_b_validation_error_analysis.csv",
+    "metrics_csv": "sts_b_validation_fine_sweep.csv",
+    "metrics_plot": "sts_b_validation_metrics_vs_threshold.png",
+    "precision_recall_plot": "sts_b_validation_precision_recall.png"
+  },
+  "git_commit": "5f63dfc3b360b270f1b86e06101b2bd4c9b51553",
+  "git_worktree_dirty_at_run": true,
+  "positive_count_score_gte_4": 264,
+  "run_date_utc": "2026-11-07T03:59:48.396823+00:00",
+  "selected_thresholds": [
+    {
+      "f1": 0.7071320182094082,
+      "false_positive_count": 162,
+      "hit_count": 395,
+      "name": "best_f1",
+      "precision": 0.589873417721519,
+      "recall": 0.8825757575757576,
+      "threshold": 0.85
+    },
+    {
+      "f1": 0.41666666666666663,
+      "false_positive_count": 2,
+      "hit_count": 72,
+      "name": "lowest_threshold_precision_at_least_0.95",
+      "precision": 0.9722222222222222,
+      "recall": 0.26515151515151514,
+      "threshold": 0.96
+    },
+    {
+      "f1": 0.5055555555555556,
+      "false_positive_count": 5,
+      "hit_count": 96,
+      "name": "lowest_threshold_precision_at_least_0.90",
+      "precision": 0.9479166666666666,
+      "recall": 0.3446969696969697,
+      "threshold": 0.95
+    }
+  ],
+  "split": "validation",
+  "test_split_used": false,
+  "thresholds": [
+    0.8,
+    0.81,
+    0.82,
+    0.83,
+    0.84,
+    0.85,
+    0.86,
+    0.87,
+    0.88,
+    0.89,
+    0.9,
+    0.91,
+    0.92,
+    0.93,
+    0.94,
+    0.95,
+    0.96,
+    0.97,
+    0.98,
+    0.99
+  ]
+}

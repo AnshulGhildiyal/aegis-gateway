@@ -16,9 +16,19 @@ outputs change.
 ## STS-B threshold-sweep notebook
 
 Open [sts_b_threshold_sweep.ipynb](../notebooks/sts_b_threshold_sweep.ipynb) and
-run its cells. It loads the GLUE STS-B validation split and labels a pair as
-similar when its human score is at least 4.0. Cosine thresholds are swept on the
-computed embeddings; the notebook displays the measured results in the session.
+run its cells. It loads only the GLUE STS-B validation split and labels a pair
+as similar when its human score is at least 4.0. It sweeps cosine thresholds
+from 0.80 through 0.99 by 0.01, reports best F1 and the lowest thresholds
+meeting precision >= 0.90 and >= 0.95, and prints the requested false-positive
+and false-negative examples. It saves the threshold metrics and error examples
+as CSV, precision/recall plots as PNG, and run metadata under
+`benchmarks/results/`.
+
+The same analysis can be run from a terminal:
+
+```bash
+uv run --group benchmark python -m benchmarks.stsb_fine_sweep
+```
 
 ## PAWS and QQP
 
