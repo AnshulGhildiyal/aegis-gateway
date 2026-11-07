@@ -482,6 +482,64 @@ candidate population before the guard rejects pairs.
    validation samples before changing its rules. Any future behavior change
    should be calibrated and reported with the same split discipline.
 
+## 2026-11-07 — Banking77 frozen QQP operating points
+
+### Protocol
+
+- Dataset: Hugging Face `PolyAI/banking77`; 10,003 training examples were used
+  as the candidate pool and 3,080 test examples as queries, following the
+  existing Banking77 evaluator split handling.
+- No Banking77 threshold selection was performed. All four settings were
+  frozen from the QQP train-calibrated results:
+  1. cosine + Stage-0, cosine 0.98;
+  2. cosine + Stage-0 + bidirectional NLI, cosine 0.95 / NLI 0.97;
+  3. reference cosine + Stage-0 + bidirectional NLI, cosine 0.85 / NLI 0.23;
+  4. reference cosine + Stage-0, cosine 0.92.
+- The candidate search considers the two most similar training examples. For
+  NLI settings, the query is counted as an NLI call when at least one of those
+  candidates passes cosine and Stage-0 and is sent to the reranker.
+- `hits` counts any accepted cache result. A false positive is a hit whose
+  returned training example has a different intent. Precision is same-intent
+  hits divided by hits; recall is same-intent hits divided by all test queries.
+  NLI call rate is NLI-called queries divided by test queries.
+- Embedding model: `BAAI/bge-small-en-v1.5`. NLI model:
+  `Xenova/nli-deberta-v3-small`, revision
+  `6bc2a55c7c0f7e2bc68de60bb248e523e2612abb`.
+- Run timestamp: `2026-11-07T09:45:22.648909+00:00`. Git HEAD recorded:
+  `7c6177cdb4ff0a4f421db26f281bfbc57c21f3cc`; the worktree contained the
+  evaluator changes that produced this run.
+- Artifacts:
+  [summary metrics CSV](../benchmarks/results/banking77_frozen_config_metrics.csv)
+  and [top false-positive intent confusions CSV](../benchmarks/results/banking77_frozen_config_top_confusions.csv).
+
+### Measured results
+
+| Frozen config | Cosine | NLI | Hits | False positives | Same-intent hits | Precision | Recall | NLI-called queries | NLI call rate | Candidate pairs sent to NLI |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Cosine + Stage-0 | 0.98 | — | 744 | 11 | 733 | 0.9852 | 0.2380 | 0 | 0.00% | 0 |
+| Stage-0 + NLI | 0.95 | 0.97 | 1,297 | 34 | 1,263 | 0.9738 | 0.4101 | 1,724 | 55.97% | 2,964 |
+| Reference Stage-0 + NLI | 0.85 | 0.23 | 2,175 | 101 | 2,074 | 0.9536 | 0.6734 | 2,587 | 83.99% | 4,792 |
+| Reference cosine + Stage-0 | 0.92 | — | 2,234 | 84 | 2,150 | 0.9624 | 0.6981 | 0 | 0.00% | 0 |
+
+### Most frequent false-positive intent confusions
+
+Each pair is `query intent → retrieved intent (false-positive count)`. The CSV
+contains the same ranked lists and is the source for exact ordering; ties are
+ordered by intent names.
+
+| Frozen config | Top false-positive intent pairs |
+|---|---|
+| Cosine + Stage-0, 0.98 | `balance_not_updated_after_bank_transfer → pending_transfer (1)`; `card_arrival → card_delivery_estimate (1)`; `card_delivery_estimate → card_arrival (1)`; `declined_card_payment → declined_transfer (1)`; `get_disposable_virtual_card → disposable_card_limits (1)`; `pending_transfer → balance_not_updated_after_bank_transfer (1)`; `pin_blocked → change_pin (1)`; `top_up_by_cash_or_cheque → topping_up_by_card (1)`; `topping_up_by_card → transfer_into_account (1)`; `transfer_into_account → topping_up_by_card (1)`; `transfer_timing → pending_transfer (1)`. |
+| Stage-0 + NLI, 0.95 / 0.97 | `card_arrival → card_delivery_estimate (3)`; `verify_my_identity → unable_to_verify_identity (3)`; `fiat_currency_support → exchange_via_app (2)`; `getting_virtual_card → get_disposable_virtual_card (2)`; `unable_to_verify_identity → verify_my_identity (2)`; `balance_not_updated_after_bank_transfer → pending_transfer (1)`; `card_delivery_estimate → card_arrival (1)`; `card_not_working → pin_blocked (1)`; `declined_card_payment → declined_transfer (1)`; `disposable_card_limits → get_disposable_virtual_card (1)`; `exchange_charge → exchange_rate (1)`; `exchange_via_app → fiat_currency_support (1)`; `get_disposable_virtual_card → disposable_card_limits (1)`; `pending_transfer → balance_not_updated_after_bank_transfer (1)`; `pending_transfer → pending_card_payment (1)`. |
+| Reference Stage-0 + NLI, 0.85 / 0.23 | `pending_transfer → transfer_timing (3)`; `pin_blocked → change_pin (3)`; `transfer_fee_charged → top_up_by_bank_transfer_charge (3)`; `verify_my_identity → unable_to_verify_identity (3)`; `why_verify_identity → verify_my_identity (3)`; `balance_not_updated_after_bank_transfer → transfer_not_received_by_recipient (2)`; `balance_not_updated_after_bank_transfer → transfer_timing (2)`; `beneficiary_not_allowed → transfer_into_account (2)`; `card_arrival → card_delivery_estimate (2)`; `card_delivery_estimate → card_arrival (2)`; `declined_card_payment → declined_transfer (2)`; `exchange_charge → exchange_rate (2)`; `fiat_currency_support → exchange_via_app (2)`; `get_disposable_virtual_card → getting_virtual_card (2)`; `get_physical_card → change_pin (2)`. |
+| Reference cosine + Stage-0, 0.92 | `exchange_via_app → fiat_currency_support (3)`; `pending_transfer → balance_not_updated_after_bank_transfer (3)`; `transfer_fee_charged → top_up_by_bank_transfer_charge (3)`; `verify_my_identity → unable_to_verify_identity (3)`; `why_verify_identity → verify_my_identity (3)`; `balance_not_updated_after_bank_transfer → transfer_timing (2)`; `card_arrival → card_delivery_estimate (2)`; `card_delivery_estimate → card_arrival (2)`; `declined_card_payment → declined_transfer (2)`; `exchange_charge → exchange_rate (2)`; `fiat_currency_support → exchange_via_app (2)`; `getting_virtual_card → get_disposable_virtual_card (2)`; `pin_blocked → change_pin (2)`; `request_refund → Refund_not_showing_up (2)`; `top_up_by_cash_or_cheque → topping_up_by_card (2)`. |
+
+The 0.98 setting had the fewest false-positive hits, while 0.92 had the most
+same-intent hits and highest query recall among these four settings. The
+0.85/0.23 reference accepted more wrong-intent hits and invoked NLI on most
+queries. These are Banking77 test measurements for frozen thresholds, not
+threshold-selection evidence; no thresholds were changed based on them.
+
 ## Future result entries
 
 For each new output, append another dated section with the exact command or

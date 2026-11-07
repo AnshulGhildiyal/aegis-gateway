@@ -75,19 +75,25 @@ Do not use a test split until separately authorized.
 
 ## Banking77 intent evaluation
 
-The candidate pool is the train split and queries are from the test split.
+The candidate pool is the train split and queries are from the existing test
+split. The evaluator runs four frozen operating points taken from the QQP
+train-calibrated results: cosine + Stage-0 at 0.98, Stage-0 + NLI at cosine
+0.95 / NLI 0.97, and reference configs Stage-0 + NLI at 0.85 / 0.23 and cosine
++ Stage-0 at 0.92. No threshold is selected or adjusted on Banking77.
 False-positive hits are accepted cache hits whose returned training example has
-a different Banking77 intent label.
+a different Banking77 intent label. Precision is same-intent hits divided by
+all cache hits; recall is same-intent hits divided by test queries. NLI call
+rate is the fraction of test queries with at least one Stage-0-passing
+candidate sent to the NLI model. The run writes a per-config metrics CSV and a
+top-15 false-positive intent-confusion CSV for each config.
 
 ```bash
-uv run python -m benchmarks.evaluate_banking77 \
-  --cosine-threshold 0.8 --nli-threshold 0.9 --limit 100
+uv run --group benchmark python -m benchmarks.evaluate_banking77
 ```
 
-Omit `--limit` for the full splits. Threshold values shown are examples only.
-The output includes false-positive hits, their rate among accepted hits, a rate
-relative to all test examples, stage outcomes, and measured embedding,
-retrieval, and lookup latencies.
+Use `--limit N` for a smoke run; omit it for the full splits. Outputs are saved
+to `benchmarks/results/banking77_frozen_config_metrics.csv` and
+`benchmarks/results/banking77_frozen_config_top_confusions.csv`.
 
 ## LMSYS manual labeling sample
 
