@@ -257,6 +257,96 @@ four decimal places.
    metadata and commit the source changes before treating the run as fully
    source-reproducible.
 
+## 2026-11-07 — PAWS/QQP train-calibrated NLI evaluation
+
+### Protocol and artifacts
+
+- Calibration used a fixed-seed reservoir sample of 5,000 `train` pairs per
+  dataset (seed 42). Threshold sweeps used NLI thresholds 0.01–0.99 by 0.01
+  and cosine thresholds 0.85 and 0.95. The threshold selection maximizes
+  recall subject to the target precision; ties prefer the higher NLI threshold.
+- Reported metrics and NLI score histograms use the validation split only.
+  The test split was not requested or evaluated.
+- Models: `BAAI/bge-small-en-v1.5` (FastEmbed 0.9.1) and
+  `Xenova/nli-deberta-v3-small`, revision
+  `6bc2a55c7c0f7e2bc68de60bb248e523e2612abb`.
+- Git HEAD recorded for both runs:
+  `937cb167f7ad3e848a9fd330bb4bfb262ccb9d49`; the worktree was dirty.
+- PAWS validation has 8,000 pairs; QQP validation has 40,430 pairs. The
+  validation NLI-score histograms include pairs with cosine >= 0.85 that passed
+  Stage-0: 7,756 PAWS pairs and 15,896 QQP pairs. Each histogram shows both
+  entailment directions and their minimum, grouped by gold label.
+- Score caches were reused where exact pair/model keys were present. PAWS
+  reused 3 train and 241 validation NLI scores; QQP loaded 211 prior sampled
+  NLI scores, all reused on validation. New NLI inference was limited to
+  missing eligible pairs.
+- Output files:
+  [PAWS report](../benchmarks/results/paraphrase_ablation_paws_train_calibrated_validation.json),
+  [PAWS train sweep](../benchmarks/results/paraphrase_ablation_paws_train_calibrated_validation_train_nli_sweep.csv),
+  [PAWS validation sweep](../benchmarks/results/paraphrase_ablation_paws_train_calibrated_validation_validation_nli_sweep.csv),
+  [PAWS validation score histograms](../benchmarks/results/paraphrase_ablation_paws_nli_histograms.png),
+  [QQP report](../benchmarks/results/paraphrase_ablation_qqp_train_calibrated_validation.json),
+  [QQP train sweep](../benchmarks/results/paraphrase_ablation_qqp_train_calibrated_validation_train_nli_sweep.csv),
+  [QQP validation sweep](../benchmarks/results/paraphrase_ablation_qqp_train_calibrated_validation_validation_nli_sweep.csv),
+  and [QQP validation score histograms](../benchmarks/results/paraphrase_ablation_qqp_nli_histograms.png).
+  The reports also link to selected-threshold metrics, Stage-0 breakdowns,
+  rejected-positive samples, validation NLI scores, and the score caches.
+
+### Calibration selections and validation results
+
+| Dataset | Cosine | Precision target | Train-selected NLI threshold | Train precision | Train recall | Validation hits | Validation TP / FP / FN | Validation precision | Validation recall | Validation F1 | Validation pairs sent to NLI |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| PAWS | 0.85 | 0.90 | None | — | — | — | — | — | — | — | — |
+| PAWS | 0.85 | 0.95 | None | — | — | — | — | — | — | — | — |
+| PAWS | 0.95 | 0.90 | None | — | — | — | — | — | — | — | — |
+| PAWS | 0.95 | 0.95 | None | — | — | — | — | — | — | — | — |
+| QQP | 0.85 | 0.90 | 0.99 | 0.9043 | 0.0924 | 1,691 | 1,558 / 133 / 13,327 | 0.9213 | 0.1047 | 0.1880 | 15,896 (39.32%) |
+| QQP | 0.85 | 0.95 | None | — | — | — | — | — | — | — | — |
+| QQP | 0.95 | 0.90 | 0.97 | 0.9040 | 0.1485 | 2,526 | 2,355 / 171 / 12,530 | 0.9323 | 0.1582 | 0.2705 | 4,847 (11.99%) |
+| QQP | 0.95 | 0.95 | None | — | — | — | — | — | — | — | — |
+
+No PAWS threshold in the sweep reached precision >= 0.90. QQP reached
+precision >= 0.90 at both cosine thresholds, but no threshold reached
+precision >= 0.95. The QQP validation precision remained above 0.90 at the
+train-selected thresholds, with low recall (0.1047 and 0.1582). Since the
+thresholds were chosen on train and evaluated on validation, the reported
+validation values are not used for further threshold tuning.
+
+### Stage-0 rejection breakdown
+
+Rejection counts are by reason and gold label. A pair may count under both
+reasons when both number and negation checks reject it.
+
+| Dataset | Reason | Non-paraphrase rejections | Paraphrase rejections |
+|---|---|---:|---:|
+| PAWS | Number mismatch | 95 | 52 |
+| PAWS | Negation mismatch | 49 | 13 |
+| QQP | Number mismatch | 3,747 | 1,028 |
+| QQP | Negation mismatch | 3,180 | 830 |
+
+Twenty rejected true-paraphrase validation pairs per dataset were saved for
+inspection. These counts show that the regex guard does reject some genuine
+paraphrases, so its scope and false-rejection behavior need continued review.
+
+### Insights, issues, and actions
+
+1. **PAWS has no operating point meeting even 0.90 precision.** Do not promote
+   an NLI threshold from this sweep for PAWS. Inspect the saved validation
+   histograms and rejected-positive samples, and consider improving the model
+   or the candidate/labeling protocol before another calibration run.
+2. **QQP reaches 0.90 precision only with very low recall.** The 0.95 precision
+   target is unmet at both cosine thresholds. Treat these as dataset-specific
+   offline operating points, not safe production cache settings; validate on
+   additional dev data and apply an explicit false-positive risk budget.
+3. **Stage-0 rejects labeled positives.** Review the saved positive samples
+   before expanding number/unit or negation rules. Any guard change should keep
+   exact regression tests for the observed cases and be reevaluated on the
+   same validation protocol.
+4. **Reproducibility remains incomplete.** The worktree was dirty and dataset
+   revisions were not pinned in the run metadata. Record immutable dataset
+   revisions and rerun from a clean commit before treating these numbers as
+   fully reproducible.
+
 ## Future result entries
 
 For each new output, append another dated section with the exact command or

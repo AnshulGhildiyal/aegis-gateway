@@ -140,9 +140,17 @@ def stage0_guard(candidate: str, query: str) -> bool:
     A ``True`` result only means the pair may proceed to the semantic checks;
     this function does not establish that the texts are equivalent.
     """
-    return _extract_quantities(candidate) == _extract_quantities(
-        query
-    ) and _extract_negated_terms(candidate) == _extract_negated_terms(query)
+    return not stage0_rejection_reasons(candidate, query)
+
+
+def stage0_rejection_reasons(candidate: str, query: str) -> tuple[str, ...]:
+    """Return every Stage-0 conflict found in a text pair."""
+    reasons: list[str] = []
+    if _extract_quantities(candidate) != _extract_quantities(query):
+        reasons.append("number_mismatch")
+    if _extract_negated_terms(candidate) != _extract_negated_terms(query):
+        reasons.append("negation_mismatch")
+    return tuple(reasons)
 
 
 def _extract_quantities(text: str) -> tuple[tuple[str, Decimal], ...]:

@@ -32,21 +32,24 @@ uv run --group benchmark python -m benchmarks.stsb_fine_sweep
 
 ## PAWS and QQP ablation
 
-The ablation runner uses only PAWS `labeled_final` validation and QQP GLUE
-validation. It calibrates one bidirectional NLI entailment threshold per
-dataset by maximizing mean F1 over the requested cosine thresholds on that
-same validation split (ties select the higher threshold), then reports
-cosine-only, cosine + Stage-0, and cosine + Stage-0 + NLI results at every
-cosine threshold. No test split is loaded.
+The ablation runner calibrates on a fixed-seed reservoir sample of 5,000
+training pairs per dataset and reports on PAWS `labeled_final` validation and
+QQP GLUE validation. It sweeps NLI thresholds 0.01–0.99 at cosine thresholds
+0.85 and 0.95, selects the maximum-recall threshold subject to precision
+>= 0.90 and >= 0.95, and reports validation ablations and selected operating
+points. It also writes NLI histograms, Stage-0 rejection counts by reason and
+gold label, and 20 sampled Stage-0-rejected positive pairs per dataset. The
+test split is never requested.
 
 ```bash
 uv run --group benchmark python -m benchmarks.evaluate_paraphrase_ablation
 ```
 
-By default this evaluates both full validation splits. Use `--dataset paws` or
-`--dataset qqp` to run one dataset, or `--limit N` for a smaller validation-only
-smoke run. Each dataset writes a JSON report, a metrics CSV, and a sampled
-false-positive CSV to `benchmarks/results/`.
+By default this evaluates both datasets. Use `--dataset paws` or
+`--dataset qqp` to run one dataset, or `--limit N` for a smaller smoke run. It
+stores hash-keyed per-pair cosine/NLI score caches in `benchmarks/results/`,
+reuses available cached scores, and computes NLI only for eligible cache
+misses. Reports, CSVs, and histogram PNGs are also saved there.
 
 The earlier single-operating-point evaluator is also validation-only:
 

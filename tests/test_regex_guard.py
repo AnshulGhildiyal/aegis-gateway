@@ -2,7 +2,7 @@
 
 import pytest
 
-from aegis.engine.regex_guard import stage0_guard
+from aegis.engine.regex_guard import stage0_guard, stage0_rejection_reasons
 
 
 @pytest.mark.parametrize(
@@ -102,3 +102,16 @@ def test_guard_is_not_a_similarity_or_equivalence_decision() -> None:
 
 def test_guard_treats_bare_numbers_and_unit_values_as_different() -> None:
     assert not stage0_guard("The value is 5.", "The value is 5 days.")
+
+
+def test_guard_reports_all_rejection_reasons() -> None:
+    assert stage0_rejection_reasons("Do not wait 5 days.", "Wait 15 days.") == (
+        "number_mismatch",
+        "negation_mismatch",
+    )
+    assert stage0_rejection_reasons("Wait 5 days.", "Wait 15 days.") == (
+        "number_mismatch",
+    )
+    assert stage0_rejection_reasons("Cancel it.", "Don't cancel it.") == (
+        "negation_mismatch",
+    )

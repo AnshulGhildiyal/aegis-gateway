@@ -1,41 +1,47 @@
-"""Validation-only ablation of cosine, Stage-0, and bidirectional NLI."""
+"""Train-calibrated, validation-reported PAWS and QQP ablation."""
 
 import argparse
 import asyncio
 import csv
+import hashlib
+import itertools
 import json
+import math
 import random
 import subprocess
+from collections import Counter
 from collections.abc import Iterable, Mapping, Sequence
 from datetime import UTC, datetime
 from importlib.metadata import version
 from pathlib import Path
 from typing import cast
 
+import matplotlib
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt  # noqa: E402
 from datasets import load_dataset  # type: ignore[import-untyped]
 from fastembed import TextEmbedding
 
 from aegis.engine.embeddings import FastEmbedder
 from aegis.engine.nli_reranker import OnnxNliScorer
-from aegis.engine.regex_guard import stage0_guard
-from benchmarks.evaluation import (
-    PairExample,
-    PairScore,
-    binary_metrics,
-    rows_to_pair_examples,
-    score_pair_cosines,
-)
+from aegis.engine.regex_guard import stage0_rejection_reasons
+from benchmarks.evaluation import PairExample, PairScore, binary_metrics
 
 _REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 _RESULTS_DIRECTORY = _REPOSITORY_ROOT / "benchmarks" / "results"
-_COSINE_THRESHOLDS = (0.85, 0.88, 0.90, 0.92, 0.95)
-_NLI_THRESHOLDS = tuple(value / 100 for value in range(101))
+_COSINE_THRESHOLDS = (0.85, 0.95)
+_NLI_THRESHOLDS = tuple(value / 100 for value in range(1, 100))
+_PRECISION_TARGETS = (0.90, 0.95)
+_TRAIN_SAMPLE_SIZE = 5_000
+_SAMPLE_SEED = 42
 _EXAMPLES_PER_BATCH = 256
 _NLI_PAIRS_PER_BATCH = 128
+_STAGE0_SAMPLE_SIZE = 20
 _FALSE_POSITIVE_SAMPLE_SIZE = 15
-_SAMPLE_SEED = 42
 _NLI_MODEL_NAME = "Xenova/nli-deberta-v3-small"
 _NLI_MODEL_REVISION = "6bc2a55c7c0f7e2bc68de60bb248e523e2612abb"
+_EMBEDDING_MODEL_NAME = "BAAI/bge-small-en-v1.5"
 
 _DATASETS: dict[str, tuple[str, str, str, str]] = {
     "paws": (
@@ -46,6 +52,93 @@ _DATASETS: dict[str, tuple[str, str, str, str]] = {
     ),
     "qqp": ("nyu-mll/glue", "qqp", "question1", "question2"),
 }
+
+
+def _pair_key(example: PairExample, embedding_model: str) -> str:
+    payload = json.dumps(
+        [
+            embedding_model,
+            _NLI_MODEL_NAME,
+            _NLI_MODEL_REVISION,
+            version("fastembed"),
+            example.candidate,
+            example.query,
+        ],
+        ensure_ascii=False,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
+
+
+def _load_score_cache(path: Path) -> dict[str, dict[str, object]]:
+    scores: dict[str, dict[str, object]] = {}
+    if not path.exists():
+        return scores
+    with path.open(encoding="utf-8") as cache_file:
+        for line_number, line in enumerate(cache_file, start=1):
+            if not line.strip():
+                continue
+            record = json.loads(line)
+            if not isinstance(record, dict) or not isinstance(record.get("key"), str):
+                raise ValueError(f"invalid score-cache record at {path}:{line_number}")
+            scores[record["key"]] = record
+    return scores
+
+
+def _append_score_cache(
+    path: Path,
+    updates: Mapping[str, dict[str, object]],
+) -> None:
+    if not updates:
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as cache_file:
+        for key, record in updates.items():
+            cache_file.write(
+                json.dumps({"key": key, **record}, sort_keys=True) + "\n"
+            )
+
+
+def _seed_cache_from_previous_samples(
+    dataset_name: str,
+    score_cache: dict[str, dict[str, object]],
+) -> int:
+    """Reuse pair-level scores preserved in the prior ablation's error samples."""
+    path = (
+        _RESULTS_DIRECTORY
+        / f"paraphrase_ablation_{dataset_name}_validation_false_positives.csv"
+    )
+    if not path.exists():
+        return 0
+    seeded_keys: set[str] = set()
+    with path.open(encoding="utf-8", newline="") as sample_file:
+        for row in csv.DictReader(sample_file):
+            candidate = row.get("candidate")
+            query = row.get("query")
+            if not candidate or not query:
+                continue
+            example = PairExample(candidate, query, row.get("gold_label") == "1")
+            key = _pair_key(example, _EMBEDDING_MODEL_NAME)
+            record = score_cache.setdefault(key, {"cosine_similarity": None})
+            cosine = row.get("cosine_similarity")
+            if cosine:
+                record["cosine_similarity"] = float(cosine)
+            forward = row.get("candidate_to_query_entailment")
+            reverse = row.get("query_to_candidate_entailment")
+            if (
+                forward
+                and reverse
+                and record.get("nli_probabilities") is None
+            ):
+                record["nli_probabilities"] = [float(forward), float(reverse)]
+                seeded_keys.add(key)
+    if seeded_keys:
+        _append_score_cache(
+            _RESULTS_DIRECTORY
+            / f"paraphrase_ablation_{dataset_name}_score_cache.jsonl",
+            {key: score_cache[key] for key in seeded_keys},
+        )
+    return len(seeded_keys)
 
 
 def _f1(precision: float | None, recall: float | None) -> float | None:
@@ -74,222 +167,550 @@ def _metrics(
     }
 
 
-def select_nli_threshold(
+def _predictions(
+    cosine_scores: Sequence[float],
+    stage0_passes: Sequence[bool],
+    bidirectional_probabilities: Sequence[tuple[float, float] | None],
+    cosine_threshold: float,
+    nli_threshold: float,
+) -> list[bool]:
+    return [
+        cosine >= cosine_threshold
+        and stage0_pass
+        and probabilities is not None
+        and probabilities[0] >= nli_threshold
+        and probabilities[1] >= nli_threshold
+        for cosine, stage0_pass, probabilities in zip(
+            cosine_scores,
+            stage0_passes,
+            bidirectional_probabilities,
+            strict=True,
+        )
+    ]
+
+
+def _calibration_sweep(
     labels: Sequence[bool],
     cosine_scores: Sequence[float],
     stage0_passes: Sequence[bool],
     bidirectional_probabilities: Sequence[tuple[float, float] | None],
-    *,
-    cosine_thresholds: Sequence[float] = _COSINE_THRESHOLDS,
-    nli_thresholds: Sequence[float] = _NLI_THRESHOLDS,
-) -> tuple[float, list[dict[str, float]]]:
-    """Choose one NLI threshold maximizing mean F1 over requested cosine points.
-
-    Ties select the higher NLI threshold as the more conservative option.
-    """
-    lengths = {
-        len(labels),
-        len(cosine_scores),
-        len(stage0_passes),
-        len(bidirectional_probabilities),
-    }
-    if len(lengths) != 1:
-        raise ValueError("calibration inputs must have equal length")
-    if not cosine_thresholds or not nli_thresholds:
-        raise ValueError("threshold collections must not be empty")
-
-    calibration: list[dict[str, float]] = []
-    for nli_threshold in nli_thresholds:
-        f1_values: list[float] = []
-        for cosine_threshold in cosine_thresholds:
-            predictions = [
-                similarity >= cosine_threshold
-                and stage0_pass
-                and probabilities is not None
-                and probabilities[0] >= nli_threshold
-                and probabilities[1] >= nli_threshold
-                for similarity, stage0_pass, probabilities in zip(
+) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
+    sweep_rows: list[dict[str, object]] = []
+    selected_rows: list[dict[str, object]] = []
+    for cosine_threshold in _COSINE_THRESHOLDS:
+        threshold_rows: list[dict[str, object]] = []
+        for nli_threshold in _NLI_THRESHOLDS:
+            metrics = _metrics(
+                labels,
+                _predictions(
                     cosine_scores,
                     stage0_passes,
                     bidirectional_probabilities,
-                    strict=True,
-                )
-            ]
-            result = _metrics(labels, predictions)
-            f1_values.append(cast(float, result["f1"] or 0.0))
-        calibration.append(
-            {
+                    cosine_threshold,
+                    nli_threshold,
+                ),
+            )
+            row = {
+                "cosine_threshold": cosine_threshold,
                 "nli_threshold": nli_threshold,
-                "mean_f1": sum(f1_values) / len(f1_values),
+                **metrics,
             }
-        )
-    selected = max(
-        calibration,
-        key=lambda item: (item["mean_f1"], item["nli_threshold"]),
-    )
-    return selected["nli_threshold"], calibration
+            threshold_rows.append(cast(dict[str, object], row))
+            sweep_rows.append(cast(dict[str, object], row))
+
+        for precision_target in _PRECISION_TARGETS:
+            eligible = [
+                row
+                for row in threshold_rows
+                if row["precision"] is not None
+                and cast(float, row["precision"]) >= precision_target
+            ]
+            selected = (
+                max(
+                    eligible,
+                    key=lambda row: (
+                        cast(float | None, row["recall"]) or 0.0,
+                        cast(float, row["nli_threshold"]),
+                    ),
+                )
+                if eligible
+                else None
+            )
+            selected_rows.append(
+                {
+                    "cosine_threshold": cosine_threshold,
+                    "precision_target": precision_target,
+                    "exists": selected is not None,
+                    "selected_nli_threshold": (
+                        selected["nli_threshold"] if selected is not None else None
+                    ),
+                    "tie_break": "higher NLI threshold",
+                    **(
+                        {
+                            key: selected[key]
+                            for key in (
+                                "hits",
+                                "true_positive",
+                                "false_positive",
+                                "false_negative",
+                                "precision",
+                                "recall",
+                                "f1",
+                            )
+                        }
+                        if selected is not None
+                        else {}
+                    ),
+                }
+            )
+    return sweep_rows, selected_rows
 
 
-def _ablation_rows(
-    examples: Sequence[PairExample],
-    pair_scores: Sequence[PairScore],
+def _validation_sweep(
+    labels: Sequence[bool],
+    cosine_scores: Sequence[float],
     stage0_passes: Sequence[bool],
     bidirectional_probabilities: Sequence[tuple[float, float] | None],
-    *,
-    nli_threshold: float,
-    dataset_name: str,
-) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
-    labels = [example.label for example in examples]
-    similarities = [score.cosine_similarity for score in pair_scores]
-    metrics_rows: list[dict[str, object]] = []
-    error_rows: list[dict[str, object]] = []
-    configurations = ("cosine_only", "cosine_stage0", "cosine_stage0_nli")
-
+) -> list[dict[str, object]]:
+    rows: list[dict[str, object]] = []
     for cosine_threshold in _COSINE_THRESHOLDS:
-        predictions_by_configuration: dict[str, list[bool]] = {
-            "cosine_only": [],
-            "cosine_stage0": [],
-            "cosine_stage0_nli": [],
-        }
-        nli_sent_indices: list[int] = []
-        for index, (similarity, stage0_pass, probabilities) in enumerate(
-            zip(
-                similarities,
-                stage0_passes,
-                bidirectional_probabilities,
-                strict=True,
-            )
+        candidate_indices = [
+            cosine >= cosine_threshold and passed
+            for cosine, passed in zip(cosine_scores, stage0_passes, strict=True)
+        ]
+        cosine_predictions = [
+            cosine >= cosine_threshold for cosine in cosine_scores
+        ]
+        stage0_predictions = [
+            cosine >= cosine_threshold and passed
+            for cosine, passed in zip(cosine_scores, stage0_passes, strict=True)
+        ]
+        for configuration, metrics in (
+            ("cosine_only", _metrics(labels, cosine_predictions)),
+            ("cosine_stage0", _metrics(labels, stage0_predictions)),
         ):
-            cosine_pass = similarity >= cosine_threshold
-            predictions_by_configuration["cosine_only"].append(cosine_pass)
-            predictions_by_configuration["cosine_stage0"].append(
-                cosine_pass and stage0_pass
+            rows.append(
+                {
+                    "cosine_threshold": cosine_threshold,
+                    "configuration": configuration,
+                    "nli_threshold": None,
+                    **metrics,
+                    "nli_pairs_sent": None,
+                    "nli_pairs_sent_percent": None,
+                }
             )
-            sent_to_nli = cosine_pass and stage0_pass
-            if sent_to_nli:
-                nli_sent_indices.append(index)
-            predictions_by_configuration["cosine_stage0_nli"].append(
-                sent_to_nli
-                and probabilities is not None
-                and probabilities[0] >= nli_threshold
-                and probabilities[1] >= nli_threshold
+        for nli_threshold in _NLI_THRESHOLDS:
+            rows.append(
+                {
+                    "cosine_threshold": cosine_threshold,
+                    "configuration": "cosine_stage0_nli",
+                    "nli_threshold": nli_threshold,
+                    **_metrics(
+                        labels,
+                        _predictions(
+                            cosine_scores,
+                            stage0_passes,
+                            bidirectional_probabilities,
+                            cosine_threshold,
+                            nli_threshold,
+                        ),
+                    ),
+                    "nli_pairs_sent": sum(candidate_indices),
+                    "nli_pairs_sent_percent": (
+                        sum(candidate_indices) / len(labels) * 100 if labels else 0.0
+                    ),
+                }
             )
+    return rows
 
-        for configuration in configurations:
-            predictions = predictions_by_configuration[configuration]
-            row: dict[str, object] = {
-                "cosine_threshold": cosine_threshold,
-                "configuration": configuration,
-                "nli_threshold": (
-                    nli_threshold if configuration == "cosine_stage0_nli" else None
-                ),
-                **_metrics(labels, predictions),
-                "nli_pairs_sent": (
-                    len(nli_sent_indices)
-                    if configuration == "cosine_stage0_nli"
-                    else None
-                ),
-                "nli_pairs_sent_percent": (
-                    len(nli_sent_indices) / len(examples) * 100
-                    if configuration == "cosine_stage0_nli" and examples
-                    else (0.0 if configuration == "cosine_stage0_nli" else None)
-                ),
+
+def _selected_validation_rows(
+    selected_thresholds: Sequence[Mapping[str, object]],
+    validation_sweep: Sequence[Mapping[str, object]],
+) -> list[dict[str, object]]:
+    selected_rows: list[dict[str, object]] = []
+    for selected in selected_thresholds:
+        if not selected["exists"]:
+            selected_rows.append(
+                {
+                    "cosine_threshold": selected["cosine_threshold"],
+                    "precision_target": selected["precision_target"],
+                    "exists": False,
+                    "selected_nli_threshold": None,
+                }
+            )
+            continue
+        matching = next(
+            row
+            for row in validation_sweep
+            if row["configuration"] == "cosine_stage0_nli"
+            and row["cosine_threshold"] == selected["cosine_threshold"]
+            and row["nli_threshold"] == selected["selected_nli_threshold"]
+        )
+        selected_rows.append(
+            {
+                "cosine_threshold": selected["cosine_threshold"],
+                "precision_target": selected["precision_target"],
+                "exists": True,
+                "selected_nli_threshold": selected["selected_nli_threshold"],
+                **{
+                    key: matching[key]
+                    for key in (
+                        "hits",
+                        "true_positive",
+                        "false_positive",
+                        "false_negative",
+                        "precision",
+                        "recall",
+                        "f1",
+                    )
+                },
+                "nli_pairs_sent": matching["nli_pairs_sent"],
+                "nli_pairs_sent_percent": matching["nli_pairs_sent_percent"],
             }
-            metrics_rows.append(row)
-
-            false_positive_indices = [
-                index
-                for index, (label, prediction) in enumerate(
-                    zip(labels, predictions, strict=True)
-                )
-                if prediction and not label
-            ]
-            sampled_indices = random.Random(
-                f"{_SAMPLE_SEED}:{dataset_name}:{cosine_threshold}:{configuration}"
-            ).sample(
-                false_positive_indices,
-                min(_FALSE_POSITIVE_SAMPLE_SIZE, len(false_positive_indices)),
-            )
-            for index in sampled_indices:
-                score = pair_scores[index]
-                probabilities = bidirectional_probabilities[index]
-                error_rows.append(
-                    {
-                        "cosine_threshold": cosine_threshold,
-                        "configuration": configuration,
-                        "nli_threshold": (
-                            nli_threshold
-                            if configuration == "cosine_stage0_nli"
-                            else None
-                        ),
-                        "dataset_row_index": index,
-                        "candidate": score.example.candidate,
-                        "query": score.example.query,
-                        "cosine_similarity": score.cosine_similarity,
-                        "gold_label": int(score.example.label),
-                        "candidate_to_query_entailment": (
-                            probabilities[0] if probabilities is not None else None
-                        ),
-                        "query_to_candidate_entailment": (
-                            probabilities[1] if probabilities is not None else None
-                        ),
-                    }
-                )
-    return metrics_rows, error_rows
+        )
+    return selected_rows
 
 
-async def _embed_all_pairs(
+def _reservoir_sample(
+    rows: Iterable[Mapping[str, object]],
+    sample_size: int,
+    *,
+    seed: int,
+) -> list[Mapping[str, object]]:
+    if sample_size < 1:
+        raise ValueError("sample_size must be positive")
+    rng = random.Random(seed)
+    reservoir: list[Mapping[str, object]] = []
+    seen = 0
+    for row in rows:
+        seen += 1
+        if len(reservoir) < sample_size:
+            reservoir.append(row)
+        else:
+            index = rng.randrange(seen)
+            if index < sample_size:
+                reservoir[index] = row
+    return reservoir
+
+
+def _pair_examples(
+    rows: Iterable[Mapping[str, object]],
+    *,
+    candidate_field: str,
+    query_field: str,
+) -> list[PairExample]:
+    examples: list[PairExample] = []
+    for row in rows:
+        candidate = row.get(candidate_field)
+        query = row.get(query_field)
+        label = row.get("label")
+        if not isinstance(candidate, str) or not isinstance(query, str):
+            raise ValueError("dataset pair fields must be strings")
+        if isinstance(label, bool):
+            positive = label
+        elif isinstance(label, int) and label in (0, 1):
+            positive = label == 1
+        else:
+            raise ValueError("dataset label must be binary 0/1")
+        examples.append(PairExample(candidate, query, positive))
+    return examples
+
+
+async def _ensure_cosine_scores(
     examples: Sequence[PairExample],
     embedder: FastEmbedder,
-) -> list[PairScore]:
-    pair_scores: list[PairScore] = []
-    for offset in range(0, len(examples), _EXAMPLES_PER_BATCH):
-        batch_scores, _, _ = await score_pair_cosines(
-            examples[offset : offset + _EXAMPLES_PER_BATCH],
-            embedder,
-        )
-        pair_scores.extend(batch_scores)
-    return pair_scores
+    score_cache: dict[str, dict[str, object]],
+    cache_path: Path,
+) -> tuple[list[PairScore], int, int]:
+    keys = [_pair_key(example, embedder.model_name) for example in examples]
+    missing_indices = [
+        index
+        for index, key in enumerate(keys)
+        if score_cache.get(key, {}).get("cosine_similarity") is None
+    ]
+    reused_count = len(examples) - len(missing_indices)
+    for offset in range(0, len(missing_indices), _EXAMPLES_PER_BATCH):
+        indices = missing_indices[offset : offset + _EXAMPLES_PER_BATCH]
+        batch_examples = [examples[index] for index in indices]
+        texts = [
+            text
+            for example in batch_examples
+            for text in (example.candidate, example.query)
+        ]
+        vectors = await embedder.embed(texts)
+        if len(vectors) != len(texts):
+            raise RuntimeError(
+                f"embedder returned {len(vectors)} vectors; expected {len(texts)}"
+            )
+        batch_updates: dict[str, dict[str, object]] = {}
+        for local_index, dataset_index in enumerate(indices):
+            candidate_vector = vectors[local_index * 2]
+            query_vector = vectors[local_index * 2 + 1]
+            if not all(
+                math.isfinite(value) for value in (*candidate_vector, *query_vector)
+            ):
+                raise RuntimeError("embedder returned a non-finite vector")
+            candidate_norm = sum(value * value for value in candidate_vector) ** 0.5
+            query_norm = sum(value * value for value in query_vector) ** 0.5
+            if candidate_norm == 0 or query_norm == 0:
+                similarity = 0.0
+            else:
+                similarity = sum(
+                    first * second
+                    for first, second in zip(
+                        candidate_vector,
+                        query_vector,
+                        strict=True,
+                    )
+                ) / (candidate_norm * query_norm)
+            similarity = min(1.0, max(-1.0, similarity))
+            key = keys[dataset_index]
+            previous = score_cache.get(key, {})
+            record = {
+                **previous,
+                "cosine_similarity": similarity,
+            }
+            score_cache[key] = record
+            batch_updates[key] = record
+        _append_score_cache(cache_path, batch_updates)
+
+    return (
+        [
+            PairScore(
+                example,
+                cast(float, score_cache[key]["cosine_similarity"]),
+            )
+            for example, key in zip(examples, keys, strict=True)
+        ],
+        reused_count,
+        len(missing_indices),
+    )
 
 
-async def _score_nli_candidates(
+async def _ensure_nli_scores(
     examples: Sequence[PairExample],
     pair_scores: Sequence[PairScore],
-    stage0_passes: Sequence[bool],
+    stage0_reasons: Sequence[tuple[str, ...]],
+    embedder_model: str,
     scorer: OnnxNliScorer,
-) -> list[tuple[float, float] | None]:
-    """Score each Stage-0-safe pair at the minimum cosine operating point."""
-    candidate_indices = [
+    score_cache: dict[str, dict[str, object]],
+    cache_path: Path,
+) -> tuple[list[tuple[float, float] | None], int, int]:
+    keys = [_pair_key(example, embedder_model) for example in examples]
+    eligible_indices = [
         index
-        for index, (score, stage0_pass) in enumerate(
-            zip(pair_scores, stage0_passes, strict=True)
+        for index, (score, reasons) in enumerate(
+            zip(pair_scores, stage0_reasons, strict=True)
         )
-        if score.cosine_similarity >= min(_COSINE_THRESHOLDS) and stage0_pass
+        if score.cosine_similarity >= min(_COSINE_THRESHOLDS) and not reasons
     ]
-    probabilities: list[tuple[float, float] | None] = [None] * len(examples)
-    for offset in range(0, len(candidate_indices), _NLI_PAIRS_PER_BATCH):
-        batch_indices = candidate_indices[offset : offset + _NLI_PAIRS_PER_BATCH]
+    missing_indices = [
+        index
+        for index in eligible_indices
+        if score_cache.get(keys[index], {}).get("nli_probabilities") is None
+    ]
+    reused_count = len(eligible_indices) - len(missing_indices)
+    for offset in range(0, len(missing_indices), _NLI_PAIRS_PER_BATCH):
+        indices = missing_indices[offset : offset + _NLI_PAIRS_PER_BATCH]
         pairs = [
             pair
-            for index in batch_indices
+            for index in indices
             for pair in (
                 (examples[index].candidate, examples[index].query),
                 (examples[index].query, examples[index].candidate),
             )
         ]
-        scores = await scorer.entailment_probabilities(pairs)
-        if len(scores) != len(pairs):
+        values = await scorer.entailment_probabilities(pairs)
+        if len(values) != len(pairs):
             raise RuntimeError(
-                f"NLI scorer returned {len(scores)} scores; expected {len(pairs)}"
+                f"NLI scorer returned {len(values)} scores; expected {len(pairs)}"
             )
-        if any(not 0 <= score <= 1 for score in scores):
+        if any(not 0 <= value <= 1 for value in values):
             raise RuntimeError("NLI scorer returned an invalid probability")
-        for item_index, dataset_index in enumerate(batch_indices):
-            probabilities[dataset_index] = (
-                scores[item_index * 2],
-                scores[item_index * 2 + 1],
+        updates: dict[str, dict[str, object]] = {}
+        for local_index, dataset_index in enumerate(indices):
+            key = keys[dataset_index]
+            record = {
+                **score_cache.get(key, {}),
+                "nli_probabilities": [
+                    values[local_index * 2],
+                    values[local_index * 2 + 1],
+                ],
+            }
+            score_cache[key] = record
+            updates[key] = record
+        _append_score_cache(cache_path, updates)
+
+    eligible_set = set(eligible_indices)
+    probabilities: list[tuple[float, float] | None] = []
+    for index, key in enumerate(keys):
+        raw = score_cache.get(key, {}).get("nli_probabilities")
+        if index not in eligible_set or not isinstance(raw, list):
+            probabilities.append(None)
+        elif len(raw) != 2:
+            raise ValueError(f"invalid cached NLI probability pair for key {key}")
+        else:
+            pair = (float(raw[0]), float(raw[1]))
+            if any(not 0 <= value <= 1 or not math.isfinite(value) for value in pair):
+                raise ValueError(f"invalid cached NLI probabilities for key {key}")
+            probabilities.append(pair)
+    return probabilities, reused_count, len(missing_indices)
+
+
+def _stage0_analysis(
+    examples: Sequence[PairExample],
+    pair_scores: Sequence[PairScore],
+    rejection_reasons: Sequence[tuple[str, ...]],
+    *,
+    dataset_name: str,
+) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
+    counts: Counter[tuple[str, int]] = Counter()
+    rejected_true: list[int] = []
+    for index, (example, reasons) in enumerate(
+        zip(examples, rejection_reasons, strict=True)
+    ):
+        for reason in reasons:
+            counts[(reason, int(example.label))] += 1
+        if reasons and example.label:
+            rejected_true.append(index)
+
+    breakdown: list[dict[str, object]] = [
+        {
+            "reason": reason,
+            "gold_label": gold_label,
+            "gold_class": "paraphrase" if gold_label else "non_paraphrase",
+            "rejections": counts[(reason, gold_label)],
+            "counts_can_overlap": True,
+        }
+        for reason in ("number_mismatch", "negation_mismatch")
+        for gold_label in (0, 1)
+    ]
+    sampled = random.Random(f"{_SAMPLE_SEED}:{dataset_name}:stage0-true").sample(
+        rejected_true,
+        min(_STAGE0_SAMPLE_SIZE, len(rejected_true)),
+    )
+    examples_out = [
+        {
+            "dataset_row_index": index,
+            "candidate": examples[index].candidate,
+            "query": examples[index].query,
+            "cosine_similarity": pair_scores[index].cosine_similarity,
+            "gold_label": 1,
+            "rejection_reasons": "|".join(rejection_reasons[index]),
+        }
+        for index in sampled
+    ]
+    return breakdown, examples_out
+
+
+def _nli_score_rows(
+    examples: Sequence[PairExample],
+    pair_scores: Sequence[PairScore],
+    stage0_reasons: Sequence[tuple[str, ...]],
+    bidirectional_probabilities: Sequence[tuple[float, float] | None],
+) -> list[dict[str, object]]:
+    rows: list[dict[str, object]] = []
+    for index, (example, pair_score, reasons, probabilities) in enumerate(
+        zip(
+            examples,
+            pair_scores,
+            stage0_reasons,
+            bidirectional_probabilities,
+            strict=True,
+        )
+    ):
+        if (
+            pair_score.cosine_similarity < min(_COSINE_THRESHOLDS)
+            or reasons
+            or probabilities is None
+        ):
+            continue
+        rows.append(
+            {
+                "dataset_row_index": index,
+                "gold_label": int(example.label),
+                "cosine_similarity": pair_score.cosine_similarity,
+                "candidate_to_query_entailment": probabilities[0],
+                "query_to_candidate_entailment": probabilities[1],
+                "bidirectional_min_entailment": min(probabilities),
+            }
+        )
+    return rows
+
+
+def _nli_histogram(
+    dataset_name: str,
+    examples: Sequence[PairExample],
+    pair_scores: Sequence[PairScore],
+    stage0_reasons: Sequence[tuple[str, ...]],
+    bidirectional_probabilities: Sequence[tuple[float, float] | None],
+) -> str:
+    plot_path = (
+        _RESULTS_DIRECTORY / f"paraphrase_ablation_{dataset_name}_nli_histograms.png"
+    )
+    figure, axes = plt.subplots(1, 3, figsize=(15, 4), sharey=True)
+    for axis, (series_name, score_index) in zip(
+        axes,
+        (
+            ("Candidate → query", 0),
+            ("Query → candidate", 1),
+            ("Bidirectional minimum", -1),
+        ),
+        strict=True,
+    ):
+        for label, gold_class in ((True, "Paraphrase"), (False, "Non-paraphrase")):
+            values: list[float] = []
+            for example, cosine, reasons, probabilities in zip(
+                examples,
+                pair_scores,
+                stage0_reasons,
+                bidirectional_probabilities,
+                strict=True,
+            ):
+                if (
+                    example.label == label
+                    and cosine.cosine_similarity >= min(_COSINE_THRESHOLDS)
+                    and not reasons
+                    and probabilities is not None
+                ):
+                    values.append(
+                        min(probabilities)
+                        if score_index == -1
+                        else probabilities[score_index]
+                    )
+            axis.hist(
+                values,
+                bins=20,
+                range=(0, 1),
+                alpha=0.55,
+                label=f"{gold_class} (n={len(values)})",
             )
-    return probabilities
+        axis.set(title=series_name, xlabel="Entailment probability")
+        axis.grid(True, alpha=0.2)
+        axis.legend()
+    axes[0].set_ylabel("Pair count")
+    figure.suptitle(
+        f"{dataset_name.upper()} validation NLI scores "
+        f"(cosine >= 0.85, Stage-0 passed)"
+    )
+    figure.tight_layout()
+    _RESULTS_DIRECTORY.mkdir(parents=True, exist_ok=True)
+    figure.savefig(plot_path, dpi=160)
+    plt.close(figure)
+    return str(plot_path)
+
+
+def _write_csv(
+    path: Path,
+    fields: Sequence[str],
+    rows: Iterable[Mapping[str, object]],
+    metadata: Mapping[str, object],
+) -> None:
+    with path.open("w", encoding="utf-8", newline="") as output_file:
+        writer = csv.DictWriter(output_file, fieldnames=list(fields))
+        writer.writeheader()
+        writer.writerows({**metadata, **row} for row in rows)
 
 
 def _save_outputs(
@@ -297,36 +718,87 @@ def _save_outputs(
     *,
     repository: str,
     config: str,
-    split: str,
-    example_count: int,
-    nli_threshold: float,
-    calibration: list[dict[str, float]],
-    metrics_rows: list[dict[str, object]],
-    error_rows: list[dict[str, object]],
+    train_sample_count: int,
+    validation_count: int,
+    calibration_rows: list[dict[str, object]],
+    selected_thresholds: list[dict[str, object]],
+    selected_validation_rows: list[dict[str, object]],
+    validation_rows: list[dict[str, object]],
+    stage0_breakdown: list[dict[str, object]],
+    stage0_samples: list[dict[str, object]],
+    nli_scores: list[dict[str, object]],
+    histogram_path: str,
     embedding_model_source: str,
     run_date: str,
     git_commit: str,
     git_worktree_dirty: bool,
-    limit: int | None,
+    cache_counts: Mapping[str, int],
 ) -> dict[str, str]:
     _RESULTS_DIRECTORY.mkdir(parents=True, exist_ok=True)
-    prefix = f"paraphrase_ablation_{dataset_name}_validation"
-    metrics_path = _RESULTS_DIRECTORY / f"{prefix}_metrics.csv"
-    errors_path = _RESULTS_DIRECTORY / f"{prefix}_false_positives.csv"
+    prefix = f"paraphrase_ablation_{dataset_name}_train_calibrated_validation"
+    calibration_path = _RESULTS_DIRECTORY / f"{prefix}_train_nli_sweep.csv"
+    validation_path = _RESULTS_DIRECTORY / f"{prefix}_validation_nli_sweep.csv"
+    selected_path = _RESULTS_DIRECTORY / f"{prefix}_selected_thresholds.csv"
+    selected_validation_path = (
+        _RESULTS_DIRECTORY / f"{prefix}_validation_selected_metrics.csv"
+    )
+    rejection_path = _RESULTS_DIRECTORY / f"{prefix}_stage0_rejections.csv"
+    stage0_samples_path = _RESULTS_DIRECTORY / f"{prefix}_stage0_true_paraphrases.csv"
+    nli_scores_path = _RESULTS_DIRECTORY / f"{prefix}_validation_nli_scores.csv"
     json_path = _RESULTS_DIRECTORY / f"{prefix}.json"
 
-    csv_metadata = {
+    common_metadata = {
         "dataset": dataset_name,
-        "split": split,
         "run_date_utc": run_date,
         "git_commit": git_commit,
-        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "embedding_model": _EMBEDDING_MODEL_NAME,
         "nli_model": _NLI_MODEL_NAME,
         "nli_model_revision": _NLI_MODEL_REVISION,
     }
-    metadata_fields = list(csv_metadata)
-    with metrics_path.open("w", encoding="utf-8", newline="") as output_file:
-        fields = metadata_fields + [
+    train_metadata = {**common_metadata, "split": "train"}
+    validation_metadata = {**common_metadata, "split": "validation"}
+    _write_csv(
+        calibration_path,
+        tuple(common_metadata) + ("split",)
+        + (
+            "cosine_threshold",
+            "nli_threshold",
+            "hits",
+            "true_positive",
+            "false_positive",
+            "false_negative",
+            "precision",
+            "recall",
+            "f1",
+        ),
+        calibration_rows,
+        train_metadata,
+    )
+    _write_csv(
+        selected_validation_path,
+        tuple(common_metadata) + ("split",)
+        + (
+            "cosine_threshold",
+            "precision_target",
+            "exists",
+            "selected_nli_threshold",
+            "hits",
+            "true_positive",
+            "false_positive",
+            "false_negative",
+            "precision",
+            "recall",
+            "f1",
+            "nli_pairs_sent",
+            "nli_pairs_sent_percent",
+        ),
+        selected_validation_rows,
+        validation_metadata,
+    )
+    _write_csv(
+        validation_path,
+        tuple(common_metadata) + ("split",)
+        + (
             "cosine_threshold",
             "configuration",
             "nli_threshold",
@@ -339,75 +811,166 @@ def _save_outputs(
             "f1",
             "nli_pairs_sent",
             "nli_pairs_sent_percent",
-        ]
-        writer = csv.DictWriter(output_file, fieldnames=fields)
-        writer.writeheader()
-        writer.writerows({**csv_metadata, **row} for row in metrics_rows)
-
-    with errors_path.open("w", encoding="utf-8", newline="") as output_file:
-        fields = metadata_fields + [
+        ),
+        validation_rows,
+        validation_metadata,
+    )
+    _write_csv(
+        selected_path,
+        tuple(common_metadata) + ("split",)
+        + (
             "cosine_threshold",
-            "configuration",
-            "nli_threshold",
+            "precision_target",
+            "exists",
+            "selected_nli_threshold",
+            "tie_break",
+            "hits",
+            "true_positive",
+            "false_positive",
+            "false_negative",
+            "precision",
+            "recall",
+            "f1",
+        ),
+        selected_thresholds,
+        train_metadata,
+    )
+    _write_csv(
+        rejection_path,
+        tuple(common_metadata) + ("split",)
+        + ("reason", "gold_label", "gold_class", "rejections", "counts_can_overlap"),
+        stage0_breakdown,
+        validation_metadata,
+    )
+    _write_csv(
+        stage0_samples_path,
+        tuple(common_metadata) + ("split",)
+        + (
             "dataset_row_index",
             "candidate",
             "query",
             "cosine_similarity",
             "gold_label",
+            "rejection_reasons",
+        ),
+        stage0_samples,
+        validation_metadata,
+    )
+    _write_csv(
+        nli_scores_path,
+        tuple(common_metadata)
+        + (
+            "split",
+            "dataset_row_index",
+            "gold_label",
+            "cosine_similarity",
             "candidate_to_query_entailment",
             "query_to_candidate_entailment",
-        ]
-        writer = csv.DictWriter(output_file, fieldnames=fields)
-        writer.writeheader()
-        writer.writerows({**csv_metadata, **row} for row in error_rows)
-
-    metadata = {
-        "dataset": dataset_name,
-        "dataset_repository": repository,
-        "configuration": config,
-        "split": split,
-        "example_count": example_count,
-        "limit": limit,
-        "label_meaning": "1=paraphrase, 0=not paraphrase",
-        "cosine_thresholds": list(_COSINE_THRESHOLDS),
-        "configurations": [
-            "cosine_only",
-            "cosine_stage0",
-            "cosine_stage0_nli",
-        ],
-        "nli_threshold_selection": {
-            "selected_threshold": nli_threshold,
-            "criterion": (
-                "maximum mean F1 across the five requested cosine thresholds "
-                "on this validation split; ties select the higher threshold"
-            ),
-            "calibration_curve": calibration,
-        },
-        "embedding_model": "BAAI/bge-small-en-v1.5",
-        "embedding_model_source": embedding_model_source,
-        "fastembed_package_version": version("fastembed"),
-        "nli_model": _NLI_MODEL_NAME,
-        "nli_model_revision": _NLI_MODEL_REVISION,
-        "run_date_utc": run_date,
-        "git_commit": git_commit,
-        "git_worktree_dirty_at_run": git_worktree_dirty,
-        "test_split_used": False,
-        "metrics": metrics_rows,
-        "sampled_false_positives": error_rows,
-        "files": {
-            "metrics_csv": metrics_path.name,
-            "false_positives_csv": errors_path.name,
-        },
-    }
+            "bidirectional_min_entailment",
+        ),
+        nli_scores,
+        validation_metadata,
+    )
     json_path.write_text(
-        json.dumps(metadata, indent=2, sort_keys=True) + "\n",
+        json.dumps(
+            {
+                **validation_metadata,
+                "calibration_split": "train",
+                "dataset_repository": repository,
+                "configuration": config,
+                "train_sample_count": train_sample_count,
+                "train_sample_seed": _SAMPLE_SEED,
+                "train_sampling": "deterministic reservoir sample",
+                "validation_example_count": validation_count,
+                "cosine_thresholds": list(_COSINE_THRESHOLDS),
+                "nli_thresholds": list(_NLI_THRESHOLDS),
+                "precision_targets": list(_PRECISION_TARGETS),
+                "selected_thresholds": selected_thresholds,
+                "validation_metrics_at_train_selected_thresholds": (
+                    selected_validation_rows
+                ),
+                "validation_metrics": validation_rows,
+                "stage0_rejection_breakdown": stage0_breakdown,
+                "stage0_rejected_true_paraphrase_sample_count": len(stage0_samples),
+                "nli_histogram_png": Path(histogram_path).name,
+                "models": {
+                    "embedding_model_source": embedding_model_source,
+                    "fastembed_package_version": version("fastembed"),
+                    "nli_model": _NLI_MODEL_NAME,
+                    "nli_model_revision": _NLI_MODEL_REVISION,
+                },
+                "run_date_utc": run_date,
+                "git_commit": git_commit,
+                "git_worktree_dirty_at_run": git_worktree_dirty,
+                "test_split_used": False,
+                "score_cache_counts": dict(cache_counts),
+                "notes": [
+                    (
+                        "NLI sweeps and selected operating points are calibrated "
+                        "on train and evaluated on validation."
+                    ),
+                    (
+                        "NLI score histograms include validation pairs with "
+                        "cosine >= 0.85 that passed Stage-0."
+                    ),
+                    (
+                        "Stage-0 number and negation rejection counts can overlap "
+                        "when both reasons apply."
+                    ),
+                ],
+                "files": {
+                    "train_nli_sweep_csv": calibration_path.name,
+                    "validation_nli_sweep_csv": validation_path.name,
+                    "selected_thresholds_csv": selected_path.name,
+                    "validation_selected_metrics_csv": selected_validation_path.name,
+                    "stage0_rejections_csv": rejection_path.name,
+                    "stage0_true_paraphrases_csv": stage0_samples_path.name,
+                    "validation_nli_scores_csv": nli_scores_path.name,
+                    "nli_histograms_png": Path(histogram_path).name,
+                },
+            },
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n",
         encoding="utf-8",
     )
     return {
         "json": str(json_path),
-        "metrics_csv": str(metrics_path),
-        "false_positives_csv": str(errors_path),
+        "train_nli_sweep_csv": str(calibration_path),
+        "validation_nli_sweep_csv": str(validation_path),
+        "selected_thresholds_csv": str(selected_path),
+        "validation_selected_metrics_csv": str(selected_validation_path),
+        "stage0_rejections_csv": str(rejection_path),
+        "stage0_true_paraphrases_csv": str(stage0_samples_path),
+        "validation_nli_scores_csv": str(nli_scores_path),
+        "nli_histograms_png": histogram_path,
     }
+
+
+async def _load_split_rows(
+    repository: str,
+    config: str,
+    split: str,
+    *,
+    limit: int | None,
+) -> list[Mapping[str, object]]:
+    if split not in {"train", "validation"}:
+        raise ValueError("only train and validation splits are permitted")
+    dataset = load_dataset(repository, config, split=split, streaming=True)
+    rows: Iterable[Mapping[str, object]] = cast(
+        Iterable[Mapping[str, object]],
+        dataset,
+    )
+    if split == "train":
+        rows = _reservoir_sample(
+            rows,
+            min(_TRAIN_SAMPLE_SIZE, limit or _TRAIN_SAMPLE_SIZE),
+            seed=_SAMPLE_SEED,
+        )
+    elif limit is not None:
+        rows = itertools.islice(rows, limit)
+    return list(rows)
 
 
 async def run_dataset_ablation(
@@ -415,13 +978,12 @@ async def run_dataset_ablation(
     *,
     limit: int | None = None,
 ) -> dict[str, object]:
-    """Run one dataset's ablation using only its validation split."""
+    """Calibrate on a seeded train sample and report validation-only metrics."""
     if dataset_name not in _DATASETS:
         raise ValueError("dataset must be 'paws' or 'qqp'")
     if limit is not None and limit < 1:
         raise ValueError("limit must be at least 1")
     repository, config, candidate_field, query_field = _DATASETS[dataset_name]
-    split = "validation"
     run_date = datetime.now(UTC).isoformat()
     git_commit = subprocess.run(
         ["git", "rev-parse", "HEAD"],
@@ -439,49 +1001,115 @@ async def run_dataset_ablation(
             text=True,
         ).stdout.strip()
     )
-    dataset = load_dataset(repository, config, split=split)
-    examples = rows_to_pair_examples(
-        cast(Iterable[Mapping[str, object]], dataset),
-        text_a_field=candidate_field,
-        text_b_field=query_field,
-        label_field="label",
-        limit=limit,
+    train_rows, validation_rows = await asyncio.gather(
+        _load_split_rows(repository, config, "train", limit=limit),
+        _load_split_rows(repository, config, "validation", limit=limit),
     )
-    if not examples:
-        raise ValueError(f"{dataset_name} validation split contains no examples")
+    train_examples = _pair_examples(
+        train_rows,
+        candidate_field=candidate_field,
+        query_field=query_field,
+    )
+    validation_examples = _pair_examples(
+        validation_rows,
+        candidate_field=candidate_field,
+        query_field=query_field,
+    )
+    if not train_examples or not validation_examples:
+        raise ValueError(f"{dataset_name} train/validation data must not be empty")
 
+    score_cache_path = (
+        _RESULTS_DIRECTORY / f"paraphrase_ablation_{dataset_name}_score_cache.jsonl"
+    )
+    score_cache = _load_score_cache(score_cache_path)
+    prior_nli_count = _seed_cache_from_previous_samples(dataset_name, score_cache)
     embedder = FastEmbedder()
     scorer = OnnxNliScorer()
     try:
-        pair_scores = await _embed_all_pairs(examples, embedder)
-        stage0_passes = [
-            stage0_guard(example.candidate, example.query) for example in examples
+        train_scores, train_cosine_reused, train_cosine_computed = (
+            await _ensure_cosine_scores(
+                train_examples,
+                embedder,
+                score_cache,
+                score_cache_path,
+            )
+        )
+        validation_scores, validation_cosine_reused, validation_cosine_computed = (
+            await _ensure_cosine_scores(
+                validation_examples,
+                embedder,
+                score_cache,
+                score_cache_path,
+            )
+        )
+        train_reasons = [
+            stage0_rejection_reasons(example.candidate, example.query)
+            for example in train_examples
         ]
-        bidirectional_probabilities = await _score_nli_candidates(
-            examples,
-            pair_scores,
-            stage0_passes,
-            scorer,
+        validation_reasons = [
+            stage0_rejection_reasons(example.candidate, example.query)
+            for example in validation_examples
+        ]
+        train_probabilities, train_nli_reused, train_nli_computed = (
+            await _ensure_nli_scores(
+                train_examples,
+                train_scores,
+                train_reasons,
+                embedder.model_name,
+                scorer,
+                score_cache,
+                score_cache_path,
+            )
+        )
+        validation_probabilities, validation_nli_reused, validation_nli_computed = (
+            await _ensure_nli_scores(
+                validation_examples,
+                validation_scores,
+                validation_reasons,
+                embedder.model_name,
+                scorer,
+                score_cache,
+                score_cache_path,
+            )
         )
     finally:
         await scorer.close()
         await embedder.close()
 
-    labels = [example.label for example in examples]
-    similarities = [score.cosine_similarity for score in pair_scores]
-    nli_threshold, calibration = select_nli_threshold(
-        labels,
-        similarities,
-        stage0_passes,
-        bidirectional_probabilities,
+    calibration_rows, selected_thresholds = _calibration_sweep(
+        [example.label for example in train_examples],
+        [score.cosine_similarity for score in train_scores],
+        [not reasons for reasons in train_reasons],
+        train_probabilities,
     )
-    metrics_rows, error_rows = _ablation_rows(
-        examples,
-        pair_scores,
-        stage0_passes,
-        bidirectional_probabilities,
-        nli_threshold=nli_threshold,
+    validation_metrics = _validation_sweep(
+        [example.label for example in validation_examples],
+        [score.cosine_similarity for score in validation_scores],
+        [not reasons for reasons in validation_reasons],
+        validation_probabilities,
+    )
+    selected_validation_metrics = _selected_validation_rows(
+        selected_thresholds,
+        validation_metrics,
+    )
+    stage0_breakdown, stage0_samples = _stage0_analysis(
+        validation_examples,
+        validation_scores,
+        validation_reasons,
         dataset_name=dataset_name,
+    )
+    validation_nli_scores = _nli_score_rows(
+        validation_examples,
+        validation_scores,
+        validation_reasons,
+        validation_probabilities,
+    )
+    histogram_path = _nli_histogram(
+        dataset_name,
+        validation_examples,
+        validation_scores,
+        validation_reasons,
+        validation_probabilities,
     )
     model_info = next(
         (
@@ -494,52 +1122,60 @@ async def run_dataset_ablation(
     if model_info is None:
         raise RuntimeError(f"FastEmbed model {embedder.model_name!r} is not registered")
     model_source = cast(dict[str, str], model_info["sources"]).get("hf", "unknown")
+    cache_counts = {
+        "prior_error_sample_nli_scores_loaded": prior_nli_count,
+        "train_cosine_reused": train_cosine_reused,
+        "train_cosine_computed": train_cosine_computed,
+        "validation_cosine_reused": validation_cosine_reused,
+        "validation_cosine_computed": validation_cosine_computed,
+        "train_nli_reused": train_nli_reused,
+        "train_nli_computed": train_nli_computed,
+        "validation_nli_reused": validation_nli_reused,
+        "validation_nli_computed": validation_nli_computed,
+    }
     files = _save_outputs(
         dataset_name,
         repository=repository,
         config=config,
-        split=split,
-        example_count=len(examples),
-        nli_threshold=nli_threshold,
-        calibration=calibration,
-        metrics_rows=metrics_rows,
-        error_rows=error_rows,
+        train_sample_count=len(train_examples),
+        validation_count=len(validation_examples),
+        calibration_rows=calibration_rows,
+        selected_thresholds=selected_thresholds,
+        selected_validation_rows=selected_validation_metrics,
+        validation_rows=validation_metrics,
+        stage0_breakdown=stage0_breakdown,
+        stage0_samples=stage0_samples,
+        nli_scores=validation_nli_scores,
+        histogram_path=histogram_path,
         embedding_model_source=model_source,
         run_date=run_date,
         git_commit=git_commit,
         git_worktree_dirty=git_worktree_dirty,
-        limit=limit,
+        cache_counts=cache_counts,
     )
     return {
         "dataset": dataset_name,
-        "split": split,
-        "example_count": len(examples),
-        "nli_threshold": nli_threshold,
-        "metrics": metrics_rows,
-        "sampled_false_positive_count": len(error_rows),
-        "metadata": {
-            "embedding_model": embedder.model_name,
-            "embedding_model_source": model_source,
-            "fastembed_package_version": version("fastembed"),
-            "nli_model": _NLI_MODEL_NAME,
-            "nli_model_revision": _NLI_MODEL_REVISION,
-            "run_date_utc": run_date,
-            "git_commit": git_commit,
-            "test_split_used": False,
-        },
+        "train_sample_count": len(train_examples),
+        "validation_count": len(validation_examples),
+        "selected_thresholds": selected_thresholds,
+        "validation_metrics": validation_metrics,
+        "stage0_rejection_breakdown": stage0_breakdown,
+        "stage0_rejected_true_paraphrase_sample_count": len(stage0_samples),
+        "score_cache_counts": cache_counts,
         "files": files,
+        "test_split_used": False,
     }
 
 
 def _arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Run validation-only PAWS and QQP ablation reports."
+        description="Calibrate NLI on train samples; evaluate PAWS and QQP validation."
     )
     parser.add_argument("--dataset", choices=("paws", "qqp", "all"), default="all")
     parser.add_argument(
         "--limit",
         type=int,
-        help="Evaluate only the first N validation examples per dataset.",
+        help="Smoke-test limit for train reservoir and validation rows.",
     )
     return parser.parse_args()
 
@@ -548,15 +1184,31 @@ async def _run(args: argparse.Namespace) -> list[dict[str, object]]:
     if args.limit is not None and args.limit < 1:
         raise ValueError("--limit must be at least 1")
     datasets = ("paws", "qqp") if args.dataset == "all" else (args.dataset,)
-    return [
-        await run_dataset_ablation(dataset_name, limit=args.limit)
-        for dataset_name in datasets
-    ]
+    results: list[dict[str, object]] = []
+    for dataset_name in datasets:
+        results.append(await run_dataset_ablation(dataset_name, limit=args.limit))
+    return results
 
 
 def main() -> None:
-    """Run requested validation ablations and print results as JSON."""
-    print(json.dumps(asyncio.run(_run(_arguments())), indent=2, sort_keys=True))
+    """Run train-calibrated validation reports and print JSON summaries."""
+    reports = asyncio.run(_run(_arguments()))
+    summaries = [
+        {
+            "dataset": report["dataset"],
+            "train_sample_count": report["train_sample_count"],
+            "validation_count": report["validation_count"],
+            "selected_thresholds": report["selected_thresholds"],
+            "stage0_rejected_true_paraphrase_sample_count": (
+                report["stage0_rejected_true_paraphrase_sample_count"]
+            ),
+            "score_cache_counts": report["score_cache_counts"],
+            "files": report["files"],
+            "test_split_used": report["test_split_used"],
+        }
+        for report in reports
+    ]
+    print(json.dumps(summaries, indent=2, sort_keys=True))
 
 
 if __name__ == "__main__":
