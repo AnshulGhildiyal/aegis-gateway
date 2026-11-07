@@ -314,8 +314,11 @@ validation values are not used for further threshold tuning.
 
 ### Stage-0 rejection breakdown
 
-Rejection counts are by reason and gold label. A pair may count under both
-reasons when both number and negation checks reject it.
+The rejection counts in the original Stage-0 breakdown are by reason and gold
+label over **all validation examples**, before applying any cosine threshold.
+A pair may count under both reasons when both number and negation checks reject
+it. The 20 saved rejected-positive examples were also sampled from that full
+validation population.
 
 | Dataset | Reason | Non-paraphrase rejections | Paraphrase rejections |
 |---|---|---:|---:|
@@ -346,6 +349,138 @@ paraphrases, so its scope and false-rejection behavior need continued review.
    revisions were not pinned in the run metadata. Record immutable dataset
    revisions and rerun from a clean commit before treating these numbers as
    fully reproducible.
+
+## 2026-11-07 — PAWS/QQP extended cosine sweep and matched precision
+
+### Protocol and Stage-0 behavior
+
+- Calibration used the existing deterministic 5,000-pair training sample
+  (seed 42). All reported metrics and plots are from validation only. The test
+  split was not requested or evaluated.
+- The cosine-only and cosine + Stage-0 validation sweep uses thresholds 0.85
+  through 0.99 in 0.01 increments. Matched-precision targets are 0.80, 0.90,
+  and 0.95. Train calibration selects the highest-recall threshold meeting
+  each target; ties prefer the higher cosine threshold, or higher NLI
+  threshold. NLI options are calibrated separately at cosine 0.85 and 0.95
+  over thresholds 0.01–0.99.
+- **Stage-0 behavior did not change in the previous run.** Comparing the
+  previous and current guard implementations shows the previous change only
+  extracted number/negation rejection reasons: the allow condition remains
+  equivalent to matching both extracted values. Diagnostics were extended,
+  but the predicate was unchanged, so previously reported prediction rows did
+  not need behavioral correction. The evaluation was rerun from cached scores.
+- The original rejection breakdowns reported above cover the **entire
+  validation split**, not only pairs retrieved by cosine. The new
+  [candidate-set breakdowns](../benchmarks/results/) separately report all
+  validation rows and the pre-Stage-0 candidate sets at every cosine threshold.
+  At cosine 0.85, these sets contain 7,960 PAWS pairs and 17,775 QQP pairs.
+  These are pairs with cosine >= threshold before the Stage-0 filter; reason
+  counts can overlap.
+- Models remain `BAAI/bge-small-en-v1.5` (FastEmbed 0.9.1) and
+  `Xenova/nli-deberta-v3-small`, revision
+  `6bc2a55c7c0f7e2bc68de60bb248e523e2612abb`. Both runs recorded Git HEAD
+  `70270acea51eff6455e28e065a036789975b2880` with a dirty worktree.
+- All cached scores were reused; neither embeddings nor NLI were recomputed.
+  PAWS reused 5,000 train and 8,000 validation cosine scores, plus 4,853 train
+  and 7,756 validation NLI pairs. QQP reused 5,000 train and 40,430 validation
+  cosine scores, plus 1,953 train and 15,896 validation NLI pairs.
+- Artifacts:
+  [PAWS train-calibrated report](../benchmarks/results/paraphrase_ablation_paws_train_calibrated_validation.json),
+  [PAWS cosine sweep](../benchmarks/results/paraphrase_ablation_paws_train_calibrated_validation_validation_cosine_sweep.csv),
+  [PAWS matched-precision CSV](../benchmarks/results/paraphrase_ablation_paws_train_calibrated_validation_validation_matched_precision.csv),
+  [PAWS recall-vs-precision plot](../benchmarks/results/paraphrase_ablation_paws_validation_matched_precision.png),
+  [QQP train-calibrated report](../benchmarks/results/paraphrase_ablation_qqp_train_calibrated_validation.json),
+  [QQP cosine sweep](../benchmarks/results/paraphrase_ablation_qqp_train_calibrated_validation_validation_cosine_sweep.csv),
+  [QQP matched-precision CSV](../benchmarks/results/paraphrase_ablation_qqp_train_calibrated_validation_validation_matched_precision.csv),
+  [QQP recall-vs-precision plot](../benchmarks/results/paraphrase_ablation_qqp_validation_matched_precision.png),
+  and per-threshold
+  [PAWS](../benchmarks/results/paraphrase_ablation_paws_train_calibrated_validation_stage0_candidate_set_rejections.csv)
+  / [QQP](../benchmarks/results/paraphrase_ablation_qqp_train_calibrated_validation_stage0_candidate_set_rejections.csv)
+  Stage-0 candidate-set counts.
+
+### Cosine-only and cosine + Stage-0 sweep endpoints
+
+The CSVs contain both configurations at all 15 cosine thresholds. The endpoints
+below show the observed precision/recall trade-off; hits are measured on
+validation.
+
+| Dataset | Cosine threshold | Configuration | Hits | Precision | Recall |
+|---|---:|---|---:|---:|---:|
+| PAWS | 0.85 | Cosine only | 7,960 | 0.4420 | 0.9941 |
+| PAWS | 0.85 | Cosine + Stage-0 | 7,756 | 0.4456 | 0.9765 |
+| PAWS | 0.99 | Cosine only | 3,127 | 0.5510 | 0.4869 |
+| PAWS | 0.99 | Cosine + Stage-0 | 3,083 | 0.5524 | 0.4812 |
+| QQP | 0.85 | Cosine only | 17,775 | 0.6716 | 0.8020 |
+| QQP | 0.85 | Cosine + Stage-0 | 15,896 | 0.6843 | 0.7307 |
+| QQP | 0.99 | Cosine only | 980 | 0.9378 | 0.0617 |
+| QQP | 0.99 | Cosine + Stage-0 | 972 | 0.9414 | 0.0615 |
+
+### Matched-precision results
+
+Thresholds were selected on the training sample and the selected operating
+points below are measured on validation. Validation precision can differ from
+the target because the target constrains calibration, not validation. “NLI”
+rows are separate operating points for cosine 0.85 and 0.95.
+
+**PAWS:** Every configuration/target combination was **unreachable on the
+specified calibration grids**, including target precision 0.80. No validation
+hits or recall are reported for a target without a train-selected threshold.
+
+| Target precision | Configuration | Cosine threshold | NLI threshold | Validation hits | Validation precision | Validation recall |
+|---:|---|---:|---:|---:|---:|---:|
+| 0.80 / 0.90 / 0.95 | Cosine only | — | — | Unreachable | — | — |
+| 0.80 / 0.90 / 0.95 | Cosine + Stage-0 | — | — | Unreachable | — | — |
+| 0.80 / 0.90 / 0.95 | Cosine + Stage-0 + NLI (cosine 0.85) | — | — | Unreachable | — | — |
+| 0.80 / 0.90 / 0.95 | Cosine + Stage-0 + NLI (cosine 0.95) | — | — | Unreachable | — | — |
+
+**QQP:**
+
+| Target precision | Configuration | Cosine threshold | NLI threshold | Validation hits | Validation precision | Validation recall |
+|---:|---|---:|---:|---:|---:|---:|
+| 0.80 | Cosine only | 0.93 | — | 7,377 | 0.8254 | 0.4091 |
+| 0.80 | Cosine + Stage-0 | 0.92 | — | 8,212 | 0.8131 | 0.4486 |
+| 0.80 | Cosine + Stage-0 + NLI | 0.85 | 0.23 | 8,109 | 0.8129 | 0.4429 |
+| 0.80 | Cosine + Stage-0 + NLI | 0.95 | 0.01 | 4,356 | 0.8942 | 0.2617 |
+| 0.90 | Cosine only | 0.98 | — | 1,899 | 0.9294 | 0.1186 |
+| 0.90 | Cosine + Stage-0 | 0.98 | — | 1,861 | 0.9339 | 0.1168 |
+| 0.90 | Cosine + Stage-0 + NLI | 0.85 | 0.99 | 1,691 | 0.9213 | 0.1047 |
+| 0.90 | Cosine + Stage-0 + NLI | 0.95 | 0.97 | 2,526 | 0.9323 | 0.1582 |
+| 0.95 | Cosine only | — | — | Unreachable | — | — |
+| 0.95 | Cosine + Stage-0 | — | — | Unreachable | — | — |
+| 0.95 | Cosine + Stage-0 + NLI | 0.85 | — | Unreachable | — | — |
+| 0.95 | Cosine + Stage-0 + NLI | 0.95 | — | Unreachable | — | — |
+
+### Stage-0 candidate populations
+
+Unlike the full-split rejection totals above, these counts are restricted to
+the specified cosine candidate set **before** Stage-0 filtering.
+
+| Dataset | Population | Candidate pairs | Number mismatch: non-paraphrase / paraphrase | Negation mismatch: non-paraphrase / paraphrase |
+|---|---|---:|---:|---:|
+| PAWS | All validation | 8,000 | 95 / 52 | 49 / 13 |
+| PAWS | Cosine >= 0.85 | 7,960 | 94 / 49 | 48 / 13 |
+| QQP | All validation | 40,430 | 3,747 / 1,028 | 3,180 / 830 |
+| QQP | Cosine >= 0.85 | 17,775 | 501 / 543 | 335 / 544 |
+
+The CSVs include corresponding rows for every cosine threshold from 0.85
+through 0.99. The counts for “All validation” intentionally preserve the
+original diagnostic population; the cosine-filtered rows show the operational
+candidate population before the guard rejects pairs.
+
+### Insights and follow-up
+
+1. No PAWS configuration met even 0.80 train precision within the tested
+   thresholds. This is a grid-limited “unreachable” result, not evidence that
+   no higher cosine cutoff could ever meet the target.
+2. On QQP, 0.90 train precision is reachable, but validation recall remains
+   low at those selected operating points. The 0.95 target was unreachable on
+   the calibration grid for all configurations.
+3. Increasing cosine from 0.85 to 0.99 sharply reduces recall on both datasets.
+   The cosine-only and Stage-0 curves should be treated as candidate-retrieval
+   comparisons, not safe cache-hit thresholds.
+4. The Stage-0 guard rejects some positive examples; inspect the saved
+   validation samples before changing its rules. Any future behavior change
+   should be calibrated and reported with the same split discipline.
 
 ## Future result entries
 

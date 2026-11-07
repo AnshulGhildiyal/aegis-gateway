@@ -41,6 +41,16 @@ points. It also writes NLI histograms, Stage-0 rejection counts by reason and
 gold label, and 20 sampled Stage-0-rejected positive pairs per dataset. The
 test split is never requested.
 
+The same run includes a validation cosine-only and cosine + Stage-0 sweep from
+0.85 to 0.99 in 0.01 increments. It also selects matched-precision operating
+points for targets 0.80, 0.90, and 0.95 on the fixed-seed train sample, then
+reports their validation hits, precision, and recall. NLI operating points are
+selected separately at cosine 0.85 and 0.95. Unmet calibration targets are
+marked `unreachable`. A recall-vs-precision plot and CSVs record these results.
+Stage-0 diagnostics include counts over the full validation split and by each
+pre-guard cosine candidate threshold, so the population for each count is
+explicit.
+
 ```bash
 uv run --group benchmark python -m benchmarks.evaluate_paraphrase_ablation
 ```

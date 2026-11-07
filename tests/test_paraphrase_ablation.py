@@ -11,14 +11,17 @@ from aegis.engine.embeddings import FastEmbedder
 from aegis.engine.nli_reranker import OnnxNliScorer
 from benchmarks.evaluate_paraphrase_ablation import (
     _calibration_sweep,
+    _cosine_validation_sweep,
     _ensure_cosine_scores,
     _ensure_nli_scores,
     _load_score_cache,
     _load_split_rows,
+    _matched_precision_rows,
     _pair_key,
     _reservoir_sample,
     _selected_validation_rows,
     _stage0_analysis,
+    _stage0_candidate_set_analysis,
     _validation_sweep,
     _write_csv,
 )
@@ -150,6 +153,80 @@ def test_validation_sweep_reports_baselines_and_nli_threshold_curve() -> None:
         row for row in at_085
         if row["configuration"] == "cosine_stage0_nli"
     )["nli_pairs_sent"] == 2
+
+
+def test_cosine_validation_sweep_covers_085_through_099() -> None:
+    rows = _cosine_validation_sweep(
+        [True, False],
+        [0.91, 0.88],
+        [True, False],
+    )
+
+    assert len(rows) == 30
+    thresholds = {cast(float, row["cosine_threshold"]) for row in rows}
+    assert min(thresholds) == 0.85
+    assert max(thresholds) == 0.99
+    at_085 = [row for row in rows if row["cosine_threshold"] == 0.85]
+    assert next(
+        row for row in at_085 if row["configuration"] == "cosine_only"
+    )["hits"] == 2
+    assert next(
+        row for row in at_085 if row["configuration"] == "cosine_stage0"
+    )["hits"] == 1
+
+
+def test_matched_precision_uses_train_thresholds_and_reports_validation() -> None:
+    labels = [True, True, False, False]
+    cosine_scores = [0.99, 0.95, 0.94, 0.85]
+    stage0_passes = [True, True, True, False]
+    probabilities = [(0.99, 0.99), (0.8, 0.8), (0.9, 0.9), None]
+
+    rows = _matched_precision_rows(
+        labels,
+        cosine_scores,
+        stage0_passes,
+        probabilities,
+        labels,
+        cosine_scores,
+        stage0_passes,
+        probabilities,
+    )
+
+    assert len(rows) == 12
+    nli_at_085 = next(
+        row
+        for row in rows
+        if row["precision_target"] == 0.90
+        and row["configuration"] == "cosine_stage0_nli"
+        and row["cosine_threshold"] == 0.85
+    )
+    assert nli_at_085["calibration_status"] == "selected"
+    assert nli_at_085["nli_threshold"] == 0.99
+    assert nli_at_085["train_precision"] == 1.0
+    assert nli_at_085["validation_hits"] == 1
+    assert nli_at_085["validation_recall"] == 0.5
+
+
+def test_matched_precision_marks_unreachable_targets() -> None:
+    rows = _matched_precision_rows(
+        [False, False],
+        [0.99, 0.95],
+        [True, True],
+        [(0.9, 0.9), (0.8, 0.8)],
+        [False, False],
+        [0.99, 0.95],
+        [True, True],
+        [(0.9, 0.9), (0.8, 0.8)],
+    )
+
+    assert rows
+    assert all(row["calibration_status"] == "unreachable" for row in rows)
+    nli_cosine_thresholds = {
+        row["cosine_threshold"]
+        for row in rows
+        if row["configuration"] == "cosine_stage0_nli"
+    }
+    assert nli_cosine_thresholds == {0.85, 0.95}
 
 
 def test_selected_validation_rows_use_train_selected_threshold() -> None:
@@ -310,6 +387,40 @@ def test_stage0_breakdown_and_true_paraphrase_sample_are_seeded() -> None:
     assert lookup[("negation_mismatch", 0)] == 1
     assert len(sample) == 2
     assert {row["dataset_row_index"] for row in sample} == {0, 2}
+
+
+def test_stage0_candidate_set_breakdown_labels_cosine_filtered_populations() -> None:
+    examples = [
+        PairExample("a", "b", True),
+        PairExample("c", "d", False),
+        PairExample("e", "f", True),
+    ]
+    scores = [
+        PairScore(examples[0], 0.90),
+        PairScore(examples[1], 0.84),
+        PairScore(examples[2], 0.70),
+    ]
+    reasons = [
+        ("number_mismatch",),
+        ("negation_mismatch",),
+        ("number_mismatch", "negation_mismatch"),
+    ]
+
+    rows = _stage0_candidate_set_analysis(examples, scores, reasons)
+
+    all_validation = [row for row in rows if row["candidate_set"] == "all_validation"]
+    cosine_candidates = [
+        row for row in rows if row["candidate_set"] == "cosine_gte_0.85"
+    ]
+    assert len(all_validation) == 4
+    assert all(row["candidate_count"] == 3 for row in all_validation)
+    assert len(cosine_candidates) == 4
+    assert all(row["candidate_count"] == 1 for row in cosine_candidates)
+    assert next(
+        row
+        for row in cosine_candidates
+        if row["reason"] == "number_mismatch" and row["gold_label"] == 1
+    )["rejections"] == 1
 
 
 def test_csv_writer_adds_reproduction_metadata(tmp_path: Path) -> None:

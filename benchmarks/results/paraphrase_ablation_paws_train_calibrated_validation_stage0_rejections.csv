@@ -1,5 +1,5 @@
-dataset,run_date_utc,git_commit,embedding_model,nli_model,nli_model_revision,split,reason,gold_label,gold_class,rejections,counts_can_overlap
-paws,2026-11-07T06:14:12.494684+00:00,937cb167f7ad3e848a9fd330bb4bfb262ccb9d49,BAAI/bge-small-en-v1.5,Xenova/nli-deberta-v3-small,6bc2a55c7c0f7e2bc68de60bb248e523e2612abb,validation,number_mismatch,0,non_paraphrase,95,True
-paws,2026-11-07T06:14:12.494684+00:00,937cb167f7ad3e848a9fd330bb4bfb262ccb9d49,BAAI/bge-small-en-v1.5,Xenova/nli-deberta-v3-small,6bc2a55c7c0f7e2bc68de60bb248e523e2612abb,validation,number_mismatch,1,paraphrase,52,True
-paws,2026-11-07T06:14:12.494684+00:00,937cb167f7ad3e848a9fd330bb4bfb262ccb9d49,BAAI/bge-small-en-v1.5,Xenova/nli-deberta-v3-small,6bc2a55c7c0f7e2bc68de60bb248e523e2612abb,validation,negation_mismatch,0,non_paraphrase,49,True
-paws,2026-11-07T06:14:12.494684+00:00,937cb167f7ad3e848a9fd330bb4bfb262ccb9d49,BAAI/bge-small-en-v1.5,Xenova/nli-deberta-v3-small,6bc2a55c7c0f7e2bc68de60bb248e523e2612abb,validation,negation_mismatch,1,paraphrase,13,True
+dataset,run_date_utc,git_commit,embedding_model,nli_model,nli_model_revision,split,candidate_set,reason,gold_label,gold_class,rejections,counts_can_overlap
+paws,2026-11-07T09:27:28.003106+00:00,70270acea51eff6455e28e065a036789975b2880,BAAI/bge-small-en-v1.5,Xenova/nli-deberta-v3-small,6bc2a55c7c0f7e2bc68de60bb248e523e2612abb,validation,all_validation,number_mismatch,0,non_paraphrase,95,True
+paws,2026-11-07T09:27:28.003106+00:00,70270acea51eff6455e28e065a036789975b2880,BAAI/bge-small-en-v1.5,Xenova/nli-deberta-v3-small,6bc2a55c7c0f7e2bc68de60bb248e523e2612abb,validation,all_validation,number_mismatch,1,paraphrase,52,True
+paws,2026-11-07T09:27:28.003106+00:00,70270acea51eff6455e28e065a036789975b2880,BAAI/bge-small-en-v1.5,Xenova/nli-deberta-v3-small,6bc2a55c7c0f7e2bc68de60bb248e523e2612abb,validation,all_validation,negation_mismatch,0,non_paraphrase,49,True
+paws,2026-11-07T09:27:28.003106+00:00,70270acea51eff6455e28e065a036789975b2880,BAAI/bge-small-en-v1.5,Xenova/nli-deberta-v3-small,6bc2a55c7c0f7e2bc68de60bb248e523e2612abb,validation,all_validation,negation_mismatch,1,paraphrase,13,True

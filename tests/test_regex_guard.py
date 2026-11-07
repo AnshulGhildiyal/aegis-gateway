@@ -115,3 +115,21 @@ def test_guard_reports_all_rejection_reasons() -> None:
     assert stage0_rejection_reasons("Cancel it.", "Don't cancel it.") == (
         "negation_mismatch",
     )
+
+
+@pytest.mark.parametrize(
+    ("candidate", "query"),
+    [
+        ("Wait 5 days.", "Wait 15 days."),
+        ("Cancel it.", "Don't cancel it."),
+        ("Wait 5 days.", "Wait 5 days."),
+        ("Do not wait 5 days.", "Wait 15 days."),
+    ],
+)
+def test_rejection_reason_diagnostics_preserve_guard_behavior(
+    candidate: str,
+    query: str,
+) -> None:
+    assert stage0_guard(candidate, query) == (
+        not stage0_rejection_reasons(candidate, query)
+    )

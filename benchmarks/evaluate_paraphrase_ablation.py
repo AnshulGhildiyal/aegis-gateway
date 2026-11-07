@@ -22,6 +22,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 from datasets import load_dataset  # type: ignore[import-untyped]
 from fastembed import TextEmbedding
+from matplotlib.lines import Line2D
 
 from aegis.engine.embeddings import FastEmbedder
 from aegis.engine.nli_reranker import OnnxNliScorer
@@ -31,8 +32,10 @@ from benchmarks.evaluation import PairExample, PairScore, binary_metrics
 _REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 _RESULTS_DIRECTORY = _REPOSITORY_ROOT / "benchmarks" / "results"
 _COSINE_THRESHOLDS = (0.85, 0.95)
+_COSINE_SWEEP_THRESHOLDS = tuple(value / 100 for value in range(85, 100))
 _NLI_THRESHOLDS = tuple(value / 100 for value in range(1, 100))
 _PRECISION_TARGETS = (0.90, 0.95)
+_MATCHED_PRECISION_TARGETS = (0.80, 0.90, 0.95)
 _TRAIN_SAMPLE_SIZE = 5_000
 _SAMPLE_SEED = 42
 _EXAMPLES_PER_BATCH = 256
@@ -321,6 +324,247 @@ def _validation_sweep(
                     ),
                 }
             )
+    return rows
+
+
+def _cosine_validation_sweep(
+    labels: Sequence[bool],
+    cosine_scores: Sequence[float],
+    stage0_passes: Sequence[bool],
+) -> list[dict[str, object]]:
+    rows: list[dict[str, object]] = []
+    for cosine_threshold in _COSINE_SWEEP_THRESHOLDS:
+        cosine_only = [
+            score >= cosine_threshold for score in cosine_scores
+        ]
+        cosine_stage0 = [
+            score >= cosine_threshold and passed
+            for score, passed in zip(cosine_scores, stage0_passes, strict=True)
+        ]
+        for configuration, predictions in (
+            ("cosine_only", cosine_only),
+            ("cosine_stage0", cosine_stage0),
+        ):
+            rows.append(
+                {
+                    "cosine_threshold": cosine_threshold,
+                    "configuration": configuration,
+                    **_metrics(labels, predictions),
+                }
+            )
+    return rows
+
+
+def _matched_precision_rows(
+    train_labels: Sequence[bool],
+    train_cosine_scores: Sequence[float],
+    train_stage0_passes: Sequence[bool],
+    train_probabilities: Sequence[tuple[float, float] | None],
+    validation_labels: Sequence[bool],
+    validation_cosine_scores: Sequence[float],
+    validation_stage0_passes: Sequence[bool],
+    validation_probabilities: Sequence[tuple[float, float] | None],
+) -> list[dict[str, object]]:
+    rows: list[dict[str, object]] = []
+    baseline_configs = ("cosine_only", "cosine_stage0")
+    for precision_target in _MATCHED_PRECISION_TARGETS:
+        for configuration in baseline_configs:
+            candidates: list[dict[str, object]] = []
+            for cosine_threshold in _COSINE_SWEEP_THRESHOLDS:
+                predictions = [
+                    cosine >= cosine_threshold
+                    and (
+                        configuration == "cosine_only"
+                        or stage0_pass
+                    )
+                    for cosine, stage0_pass in zip(
+                        train_cosine_scores,
+                        train_stage0_passes,
+                        strict=True,
+                    )
+                ]
+                candidates.append(
+                    {
+                        "cosine_threshold": cosine_threshold,
+                        "nli_threshold": None,
+                        **_metrics(train_labels, predictions),
+                    }
+                )
+            selected = _best_precision_candidate(candidates, precision_target)
+            rows.append(
+                _matched_precision_result(
+                    precision_target,
+                    configuration,
+                    selected,
+                    validation_labels,
+                    validation_cosine_scores,
+                    validation_stage0_passes,
+                    validation_probabilities,
+                )
+            )
+
+        for cosine_threshold in _COSINE_THRESHOLDS:
+            candidates = []
+            for nli_threshold in _NLI_THRESHOLDS:
+                candidates.append(
+                    {
+                        "cosine_threshold": cosine_threshold,
+                        "nli_threshold": nli_threshold,
+                        **_metrics(
+                            train_labels,
+                            _predictions(
+                                train_cosine_scores,
+                                train_stage0_passes,
+                                train_probabilities,
+                                cosine_threshold,
+                                nli_threshold,
+                            ),
+                        ),
+                    }
+                )
+            selected = _best_precision_candidate(candidates, precision_target)
+            rows.append(
+                _matched_precision_result(
+                    precision_target,
+                    "cosine_stage0_nli",
+                    selected,
+                    validation_labels,
+                    validation_cosine_scores,
+                    validation_stage0_passes,
+                    validation_probabilities,
+                    calibration_cosine_threshold=cosine_threshold,
+                )
+            )
+    return rows
+
+
+def _best_precision_candidate(
+    candidates: Sequence[dict[str, object]],
+    precision_target: float,
+) -> dict[str, object] | None:
+    eligible = [
+        row
+        for row in candidates
+        if row["precision"] is not None
+        and cast(float, row["precision"]) >= precision_target
+    ]
+    if not eligible:
+        return None
+    return max(
+        eligible,
+        key=lambda row: (
+            cast(float | None, row["recall"]) or 0.0,
+            cast(float, row["cosine_threshold"]),
+            cast(float, row["nli_threshold"])
+            if row["nli_threshold"] is not None
+            else 0.0,
+        ),
+    )
+
+
+def _matched_precision_result(
+    precision_target: float,
+    configuration: str,
+    selected: dict[str, object] | None,
+    validation_labels: Sequence[bool],
+    validation_cosine_scores: Sequence[float],
+    validation_stage0_passes: Sequence[bool],
+    validation_probabilities: Sequence[tuple[float, float] | None],
+    *,
+    calibration_cosine_threshold: float | None = None,
+) -> dict[str, object]:
+    result: dict[str, object] = {
+        "precision_target": precision_target,
+        "configuration": configuration,
+        "calibration_status": "selected" if selected is not None else "unreachable",
+        "cosine_threshold": calibration_cosine_threshold,
+    }
+    if selected is None:
+        return result
+
+    cosine_threshold = cast(float, selected["cosine_threshold"])
+    nli_threshold = cast(float | None, selected["nli_threshold"])
+    if configuration == "cosine_only":
+        validation_predictions = [
+            cosine >= cosine_threshold for cosine in validation_cosine_scores
+        ]
+    elif configuration == "cosine_stage0":
+        validation_predictions = [
+            cosine >= cosine_threshold and stage0_pass
+            for cosine, stage0_pass in zip(
+                validation_cosine_scores,
+                validation_stage0_passes,
+                strict=True,
+            )
+        ]
+    else:
+        if nli_threshold is None:
+            raise RuntimeError("NLI calibration selection is missing its threshold")
+        validation_predictions = _predictions(
+            validation_cosine_scores,
+            validation_stage0_passes,
+            validation_probabilities,
+            cosine_threshold,
+            nli_threshold,
+        )
+    validation_metrics = _metrics(validation_labels, validation_predictions)
+    return {
+        **result,
+        "cosine_threshold": cosine_threshold,
+        "nli_threshold": nli_threshold,
+        "train_hits": selected["hits"],
+        "train_precision": selected["precision"],
+        "train_recall": selected["recall"],
+        "validation_hits": validation_metrics["hits"],
+        "validation_true_positive": validation_metrics["true_positive"],
+        "validation_false_positive": validation_metrics["false_positive"],
+        "validation_false_negative": validation_metrics["false_negative"],
+        "validation_precision": validation_metrics["precision"],
+        "validation_recall": validation_metrics["recall"],
+        "validation_f1": validation_metrics["f1"],
+    }
+
+
+def _stage0_candidate_set_analysis(
+    examples: Sequence[PairExample],
+    pair_scores: Sequence[PairScore],
+    rejection_reasons: Sequence[tuple[str, ...]],
+) -> list[dict[str, object]]:
+    candidate_sets: list[tuple[str, float | None]] = [
+        ("all_validation", None),
+        *[
+            (f"cosine_gte_{threshold:.2f}", threshold)
+            for threshold in _COSINE_SWEEP_THRESHOLDS
+        ],
+    ]
+    rows: list[dict[str, object]] = []
+    for candidate_set, cosine_threshold in candidate_sets:
+        indices = [
+            index
+            for index, score in enumerate(pair_scores)
+            if cosine_threshold is None
+            or score.cosine_similarity >= cosine_threshold
+        ]
+        counts: Counter[tuple[str, int]] = Counter()
+        for index in indices:
+            for reason in rejection_reasons[index]:
+                counts[(reason, int(examples[index].label))] += 1
+        for reason in ("number_mismatch", "negation_mismatch"):
+            for gold_label in (0, 1):
+                rows.append(
+                    {
+                        "candidate_set": candidate_set,
+                        "cosine_threshold": cosine_threshold,
+                        "candidate_count": len(indices),
+                        "reason": reason,
+                        "gold_label": gold_label,
+                        "gold_class": (
+                            "paraphrase" if gold_label else "non_paraphrase"
+                        ),
+                        "rejections": counts[(reason, gold_label)],
+                        "counts_can_overlap": True,
+                    }
+                )
     return rows
 
 
@@ -708,9 +952,144 @@ def _write_csv(
     metadata: Mapping[str, object],
 ) -> None:
     with path.open("w", encoding="utf-8", newline="") as output_file:
-        writer = csv.DictWriter(output_file, fieldnames=list(fields))
+        writer = csv.DictWriter(
+            output_file,
+            fieldnames=list(fields),
+            lineterminator="\n",
+        )
         writer.writeheader()
         writer.writerows({**metadata, **row} for row in rows)
+
+
+def _matched_precision_plot(
+    dataset_name: str,
+    matched_rows: Sequence[Mapping[str, object]],
+    cosine_sweep_rows: Sequence[Mapping[str, object]],
+    validation_sweep_rows: Sequence[Mapping[str, object]],
+) -> str:
+    plot_path = (
+        _RESULTS_DIRECTORY
+        / f"paraphrase_ablation_{dataset_name}_validation_matched_precision.png"
+    )
+    figure, axis = plt.subplots(figsize=(8, 6))
+    colors = {
+        "cosine_only": "tab:blue",
+        "cosine_stage0": "tab:orange",
+        "cosine_stage0_nli": "tab:green",
+    }
+    markers = {0.80: "o", 0.90: "s", 0.95: "^"}
+    curve_rows = [
+        (
+            "Cosine only",
+            "tab:blue",
+            "-",
+            [
+                row
+                for row in cosine_sweep_rows
+                if row["configuration"] == "cosine_only"
+            ],
+        ),
+        (
+            "Cosine + Stage-0",
+            "tab:orange",
+            "-",
+            [
+                row
+                for row in cosine_sweep_rows
+                if row["configuration"] == "cosine_stage0"
+            ],
+        ),
+        *[
+            (
+                f"Cosine + Stage-0 + NLI (cosine {cosine_threshold:.2f})",
+                "tab:green",
+                "-" if cosine_threshold == 0.85 else "--",
+                [
+                    row
+                    for row in validation_sweep_rows
+                    if row["configuration"] == "cosine_stage0_nli"
+                    and row["cosine_threshold"] == cosine_threshold
+                ],
+            )
+            for cosine_threshold in _COSINE_THRESHOLDS
+        ],
+    ]
+    for label, color, linestyle, rows in curve_rows:
+        points = [
+            (cast(float, row["precision"]), cast(float, row["recall"]))
+            for row in rows
+            if row.get("precision") is not None and row.get("recall") is not None
+        ]
+        points.sort(key=lambda point: point[0])
+        if points:
+            axis.plot(
+                [point[0] for point in points],
+                [point[1] for point in points],
+                color=color,
+                linestyle=linestyle,
+                marker=".",
+                markersize=3,
+                label=label,
+            )
+
+    for row in matched_rows:
+        if row.get("calibration_status") != "selected":
+            continue
+        precision = row.get("validation_precision")
+        recall = row.get("validation_recall")
+        if precision is None or recall is None:
+            continue
+        configuration = cast(str, row["configuration"])
+        target = cast(float, row["precision_target"])
+        axis.scatter(
+            cast(float, precision),
+            cast(float, recall),
+            color=colors[configuration],
+            marker=markers[target],
+            edgecolors="black",
+            linewidths=0.5,
+            s=65,
+            zorder=3,
+        )
+    target_legend = [
+        Line2D(
+            [],
+            [],
+            marker=markers[target],
+            color="white",
+            markeredgecolor="black",
+            label=f"Train precision target {target:.2f}",
+        )
+        for target in _MATCHED_PRECISION_TARGETS
+    ]
+    axis.add_artist(axis.legend(handles=target_legend, loc="lower left", fontsize=8))
+    axis.set(
+        title=(
+            f"{dataset_name.upper()} validation recall vs precision\n"
+            "Train-calibrated operating points; marker shapes show precision target"
+        ),
+        xlabel="Validation precision",
+        ylabel="Validation recall",
+        xlim=(0, 1.02),
+        ylim=(0, 1.02),
+    )
+    axis.grid(True, alpha=0.25)
+    if axis.get_legend_handles_labels()[0]:
+        axis.legend(fontsize=8)
+    else:
+        axis.text(
+            0.5,
+            0.5,
+            "No validation operating points were measured",
+            ha="center",
+            va="center",
+            transform=axis.transAxes,
+        )
+    figure.tight_layout()
+    _RESULTS_DIRECTORY.mkdir(parents=True, exist_ok=True)
+    figure.savefig(plot_path, dpi=160)
+    plt.close(figure)
+    return str(plot_path)
 
 
 def _save_outputs(
@@ -724,10 +1103,15 @@ def _save_outputs(
     selected_thresholds: list[dict[str, object]],
     selected_validation_rows: list[dict[str, object]],
     validation_rows: list[dict[str, object]],
+    cosine_sweep_rows: list[dict[str, object]],
+    matched_precision_validation_rows: list[dict[str, object]],
+    matched_precision_rows: list[dict[str, object]],
     stage0_breakdown: list[dict[str, object]],
+    stage0_candidate_set_breakdown: list[dict[str, object]],
     stage0_samples: list[dict[str, object]],
     nli_scores: list[dict[str, object]],
     histogram_path: str,
+    matched_precision_plot_path: str,
     embedding_model_source: str,
     run_date: str,
     git_commit: str,
@@ -745,6 +1129,15 @@ def _save_outputs(
     rejection_path = _RESULTS_DIRECTORY / f"{prefix}_stage0_rejections.csv"
     stage0_samples_path = _RESULTS_DIRECTORY / f"{prefix}_stage0_true_paraphrases.csv"
     nli_scores_path = _RESULTS_DIRECTORY / f"{prefix}_validation_nli_scores.csv"
+    cosine_sweep_path = (
+        _RESULTS_DIRECTORY / f"{prefix}_validation_cosine_sweep.csv"
+    )
+    matched_precision_path = (
+        _RESULTS_DIRECTORY / f"{prefix}_validation_matched_precision.csv"
+    )
+    candidate_set_rejection_path = (
+        _RESULTS_DIRECTORY / f"{prefix}_stage0_candidate_set_rejections.csv"
+    )
     json_path = _RESULTS_DIRECTORY / f"{prefix}.json"
 
     common_metadata = {
@@ -837,10 +1230,70 @@ def _save_outputs(
     )
     _write_csv(
         rejection_path,
-        tuple(common_metadata) + ("split",)
+        tuple(common_metadata) + ("split", "candidate_set")
         + ("reason", "gold_label", "gold_class", "rejections", "counts_can_overlap"),
         stage0_breakdown,
+        {**validation_metadata, "candidate_set": "all_validation"},
+    )
+    _write_csv(
+        candidate_set_rejection_path,
+        tuple(common_metadata)
+        + (
+            "split",
+            "candidate_set",
+            "cosine_threshold",
+            "candidate_count",
+            "reason",
+            "gold_label",
+            "gold_class",
+            "rejections",
+            "counts_can_overlap",
+        ),
+        stage0_candidate_set_breakdown,
         validation_metadata,
+    )
+    _write_csv(
+        cosine_sweep_path,
+        tuple(common_metadata)
+        + (
+            "split",
+            "cosine_threshold",
+            "configuration",
+            "hits",
+            "true_positive",
+            "false_positive",
+            "false_negative",
+            "precision",
+            "recall",
+            "f1",
+        ),
+        cosine_sweep_rows,
+        validation_metadata,
+    )
+    _write_csv(
+        matched_precision_path,
+        tuple(common_metadata)
+        + (
+            "calibration_split",
+            "split",
+            "precision_target",
+            "configuration",
+            "calibration_status",
+            "cosine_threshold",
+            "nli_threshold",
+            "train_hits",
+            "train_precision",
+            "train_recall",
+            "validation_hits",
+            "validation_true_positive",
+            "validation_false_positive",
+            "validation_false_negative",
+            "validation_precision",
+            "validation_recall",
+            "validation_f1",
+        ),
+        matched_precision_rows,
+        {**validation_metadata, "calibration_split": "train"},
     )
     _write_csv(
         stage0_samples_path,
@@ -890,9 +1343,26 @@ def _save_outputs(
                     selected_validation_rows
                 ),
                 "validation_metrics": validation_rows,
+                "cosine_sweep_thresholds": list(_COSINE_SWEEP_THRESHOLDS),
+                "validation_cosine_sweep": cosine_sweep_rows,
+                "validation_matched_precision_sweep": (
+                    matched_precision_validation_rows
+                ),
+                "matched_precision_targets": list(_MATCHED_PRECISION_TARGETS),
+                "validation_matched_precision": matched_precision_rows,
                 "stage0_rejection_breakdown": stage0_breakdown,
+                "stage0_candidate_set_rejection_breakdown": (
+                    stage0_candidate_set_breakdown
+                ),
+                "stage0_behavior_changed_since_previous_run": False,
+                "stage0_rejection_count_population": (
+                    "The stage0_rejections CSV covers all validation examples; "
+                    "the candidate-set CSV also reports counts for cosine>=each "
+                    "swept threshold before Stage-0 filtering."
+                ),
                 "stage0_rejected_true_paraphrase_sample_count": len(stage0_samples),
                 "nli_histogram_png": Path(histogram_path).name,
+                "matched_precision_plot_png": Path(matched_precision_plot_path).name,
                 "models": {
                     "embedding_model_source": embedding_model_source,
                     "fastembed_package_version": version("fastembed"),
@@ -917,6 +1387,24 @@ def _save_outputs(
                         "Stage-0 number and negation rejection counts can overlap "
                         "when both reasons apply."
                     ),
+                    (
+                        "The original Stage-0 rejection breakdown covers the "
+                        "entire validation split, not only cosine-retrieved pairs."
+                    ),
+                    (
+                        "The expanded candidate-set breakdown labels all-validation "
+                        "and cosine-threshold candidate populations separately."
+                    ),
+                    (
+                        "Matched-precision calibration searches cosine thresholds "
+                        "0.85-0.99 and NLI thresholds 0.01-0.99 at cosine 0.85 "
+                        "and 0.95."
+                    ),
+                    (
+                        "Stage-0 guard logic is behaviorally unchanged from the "
+                        "previous evaluation; only its reason-reporting helper "
+                        "was factored out."
+                    ),
                 ],
                 "files": {
                     "train_nli_sweep_csv": calibration_path.name,
@@ -924,9 +1412,17 @@ def _save_outputs(
                     "selected_thresholds_csv": selected_path.name,
                     "validation_selected_metrics_csv": selected_validation_path.name,
                     "stage0_rejections_csv": rejection_path.name,
+                    "stage0_candidate_set_rejections_csv": (
+                        candidate_set_rejection_path.name
+                    ),
                     "stage0_true_paraphrases_csv": stage0_samples_path.name,
                     "validation_nli_scores_csv": nli_scores_path.name,
                     "nli_histograms_png": Path(histogram_path).name,
+                    "validation_cosine_sweep_csv": cosine_sweep_path.name,
+                    "validation_matched_precision_csv": matched_precision_path.name,
+                    "validation_matched_precision_plot_png": Path(
+                        matched_precision_plot_path
+                    ).name,
                 },
             },
             indent=2,
@@ -942,9 +1438,13 @@ def _save_outputs(
         "selected_thresholds_csv": str(selected_path),
         "validation_selected_metrics_csv": str(selected_validation_path),
         "stage0_rejections_csv": str(rejection_path),
+        "stage0_candidate_set_rejections_csv": str(candidate_set_rejection_path),
         "stage0_true_paraphrases_csv": str(stage0_samples_path),
         "validation_nli_scores_csv": str(nli_scores_path),
         "nli_histograms_png": histogram_path,
+        "validation_cosine_sweep_csv": str(cosine_sweep_path),
+        "validation_matched_precision_csv": str(matched_precision_path),
+        "validation_matched_precision_plot_png": matched_precision_plot_path,
     }
 
 
@@ -1088,6 +1588,37 @@ async def run_dataset_ablation(
         [not reasons for reasons in validation_reasons],
         validation_probabilities,
     )
+    train_labels = [example.label for example in train_examples]
+    train_cosine_scores = [
+        score.cosine_similarity for score in train_scores
+    ]
+    train_stage0_passes = [not reasons for reasons in train_reasons]
+    validation_labels = [example.label for example in validation_examples]
+    validation_cosine_scores = [
+        score.cosine_similarity for score in validation_scores
+    ]
+    validation_stage0_passes = [not reasons for reasons in validation_reasons]
+    cosine_sweep_rows = _cosine_validation_sweep(
+        validation_labels,
+        validation_cosine_scores,
+        validation_stage0_passes,
+    )
+    matched_precision_rows = _matched_precision_rows(
+        train_labels,
+        train_cosine_scores,
+        train_stage0_passes,
+        train_probabilities,
+        validation_labels,
+        validation_cosine_scores,
+        validation_stage0_passes,
+        validation_probabilities,
+    )
+    matched_precision_plot_path = _matched_precision_plot(
+        dataset_name,
+        matched_precision_rows,
+        cosine_sweep_rows,
+        validation_metrics,
+    )
     selected_validation_metrics = _selected_validation_rows(
         selected_thresholds,
         validation_metrics,
@@ -1097,6 +1628,11 @@ async def run_dataset_ablation(
         validation_scores,
         validation_reasons,
         dataset_name=dataset_name,
+    )
+    stage0_candidate_set_breakdown = _stage0_candidate_set_analysis(
+        validation_examples,
+        validation_scores,
+        validation_reasons,
     )
     validation_nli_scores = _nli_score_rows(
         validation_examples,
@@ -1143,10 +1679,15 @@ async def run_dataset_ablation(
         selected_thresholds=selected_thresholds,
         selected_validation_rows=selected_validation_metrics,
         validation_rows=validation_metrics,
+        cosine_sweep_rows=cosine_sweep_rows,
+        matched_precision_validation_rows=validation_metrics,
+        matched_precision_rows=matched_precision_rows,
         stage0_breakdown=stage0_breakdown,
+        stage0_candidate_set_breakdown=stage0_candidate_set_breakdown,
         stage0_samples=stage0_samples,
         nli_scores=validation_nli_scores,
         histogram_path=histogram_path,
+        matched_precision_plot_path=matched_precision_plot_path,
         embedding_model_source=model_source,
         run_date=run_date,
         git_commit=git_commit,
@@ -1159,7 +1700,11 @@ async def run_dataset_ablation(
         "validation_count": len(validation_examples),
         "selected_thresholds": selected_thresholds,
         "validation_metrics": validation_metrics,
+        "validation_cosine_sweep": cosine_sweep_rows,
+        "validation_matched_precision": matched_precision_rows,
         "stage0_rejection_breakdown": stage0_breakdown,
+        "stage0_candidate_set_rejection_breakdown": stage0_candidate_set_breakdown,
+        "stage0_behavior_changed_since_previous_run": False,
         "stage0_rejected_true_paraphrase_sample_count": len(stage0_samples),
         "score_cache_counts": cache_counts,
         "files": files,
