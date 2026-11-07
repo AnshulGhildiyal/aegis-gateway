@@ -540,6 +540,94 @@ same-intent hits and highest query recall among these four settings. The
 queries. These are Banking77 test measurements for frozen thresholds, not
 threshold-selection evidence; no thresholds were changed based on them.
 
+## 2026-11-07 — Banking77 train-LOO calibration and test evaluation
+
+### Protocol and run details
+
+- Dataset: Hugging Face `PolyAI/banking77`; 10,003 train rows and 3,080 test
+  rows.
+- Calibration: each train query was matched against the remaining train rows;
+  its own row was excluded. The two nearest candidates were considered.
+- Cosine + Stage-0 calibration swept thresholds 0.85–0.99 by 0.01.
+  Stage-0 + bidirectional NLI calibration used cosine thresholds 0.85, 0.90,
+  and 0.95 and NLI thresholds 0.01–0.99 by 0.01. For each configuration and
+  precision target, the chosen train operating point maximized recall subject
+  to the target, breaking ties by higher cosine and then NLI threshold.
+- Test use: the test split was used only to compute final metrics, the cosine
+  sweep, and the false-positive audit. It did not affect threshold choices.
+  In a wrong-intent hit, the retrieved training query's intent differs from the
+  test query's intent. Precision is same-intent hits divided by hits; recall is
+  same-intent hits divided by all 3,080 test queries.
+- Embeddings: `BAAI/bge-small-en-v1.5`, FastEmbed 0.9.1. NLI:
+  `Xenova/nli-deberta-v3-small`, revision
+  `6bc2a55c7c0f7e2bc68de60bb248e523e2612abb`.
+- Run timestamp: `2026-11-07T10:44:30.489730+00:00`. Git HEAD:
+  `b5be4de57003b474d59f38671b503d0e836a83d7`; the worktree contained the
+  evaluator and documentation changes. The first run computed embeddings and
+  NLI scores; the report refresh reused both split embedding caches and all
+  19,713 cached NLI pair scores (14,921 train, 4,792 test).
+- Artifacts:
+  [matched-precision CSV](../benchmarks/results/banking77_loo_train_calibrated_test_matched_precision.csv),
+  [test cosine-sweep CSV](../benchmarks/results/banking77_loo_train_calibrated_test_cosine_sweep.csv),
+  [40-row false-positive audit CSV](../benchmarks/results/banking77_loo_train_calibrated_test_cosine_stage0_092_false_positives.csv),
+  [recall-vs-precision plot](../benchmarks/results/banking77_loo_train_calibrated_test_recall_vs_precision.png),
+  and [JSON metadata](../benchmarks/results/banking77_loo_train_calibrated_test.json).
+
+### Train-selected operating points and test results
+
+Train precision/recall are calibration measurements; test precision/recall are
+the held-out evaluation. Hits include same- and wrong-intent retrievals.
+
+| Target precision | Configuration | Train-selected cosine | Train-selected NLI | Train precision | Train recall | Test hits | Test FP | Test precision | Test recall |
+|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| 0.95 | Cosine + Stage-0 | 0.91 | — | 0.9515 | 0.6930 | 2,340 | 101 | 0.9568 | 0.7269 |
+| 0.95 | Stage-0 + NLI | 0.85 | 0.06 | 0.9508 | 0.6819 | 2,294 | 110 | 0.9520 | 0.7091 |
+| 0.97 | Cosine + Stage-0 | 0.95 | — | 0.9708 | 0.5054 | 1,724 | 48 | 0.9722 | 0.5442 |
+| 0.97 | Stage-0 + NLI | 0.95 | 0.01 | 0.9712 | 0.4926 | 1,687 | 46 | 0.9727 | 0.5328 |
+| 0.98 | Cosine + Stage-0 | 0.97 | — | 0.9816 | 0.3251 | 1,132 | 26 | 0.9770 | 0.3591 |
+| 0.98 | Stage-0 + NLI | 0.95 | 0.99 | 0.9802 | 0.2873 | 945 | 23 | 0.9757 | 0.2994 |
+
+### Test cosine sweep
+
+Each cell is hits / false positives / precision / recall. The cosine-only
+configuration bypasses Stage-0; cosine + Stage-0 applies the regex guard.
+
+| Cosine | Cosine only: hits / FP / P / R | Cosine + Stage-0: hits / FP / P / R |
+|---:|---|---|
+| 0.85 | 3,015 / 201 / 0.9333 / 0.9136 | 2,587 / 160 / 0.9382 / 0.7880 |
+| 0.86 | 2,993 / 194 / 0.9352 / 0.9088 | 2,573 / 153 / 0.9405 / 0.7857 |
+| 0.87 | 2,967 / 184 / 0.9380 / 0.9036 | 2,558 / 146 / 0.9429 / 0.7831 |
+| 0.88 | 2,929 / 177 / 0.9396 / 0.8935 | 2,531 / 139 / 0.9451 / 0.7766 |
+| 0.89 | 2,875 / 166 / 0.9423 / 0.8795 | 2,486 / 128 / 0.9485 / 0.7656 |
+| 0.90 | 2,790 / 142 / 0.9491 / 0.8597 | 2,418 / 114 / 0.9529 / 0.7481 |
+| 0.91 | 2,694 / 127 / 0.9529 / 0.8334 | 2,340 / 101 / 0.9568 / 0.7269 |
+| 0.92 | 2,553 / 110 / 0.9569 / 0.7932 | 2,234 / 84 / 0.9624 / 0.6981 |
+| 0.93 | 2,386 / 90 / 0.9623 / 0.7455 | 2,111 / 71 / 0.9664 / 0.6623 |
+| 0.94 | 2,155 / 73 / 0.9661 / 0.6760 | 1,925 / 58 / 0.9699 / 0.6062 |
+| 0.95 | 1,901 / 61 / 0.9679 / 0.5974 | 1,724 / 48 / 0.9722 / 0.5442 |
+| 0.96 | 1,580 / 44 / 0.9722 / 0.4987 | 1,441 / 37 / 0.9743 / 0.4558 |
+| 0.97 | 1,215 / 31 / 0.9745 / 0.3844 | 1,132 / 26 / 0.9770 / 0.3591 |
+| 0.98 | 783 / 13 / 0.9834 / 0.2500 | 744 / 11 / 0.9852 / 0.2380 |
+| 0.99 | 314 / 5 / 0.9841 / 0.1003 | 304 / 4 / 0.9868 / 0.0974 |
+
+### False-positive audit, insights, and actions
+
+- At cosine + Stage-0 0.92 there were 84 wrong-intent hits; 40 were sampled
+  with fixed seed 42 and exported with both texts, intent labels, cosine score,
+  and both directional NLI scores. The test FP count is not a calibration
+  statistic.
+- On this run's chosen matched-precision points, Stage-0 + NLI yielded less
+  test recall than cosine + Stage-0 at each target. Its test precision also
+  fell below the 0.98 calibration target for both configurations (0.9770 and
+  0.9757). Train-calibrated precision is not a guarantee of test precision.
+- Raising cosine consistently reduced false positives and recall. At cosine
+  0.92, Stage-0 rejected 319 hits relative to cosine-only and reduced wrong-
+  intent hits from 110 to 84, while test recall fell from 0.7932 to 0.6981.
+- Follow-up: keep the test set untouched for future threshold choices; assess
+  calibration stability and NLI value using another train-only resampling or
+  cross-validation protocol before changing the operating points. Review the
+  sampled audit cases before modifying Stage-0 or the NLI threshold policy.
+
 ## Future result entries
 
 For each new output, append another dated section with the exact command or

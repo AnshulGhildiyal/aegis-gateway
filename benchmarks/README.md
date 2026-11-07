@@ -95,6 +95,27 @@ Use `--limit N` for a smoke run; omit it for the full splits. Outputs are saved
 to `benchmarks/results/banking77_frozen_config_metrics.csv` and
 `benchmarks/results/banking77_frozen_config_top_confusions.csv`.
 
+### Banking77 train-LOO calibration
+
+This evaluator selects thresholds using only training queries, with each query
+compared against the remaining training examples (self-match excluded). It
+reports the test cosine sweep for cosine-only and cosine + Stage-0, then
+compares train-selected operating points at precision targets 0.95, 0.97, and
+0.98 for cosine + Stage-0 and Stage-0 + bidirectional NLI. NLI thresholds are
+selected on train leave-one-out data at cosine thresholds 0.85, 0.90, and 0.95.
+Test examples are used only for final evaluation and the 40-row false-positive
+audit sample at cosine + Stage-0 0.92. Embeddings and directional NLI scores
+are cached across runs.
+
+```bash
+uv run --group benchmark python -m benchmarks.evaluate_banking77_loo
+```
+
+The runner writes matched-precision and cosine-sweep CSVs, a sampled
+false-positive audit CSV, a recall-vs-precision PNG, and JSON run metadata under
+`benchmarks/results/`. Its threshold selection and test results are logged in
+[docs/results.md](../docs/results.md) after execution.
+
 ## LMSYS manual labeling sample
 
 The LMSYS-Chat-1M repository requires agreeing to its Hugging Face access terms.
