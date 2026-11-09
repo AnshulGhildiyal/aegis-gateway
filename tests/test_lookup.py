@@ -70,10 +70,10 @@ def cache_entry(user_content: str, similarity: float) -> CacheEntry:
     )
 
 
-def key() -> CacheKey:
+def key(tenant_id: str = "tenant") -> CacheKey:
     return CacheKey(
         system_prompt_hash="system",
-        tenant_id="tenant",
+        tenant_id=tenant_id,
         embedding_model_version="embed-v1",
         target_llm="model",
         temperature=0.0,
@@ -91,6 +91,8 @@ async def test_lookup_passes_candidates_through_all_three_stages() -> None:
         cache,
         reranker,
         cosine_threshold=0.8,
+        stage0_enabled=True,
+        nli_enabled=True,
         metrics_hook=metrics.append,
     )
 
@@ -122,6 +124,7 @@ async def test_cosine_rejection_prevents_stage0_and_nli() -> None:
         cache,
         reranker,
         cosine_threshold=0.8,
+        stage0_enabled=True,
         metrics_hook=metrics.append,
     )
 
@@ -142,6 +145,8 @@ async def test_stage0_rejection_prevents_nli() -> None:
         cache,
         reranker,
         cosine_threshold=0.8,
+        stage0_enabled=True,
+        nli_enabled=True,
         metrics_hook=metrics.append,
     )
 
@@ -165,6 +170,8 @@ async def test_lookup_returns_miss_when_all_nli_candidates_fail() -> None:
         cache,
         reranker,
         cosine_threshold=0.8,
+        stage0_enabled=True,
+        nli_enabled=True,
         metrics_hook=metrics.append,
     )
 
@@ -215,7 +222,13 @@ async def test_only_top_two_candidates_reach_later_stages() -> None:
             "second rank candidate": False,
         }
     )
-    lookup = SemanticLookup(cache, reranker, cosine_threshold=0.8)
+    lookup = SemanticLookup(
+        cache,
+        reranker,
+        cosine_threshold=0.8,
+        stage0_enabled=True,
+        nli_enabled=True,
+    )
 
     result = await lookup.lookup("highest rank candidate", key())
 
@@ -231,6 +244,57 @@ async def test_only_top_two_candidates_reach_later_stages() -> None:
 def test_invalid_cosine_threshold_is_rejected(threshold: float) -> None:
     with pytest.raises(ValueError, match="cosine_threshold"):
         SemanticLookup(FakeCache([]), FakeReranker({}), cosine_threshold=threshold)
+
+
+async def test_default_lookup_uses_cosine_only() -> None:
+    candidate = cache_entry("Wait 5 days.", 0.96)
+    reranker = FakeReranker({})
+    metrics: list[LookupMetric] = []
+    lookup = SemanticLookup(
+        FakeCache([candidate]),
+        reranker,
+        metrics_hook=metrics.append,
+    )
+
+    result = await lookup.lookup("Wait 15 days.", key())
+
+    assert result.entry is candidate
+    assert reranker.candidates == []
+    assert [(metric.stage, metric.outcome) for metric in metrics] == [
+        ("cosine", "accepted")
+    ]
+
+
+async def test_cosine_threshold_can_be_overridden_per_tenant() -> None:
+    candidate = cache_entry("A policy applies.", 0.9)
+    lookup = SemanticLookup(
+        FakeCache([candidate]),
+        cosine_threshold=0.95,
+        tenant_cosine_thresholds={"lower-threshold": 0.85},
+    )
+
+    default_tenant = await lookup.lookup("A policy applies.", key())
+    configured_tenant = await lookup.lookup(
+        "A policy applies.",
+        key("lower-threshold"),
+    )
+
+    assert not default_tenant.hit
+    assert configured_tenant.entry is candidate
+
+
+def test_nli_cannot_be_enabled_without_a_reranker() -> None:
+    with pytest.raises(ValueError, match="reranker is required"):
+        SemanticLookup(FakeCache([]), nli_enabled=True)
+
+
+@pytest.mark.parametrize("threshold", [-1.01, 1.01, float("nan"), float("inf")])
+def test_invalid_tenant_cosine_threshold_is_rejected(threshold: float) -> None:
+    with pytest.raises(ValueError, match="cosine_threshold"):
+        SemanticLookup(
+            FakeCache([]),
+            tenant_cosine_thresholds={"tenant": threshold},
+        )
 
 
 async def test_metrics_hook_error_is_not_silently_discarded() -> None:

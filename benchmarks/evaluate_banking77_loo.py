@@ -1,5 +1,6 @@
 """Banking77 leave-one-out train calibration and frozen test evaluation."""
 
+import argparse
 import asyncio
 import csv
 import hashlib
@@ -54,16 +55,19 @@ NliPair = tuple[str, str]
 NliScores = dict[str, tuple[float, float]]
 
 
-def _arguments() -> None:
-    import argparse
-
+def _arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
             "Calibrate Banking77 thresholds with train leave-one-out and "
             "evaluate only the selected thresholds on test."
         )
     )
-    parser.parse_args()
+    parser.add_argument(
+        "--cached-scores-only",
+        action="store_true",
+        help="Fail if cached embeddings or NLI scores are missing; run no models.",
+    )
+    return parser.parse_args()
 
 
 def _pair_key(candidate: str, query: str) -> str:
@@ -126,6 +130,34 @@ async def _cached_embeddings(
             vectors=vectors,
         )
     return vectors, False
+
+
+def _load_cached_embeddings(
+    examples: Sequence[IntentExample],
+    *,
+    split: str,
+) -> np.ndarray:
+    path = _vector_cache_path(split, _EMBEDDING_MODEL)
+    if not path.exists():
+        raise FileNotFoundError(f"cached {split} embeddings not found: {path}")
+    expected_text_keys = np.asarray(
+        [
+            hashlib.sha256(example.text.encode("utf-8")).hexdigest()
+            for example in examples
+        ]
+    )
+    with np.load(path, allow_pickle=False) as archive:
+        cached_model = str(archive["model_name"].item())
+        cached_text_keys = archive["text_keys"]
+        vectors = archive["vectors"]
+    if cached_model != _EMBEDDING_MODEL or not np.array_equal(
+        cached_text_keys,
+        expected_text_keys,
+    ):
+        raise ValueError(f"cached {split} embeddings do not match this dataset")
+    if vectors.ndim != 2 or vectors.shape[0] != len(examples):
+        raise ValueError(f"invalid cached {split} embeddings at {path}")
+    return _normalize_vectors(vectors)
 
 
 def _normalize_vectors(vectors: np.ndarray) -> np.ndarray:
@@ -263,6 +295,33 @@ async def _ensure_nli_scores(
     return reused_count, len(missing)
 
 
+def _require_cached_nli_scores(
+    queries: Sequence[IntentExample],
+    candidate_examples: Sequence[IntentExample],
+    candidate_rows: CandidateRows,
+    scores: Mapping[str, tuple[float, float]],
+) -> int:
+    required_keys = {
+        _pair_key(
+            candidate_examples[candidate_index].text,
+            queries[query_index].text,
+        )
+        for query_index, candidates in enumerate(candidate_rows)
+        for candidate_index, similarity in candidates
+        if similarity >= _NLI_COSINE_THRESHOLDS[0]
+        and stage0_guard(
+            candidate_examples[candidate_index].text,
+            queries[query_index].text,
+        )
+    }
+    missing_count = len(required_keys - scores.keys())
+    if missing_count:
+        raise RuntimeError(
+            f"cached-score-only run is missing {missing_count} NLI score pairs"
+        )
+    return len(required_keys)
+
+
 def _score_rows(
     query_examples: Sequence[IntentExample],
     candidate_examples: Sequence[IntentExample],
@@ -294,6 +353,7 @@ def _evaluate(
     *,
     cosine_threshold: float,
     nli_threshold: float | None = None,
+    stage0_enabled: bool = True,
 ) -> dict[str, int | float | None]:
     hits = 0
     false_positives = 0
@@ -301,7 +361,7 @@ def _evaluate(
         for candidate in candidates:
             if cast(float, candidate["cosine"]) < cosine_threshold:
                 continue
-            if not cast(bool, candidate["stage0_pass"]):
+            if stage0_enabled and not cast(bool, candidate["stage0_pass"]):
                 continue
             if nli_threshold is not None:
                 probabilities = candidate["nli_scores"]
@@ -330,19 +390,21 @@ def _calibrate(
 ) -> list[dict[str, object]]:
     operating_points: list[dict[str, object]] = []
     for cosine_threshold in _COSINE_THRESHOLDS:
-        metrics = _evaluate(
-            train,
-            train_rows,
-            cosine_threshold=cosine_threshold,
-        )
-        operating_points.append(
-            {
-                "configuration": "cosine_stage0",
-                "cosine_threshold": cosine_threshold,
-                "nli_threshold": None,
-                **metrics,
-            }
-        )
+        for configuration in ("cosine_only", "cosine_stage0"):
+            metrics = _evaluate(
+                train,
+                train_rows,
+                cosine_threshold=cosine_threshold,
+                stage0_enabled=configuration == "cosine_stage0",
+            )
+            operating_points.append(
+                {
+                    "configuration": configuration,
+                    "cosine_threshold": cosine_threshold,
+                    "nli_threshold": None,
+                    **metrics,
+                }
+            )
     for cosine_threshold in _NLI_COSINE_THRESHOLDS:
         for nli_threshold in _NLI_THRESHOLDS:
             metrics = _evaluate(
@@ -362,7 +424,7 @@ def _calibrate(
 
     selected_rows: list[dict[str, object]] = []
     for target in _PRECISION_TARGETS:
-        for configuration in ("cosine_stage0", "stage0_nli"):
+        for configuration in ("cosine_only", "cosine_stage0", "stage0_nli"):
             eligible = [
                 row
                 for row in operating_points
@@ -422,6 +484,7 @@ def _test_selected_metrics(
                 test_rows,
                 cosine_threshold=cast(float, selected["cosine_threshold"]),
                 nli_threshold=cast(float | None, selected.get("nli_threshold")),
+                stage0_enabled=selected["configuration"] != "cosine_only",
             )
             result.update(
                 {f"test_{key}": value for key, value in metrics.items()}
@@ -618,11 +681,11 @@ def _save_report(
             cast(float, row["test_precision"]),
             cast(float, row["test_recall"]),
             marker=target_markers[cast(float, row["precision_target"])],
-            color=(
-                "tab:green"
-                if row["configuration"] == "stage0_nli"
-                else "tab:orange"
-            ),
+            color={
+                "cosine_only": "tab:blue",
+                "cosine_stage0": "tab:orange",
+                "stage0_nli": "tab:green",
+            }[cast(str, row["configuration"])],
             edgecolors="black",
             zorder=3,
         )
@@ -726,7 +789,7 @@ def _save_report(
     }
 
 
-async def _run() -> dict[str, object]:
+async def _run(*, cached_scores_only: bool = False) -> dict[str, object]:
     train, test = _read_splits(None)
     run_date = datetime.now(UTC).isoformat()
     git_commit = subprocess.run(
@@ -736,14 +799,19 @@ async def _run() -> dict[str, object]:
         capture_output=True,
         text=True,
     ).stdout.strip()
-    embedder = FastEmbedder()
-    scorer = OnnxNliScorer()
+    embedder = None if cached_scores_only else FastEmbedder()
+    scorer = None if cached_scores_only else OnnxNliScorer()
     try:
-        train_vectors, train_vectors_reused = await _cached_embeddings(
-            train,
-            split="train",
-            embedder=embedder,
-        )
+        if cached_scores_only:
+            train_vectors = _load_cached_embeddings(train, split="train")
+            train_vectors_reused = True
+        else:
+            assert embedder is not None
+            train_vectors, train_vectors_reused = await _cached_embeddings(
+                train,
+                split="train",
+                embedder=embedder,
+            )
         train_candidates = _top_candidates(
             train_vectors,
             train_vectors,
@@ -751,14 +819,24 @@ async def _run() -> dict[str, object]:
         )
         nli_cache_path = _RESULTS_DIRECTORY / "banking77_nli_pair_scores.jsonl"
         nli_scores = _load_nli_cache(nli_cache_path)
-        train_nli_reused, train_nli_computed = await _ensure_nli_scores(
-            train,
-            train,
-            train_candidates,
-            scorer=scorer,
-            score_cache=nli_scores,
-            cache_path=nli_cache_path,
-        )
+        if cached_scores_only:
+            train_nli_reused = _require_cached_nli_scores(
+                train,
+                train,
+                train_candidates,
+                nli_scores,
+            )
+            train_nli_computed = 0
+        else:
+            assert scorer is not None
+            train_nli_reused, train_nli_computed = await _ensure_nli_scores(
+                train,
+                train,
+                train_candidates,
+                scorer=scorer,
+                score_cache=nli_scores,
+                cache_path=nli_cache_path,
+            )
         train_rows = _score_rows(
             train,
             train,
@@ -767,24 +845,39 @@ async def _run() -> dict[str, object]:
         )
         selected = _calibrate(train, train_rows)
 
-        test_vectors, test_vectors_reused = await _cached_embeddings(
-            test,
-            split="test",
-            embedder=embedder,
-        )
+        if cached_scores_only:
+            test_vectors = _load_cached_embeddings(test, split="test")
+            test_vectors_reused = True
+        else:
+            assert embedder is not None
+            test_vectors, test_vectors_reused = await _cached_embeddings(
+                test,
+                split="test",
+                embedder=embedder,
+            )
         test_candidates = _top_candidates(
             test_vectors,
             train_vectors,
             leave_one_out=False,
         )
-        test_nli_reused, test_nli_computed = await _ensure_nli_scores(
-            test,
-            train,
-            test_candidates,
-            scorer=scorer,
-            score_cache=nli_scores,
-            cache_path=nli_cache_path,
-        )
+        if cached_scores_only:
+            test_nli_reused = _require_cached_nli_scores(
+                test,
+                train,
+                test_candidates,
+                nli_scores,
+            )
+            test_nli_computed = 0
+        else:
+            assert scorer is not None
+            test_nli_reused, test_nli_computed = await _ensure_nli_scores(
+                test,
+                train,
+                test_candidates,
+                scorer=scorer,
+                score_cache=nli_scores,
+                cache_path=nli_cache_path,
+            )
         test_rows: list[list[dict[str, object]]] = []
         for query_index, candidates in enumerate(test_candidates):
             row: list[dict[str, object]] = []
@@ -848,6 +941,14 @@ async def _run() -> dict[str, object]:
                 "test_computed": test_nli_computed,
                 "cache_path": nli_cache_path.name,
             },
+            "cached_scores_only": cached_scores_only,
+            "model_inference_performed": not cached_scores_only
+            and (
+                train_nli_computed > 0
+                or test_nli_computed > 0
+                or not train_vectors_reused
+                or not test_vectors_reused
+            ),
             "cosine_cache": "persistent split-specific compressed NumPy files",
             "test_split_used_for_threshold_choice": False,
         }
@@ -875,14 +976,22 @@ async def _run() -> dict[str, object]:
             "files": files,
         }
     finally:
-        await scorer.close()
-        await embedder.close()
+        if scorer is not None:
+            await scorer.close()
+        if embedder is not None:
+            await embedder.close()
 
 
 def main() -> None:
     """Run Banking77 train-LOO calibration and test-only reporting."""
-    _arguments()
-    print(json.dumps(asyncio.run(_run()), indent=2, sort_keys=True))
+    args = _arguments()
+    print(
+        json.dumps(
+            asyncio.run(_run(cached_scores_only=args.cached_scores_only)),
+            indent=2,
+            sort_keys=True,
+        )
+    )
 
 
 if __name__ == "__main__":

@@ -634,3 +634,49 @@ For each new output, append another dated section with the exact command or
 notebook, dataset revision/split, sample count, label definition, model versions,
 thresholds, measured results, derived calculations, and any issues/actions.
 Preserve previous entries so changes between runs can be compared honestly.
+
+## 2026-11-09 — Banking77 cosine-only matched-precision extension
+
+### Protocol and cache use
+
+- Dataset and split protocol: the existing 10,003-row Banking77 train split was
+  calibrated by leave-one-out, with each train query excluded from its own
+  candidate set; selected thresholds were evaluated on the existing 3,080-row
+  test split. Test labels did not affect threshold choice.
+- Added cosine-only operating points at train precision targets 0.95, 0.97,
+  and 0.98. This configuration applies neither Stage-0 nor NLI. Existing
+  cosine + Stage-0 and Stage-0 + NLI results remain in the same CSV and plot.
+- Run command:
+  `uv run --group benchmark python -m benchmarks.evaluate_banking77_loo --cached-scores-only`.
+  The strict mode instantiated no embedding or NLI models and performed no
+  model inference. It validated and reused both embedding caches and all
+  19,713 required NLI pair scores (14,921 train and 4,792 test).
+- Embedding model: `BAAI/bge-small-en-v1.5`, FastEmbed 0.9.1. NLI model:
+  `Xenova/nli-deberta-v3-small`, revision
+  `6bc2a55c7c0f7e2bc68de60bb248e523e2612abb`.
+- Run timestamp: `2026-11-09T13:00:34.554540+00:00`. Git HEAD recorded:
+  `b5be4de57003b474d59f38671b503d0e836a83d7`; uncommitted lookup, benchmark,
+  and documentation changes were present.
+- Artifacts:
+  [matched-precision CSV](../benchmarks/results/banking77_loo_train_calibrated_test_matched_precision.csv),
+  [recall-vs-precision PNG](../benchmarks/results/banking77_loo_train_calibrated_test_recall_vs_precision.png),
+  and [JSON metadata](../benchmarks/results/banking77_loo_train_calibrated_test.json).
+  See the [Phase 1 summary](./phase1_summary.md) for cross-dataset matched
+  results.
+
+### Cosine-only matched points
+
+| Train precision target | Selected train LOO cosine threshold | Train precision | Train recall | Test hits | Test precision | Test recall |
+|---:|---:|---:|---:|---:|---:|---:|
+| 0.95 | 0.91 | 0.9512 | 0.8278 | 2,694 | 0.9529 | 0.8334 |
+| 0.97 | 0.95 | 0.9718 | 0.5725 | 1,901 | 0.9679 | 0.5974 |
+| 0.98 | 0.97 | 0.9818 | 0.3558 | 1,215 | 0.9745 | 0.3844 |
+
+### Finding
+
+Cosine-only provides more Banking77 test recall than the corresponding
+cosine + Stage-0 or Stage-0 + NLI point at each target, while the 0.98
+train-calibrated threshold does not maintain 0.98 precision on test. This is
+one reason to expose a per-tenant threshold and keep the additional filters
+available but disabled by default; it is not evidence that cosine-only is safe
+for every tenant or prompt domain.

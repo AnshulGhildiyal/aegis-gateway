@@ -20,7 +20,10 @@ from benchmarks.evaluate_banking77_loo import (
     _cached_embeddings,
     _calibrate,
     _ensure_nli_scores,
+    _evaluate,
     _load_nli_cache,
+    _require_cached_nli_scores,
+    _test_selected_metrics,
     _top_candidates,
 )
 from benchmarks.evaluation import IntentExample
@@ -208,8 +211,78 @@ def test_leave_one_out_calibration_uses_only_train_rows() -> None:
 
     selected = _calibrate(train, rows)
 
-    assert len(selected) == 6
+    assert len(selected) == 9
     assert all(row["calibration_status"] == "unreachable" for row in selected)
+    assert {row["configuration"] for row in selected} == {
+        "cosine_only",
+        "cosine_stage0",
+        "stage0_nli",
+    }
+
+
+def test_cosine_only_evaluation_does_not_apply_stage0_or_nli() -> None:
+    examples = [IntentExample("wait 15 days", "intent")]
+    rows = [
+        [
+            {
+                "cosine": 0.96,
+                "stage0_pass": False,
+                "nli_scores": None,
+                "candidate_intent": "intent",
+            }
+        ]
+    ]
+
+    metrics = _evaluate(
+        examples,
+        rows,
+        cosine_threshold=0.95,
+        stage0_enabled=False,
+    )
+
+    assert metrics["hits"] == 1
+    assert metrics["false_positives"] == 0
+    assert metrics["recall"] == 1.0
+
+
+def test_cosine_only_calibration_and_test_metrics_are_selected() -> None:
+    examples = [IntentExample("same intent query", "intent")]
+    rows = [
+        [
+            {
+                "cosine": 0.91,
+                "stage0_pass": False,
+                "nli_scores": None,
+                "candidate_intent": "intent",
+            }
+        ]
+    ]
+
+    selected = _calibrate(examples, rows)
+    test_selected = _test_selected_metrics(selected, examples, rows)
+    cosine_results = [
+        row for row in test_selected if row["configuration"] == "cosine_only"
+    ]
+
+    assert len(cosine_results) == 3
+    assert all(row["calibration_status"] == "selected" for row in cosine_results)
+    assert all(row["test_hits"] == 1 for row in cosine_results)
+    assert all(row["test_precision"] == 1.0 for row in cosine_results)
+    assert all(row["test_recall"] == 1.0 for row in cosine_results)
+
+
+def test_cached_nli_verification_fails_instead_of_running_inference() -> None:
+    queries = [IntentExample("Wait 15 days.", "intent")]
+    candidates = [IntentExample("Wait 15 days.", "intent")]
+    candidate_rows = [[(0, 0.96)]]
+
+    with pytest.raises(RuntimeError, match="missing 1 NLI score pairs"):
+        _require_cached_nli_scores(
+            queries,
+            candidates,
+            candidate_rows,
+            {},
+        )
 
 
 def test_cached_embeddings_are_reused_without_calling_embedder(

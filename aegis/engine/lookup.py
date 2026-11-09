@@ -1,7 +1,7 @@
-"""Three-stage semantic cache lookup orchestration."""
+"""Configurable semantic cache lookup orchestration."""
 
 import math
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 from typing import Literal, Protocol
 
@@ -10,6 +10,7 @@ from aegis.engine.regex_guard import stage0_guard
 from aegis.storage.cache import CacheEntry, CacheKey, SemanticCache
 
 _MAX_CANDIDATES = 2
+_DEFAULT_COSINE_THRESHOLD = 0.95
 
 
 class CandidateCache(Protocol):
@@ -63,30 +64,40 @@ class LookupResult:
 
     @property
     def hit(self) -> bool:
-        """Whether the complete three-stage lookup accepted a cache entry."""
+        """Whether the enabled lookup checks accepted a cache entry."""
         return self.entry is not None
 
 
 class SemanticLookup:
-    """Apply vector retrieval, Stage-0 checks, and bidirectional NLI in order."""
+    """Apply cosine matching with optional Stage-0 and bidirectional NLI checks."""
 
     def __init__(
         self,
         cache: CandidateCache | SemanticCache,
-        reranker: CandidateReranker | NliReranker,
+        reranker: CandidateReranker | NliReranker | None = None,
         *,
-        cosine_threshold: float,
+        cosine_threshold: float = _DEFAULT_COSINE_THRESHOLD,
+        tenant_cosine_thresholds: Mapping[str, float] | None = None,
+        stage0_enabled: bool = False,
+        nli_enabled: bool = False,
         metrics_hook: MetricHook | None = None,
     ) -> None:
-        if not math.isfinite(cosine_threshold) or not -1 <= cosine_threshold <= 1:
-            raise ValueError("cosine_threshold must be between -1 and 1")
+        self._validate_threshold(cosine_threshold)
+        tenant_thresholds = dict(tenant_cosine_thresholds or {})
+        for threshold in tenant_thresholds.values():
+            self._validate_threshold(threshold)
+        if nli_enabled and reranker is None:
+            raise ValueError("reranker is required when nli_enabled is true")
         self._cache = cache
         self._reranker = reranker
         self._cosine_threshold = cosine_threshold
+        self._tenant_cosine_thresholds = tenant_thresholds
+        self._stage0_enabled = stage0_enabled
+        self._nli_enabled = nli_enabled
         self._metrics_hook = metrics_hook
 
     async def lookup(self, user_content: str, key: CacheKey) -> LookupResult:
-        """Return the first highest-cosine candidate accepted by all three stages."""
+        """Return the best candidate accepted by the enabled lookup checks."""
         retrieved = await self._cache.search(
             user_content=user_content,
             key=key,
@@ -108,8 +119,12 @@ class SemanticLookup:
             return LookupResult(entry=None)
 
         cosine_candidates: list[tuple[int, CacheEntry]] = []
+        threshold = self._tenant_cosine_thresholds.get(
+            key.tenant_id,
+            self._cosine_threshold,
+        )
         for rank, candidate in enumerate(candidates, start=1):
-            passed = candidate.similarity >= self._cosine_threshold
+            passed = candidate.similarity >= threshold
             self._emit(
                 LookupMetric(
                     stage="cosine",
@@ -123,20 +138,27 @@ class SemanticLookup:
 
         guarded_candidates: list[tuple[int, CacheEntry]] = []
         for rank, candidate in cosine_candidates:
-            passed = stage0_guard(candidate.user_content, user_content)
-            self._emit(
-                LookupMetric(
-                    stage="stage0",
-                    outcome="accepted" if passed else "rejected",
-                    candidate_rank=rank,
-                    cosine_similarity=candidate.similarity,
+            if self._stage0_enabled:
+                passed = stage0_guard(candidate.user_content, user_content)
+                self._emit(
+                    LookupMetric(
+                        stage="stage0",
+                        outcome="accepted" if passed else "rejected",
+                        candidate_rank=rank,
+                        cosine_similarity=candidate.similarity,
+                    )
                 )
-            )
+            else:
+                passed = True
             if passed:
                 guarded_candidates.append((rank, candidate))
         if not guarded_candidates:
             return LookupResult(entry=None)
+        if not self._nli_enabled:
+            return LookupResult(entry=guarded_candidates[0][1])
 
+        if self._reranker is None:
+            raise RuntimeError("NLI is enabled without a reranker")
         candidate_ranks = {
             id(candidate): rank for rank, candidate in guarded_candidates
         }
@@ -170,6 +192,11 @@ class SemanticLookup:
             if decision.accepted:
                 return LookupResult(entry=decision.candidate)
         return LookupResult(entry=None)
+
+    @staticmethod
+    def _validate_threshold(threshold: float) -> None:
+        if not math.isfinite(threshold) or not -1 <= threshold <= 1:
+            raise ValueError("cosine_threshold must be between -1 and 1")
 
     def _emit(self, metric: LookupMetric) -> None:
         if self._metrics_hook is not None:

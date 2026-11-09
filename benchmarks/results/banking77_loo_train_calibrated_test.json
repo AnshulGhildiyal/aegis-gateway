@@ -1,4 +1,5 @@
 {
+  "cached_scores_only": true,
   "cosine_cache": "persistent split-specific compressed NumPy files",
   "cosine_sweep_thresholds": [
     0.85,
@@ -32,8 +33,24 @@
     "matched_precision_csv": "banking77_loo_train_calibrated_test_matched_precision.csv",
     "recall_vs_precision_png": "banking77_loo_train_calibrated_test_recall_vs_precision.png"
   },
-  "git_commit": "b5be4de57003b474d59f38671b503d0e836a83d7",
+  "git_commit": "b94614681743c1f9d5eb22abc53b12e97dc116fa",
   "matched_precision_results": [
+    {
+      "calibration_status": "selected",
+      "configuration": "cosine_only",
+      "cosine_threshold": 0.91,
+      "nli_threshold": null,
+      "precision_target": 0.95,
+      "test_false_positives": 127,
+      "test_hits": 2694,
+      "test_precision": 0.9528582034149963,
+      "test_recall": 0.8334415584415584,
+      "test_same_intent_hits": 2567,
+      "train_false_positives": 425,
+      "train_hits": 8705,
+      "train_precision": 0.9511774842044802,
+      "train_recall": 0.8277516744976507
+    },
     {
       "calibration_status": "selected",
       "configuration": "cosine_stage0",
@@ -65,6 +82,22 @@
       "train_hits": 7174,
       "train_precision": 0.9507945358238082,
       "train_recall": 0.6818954313705888
+    },
+    {
+      "calibration_status": "selected",
+      "configuration": "cosine_only",
+      "cosine_threshold": 0.95,
+      "nli_threshold": null,
+      "precision_target": 0.97,
+      "test_false_positives": 61,
+      "test_hits": 1901,
+      "test_precision": 0.9679116254602841,
+      "test_recall": 0.5974025974025974,
+      "test_same_intent_hits": 1840,
+      "train_false_positives": 166,
+      "train_hits": 5893,
+      "train_precision": 0.971830985915493,
+      "train_recall": 0.5725282415275418
     },
     {
       "calibration_status": "selected",
@@ -100,6 +133,22 @@
     },
     {
       "calibration_status": "selected",
+      "configuration": "cosine_only",
+      "cosine_threshold": 0.97,
+      "nli_threshold": null,
+      "precision_target": 0.98,
+      "test_false_positives": 31,
+      "test_hits": 1215,
+      "test_precision": 0.974485596707819,
+      "test_recall": 0.38441558441558443,
+      "test_same_intent_hits": 1184,
+      "train_false_positives": 66,
+      "train_hits": 3625,
+      "train_precision": 0.9817931034482759,
+      "train_recall": 0.3557932620213936
+    },
+    {
+      "calibration_status": "selected",
       "configuration": "cosine_stage0",
       "cosine_threshold": 0.97,
       "nli_threshold": null,
@@ -131,6 +180,7 @@
       "train_recall": 0.2873138058582425
     }
   ],
+  "model_inference_performed": false,
   "nli_cache": {
     "cache_path": "banking77_nli_pair_scores.jsonl",
     "test_computed": 0,
@@ -251,7 +301,7 @@
     0.97,
     0.98
   ],
-  "run_date_utc": "2026-11-07T10:44:30.489730+00:00",
+  "run_date_utc": "2026-11-09T13:00:34.554540+00:00",
   "test_count": 3080,
   "test_evaluation_split": "test",
   "test_split_used_for_threshold_choice": false,
