@@ -1,0 +1,185 @@
+[1mdiff --git a/aegis/api/app.py b/aegis/api/app.py[m
+[1mindex 96bd184..d7f1071 100644[m
+[1m--- a/aegis/api/app.py[m
+[1m+++ b/aegis/api/app.py[m
+[36m@@ -1,10 +1,35 @@[m
+[31m-"""FastAPI application and Phase 0 endpoints."""[m
+[32m+[m[32m"""FastAPI application and API endpoints."""[m
+ [m
+[31m-from fastapi import FastAPI, HTTPException, status[m
+[32m+[m[32mfrom collections.abc import AsyncIterator[m
+[32m+[m[32mfrom contextlib import asynccontextmanager[m
+[32m+[m[32mfrom typing import cast[m
+ [m
+[31m-from aegis.api.models import ChatCompletionRequest[m
+[32m+[m[32mfrom fastapi import FastAPI, HTTPException, Request, status[m
+ [m
+[31m-app = FastAPI(title="Aegis Gateway", version="0.1.0")[m
+[32m+[m[32mfrom aegis.api.models import ChatCompletionRequest, ChatCompletionResponse[m
+[32m+[m[32mfrom aegis.providers.groq import ([m
+[32m+[m[32m    GroqConfigurationError,[m
+[32m+[m[32m    GroqConnectionError,[m
+[32m+[m[32m    GroqHTTPError,[m
+[32m+[m[32m    GroqProvider,[m
+[32m+[m[32m    GroqResponseError,[m
+[32m+[m[32m    GroqTimeoutError,[m
+[32m+[m[32m    GroqUnsupportedRequestError,[m
+[32m+[m[32m)[m
+[32m+[m
+[32m+[m
+[32m+[m[32m@asynccontextmanager[m
+[32m+[m[32masync def lifespan(application: FastAPI) -> AsyncIterator[None]:[m
+[32m+[m[32m    """Create and close the shared provider for this application instance."""[m
+[32m+[m[32m    provider = GroqProvider()[m
+[32m+[m[32m    application.state.groq_provider = provider[m
+[32m+[m[32m    try:[m
+[32m+[m[32m        yield[m
+[32m+[m[32m    finally:[m
+[32m+[m[32m        await provider.aclose()[m
+[32m+[m
+[32m+[m
+[32m+[m[32mapp = FastAPI(title="Aegis Gateway", version="0.1.0", lifespan=lifespan)[m
+ [m
+ [m
+ @app.get("/health")[m
+[36m@@ -15,12 +40,33 @@[m [masync def health() -> dict[str, str]:[m
+ [m
+ @app.post([m
+     "/v1/chat/completions",[m
+[31m-    status_code=status.HTTP_501_NOT_IMPLEMENTED,[m
+[31m-    response_model=None,[m
+[32m+[m[32m    response_model=ChatCompletionResponse,[m
+ )[m
+[31m-async def create_chat_completion(request: ChatCompletionRequest) -> None:[m
+[31m-    """Reserve the OpenAI-compatible route for a later implementation phase."""[m
+[31m-    raise HTTPException([m
+[31m-        status_code=status.HTTP_501_NOT_IMPLEMENTED,[m
+[31m-        detail="Chat completions are not implemented yet.",[m
+[31m-    )[m
+[32m+[m[32masync def create_chat_completion([m
+[32m+[m[32m    http_request: Request,[m
+[32m+[m[32m    request: ChatCompletionRequest,[m
+[32m+[m[32m) -> ChatCompletionResponse:[m
+[32m+[m[32m    """Forward one non-streaming chat completion request to Groq."""[m
+[32m+[m[32m    try:[m
+[32m+[m[32m        provider = cast(GroqProvider, http_request.app.state.groq_provider)[m
+[32m+[m[32m        return await provider.complete(request)[m
+[32m+[m[32m    except GroqUnsupportedRequestError:[m
+[32m+[m[32m        raise HTTPException([m
+[32m+[m[32m            status_code=status.HTTP_400_BAD_REQUEST,[m
+[32m+[m[32m            detail="The chat completion request is not supported.",[m
+[32m+[m[32m        ) from None[m
+[32m+[m[32m    except GroqConfigurationError:[m
+[32m+[m[32m        raise HTTPException([m
+[32m+[m[32m            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,[m
+[32m+[m[32m            detail="The chat completion provider is not configured.",[m
+[32m+[m[32m        ) from None[m
+[32m+[m[32m    except GroqTimeoutError:[m
+[32m+[m[32m        raise HTTPException([m
+[32m+[m[32m            status_code=status.HTTP_504_GATEWAY_TIMEOUT,[m
+[32m+[m[32m            detail="The chat completion provider timed out.",[m
+[32m+[m[32m        ) from None[m
+[32m+[m[32m    except (GroqConnectionError, GroqHTTPError, GroqResponseError):[m
+[32m+[m[32m        raise HTTPException([m
+[32m+[m[32m            status_code=status.HTTP_502_BAD_GATEWAY,[m
+[32m+[m[32m            detail="The chat completion provider failed.",[m
+[32m+[m[32m        ) from None[m
+[1mdiff --git a/tests/test_app.py b/tests/test_app.py[m
+[1mindex d00b5e1..80f4d90 100644[m
+[1m--- a/tests/test_app.py[m
+[1m+++ b/tests/test_app.py[m
+[36m@@ -1,21 +1,73 @@[m
+[31m-"""Tests for the Phase 0 API and request/response models."""[m
+[32m+[m[32m"""Tests for the FastAPI application and request/response models."""[m
+ [m
+ from collections.abc import AsyncIterator[m
+[32m+[m[32mfrom typing import cast[m
+ [m
+[32m+[m[32mimport httpx[m
+ import pytest[m
+ from httpx import ASGITransport, AsyncClient[m
+ [m
+[31m-from aegis.api.app import app[m
+[32m+[m[32mimport aegis.api.app as api_module[m
+ from aegis.api.models import ([m
+     ChatCompletionRequest,[m
+     ChatCompletionResponse,[m
+ )[m
+[32m+[m[32mfrom aegis.providers.groq import ([m
+[32m+[m[32m    GroqConfigurationError,[m
+[32m+[m[32m    GroqConnectionError,[m
+[32m+[m[32m    GroqHTTPError,[m
+[32m+[m[32m    GroqResponseError,[m
+[32m+[m[32m    GroqTimeoutError,[m
+[32m+[m[32m    GroqUnsupportedRequestError,[m
+[32m+[m[32m)[m
+[32m+[m
+[32m+[m[32mREQUEST_BODY = {[m
+[32m+[m[32m    "model": "llama-test",[m
+[32m+[m[32m    "messages": [{"role": "user", "content": "Hello"}],[m
+[32m+[m[32m}[m
+[32m+[m[32mRESPONSE_BODY = {[m
+[32m+[m[32m    "id": "chatcmpl-test",[m
+[32m+[m[32m    "created": 1,[m
+[32m+[m[32m    "model": "llama-test",[m
+[32m+[m[32m    "choices": [[m
+[32m+[m[32m        {[m
+[32m+[m[32m            "index": 0,[m
+[32m+[m[32m            "message": {"role": "assistant", "content": "Hi"},[m
+[32m+[m[32m            "finish_reason": "stop",[m
+[32m+[m[32m        }[m
+[32m+[m[32m    ],[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass MockProvider:[m
+[32m+[m[32m    def __init__([m
+[32m+[m[32m        self,[m
+[32m+[m[32m        *,[m
+[32m+[m[32m        response: ChatCompletionResponse | None = None,[m
+[32m+[m[32m        error: Exception | None = None,[m
+[32m+[m[32m    ) -> None:[m
+[32m+[m[32m        self.response = response or ChatCompletionResponse.model_validate(RESPONSE_BODY)[m
+[32m+[m[32m        self.error = error[m
+[32m+[m[32m        self.received_request: ChatCompletionRequest | None = None[m
+[32m+[m[32m        self.closed = False[m
+[32m+[m
+[32m+[m[32m    async def complete([m
+[32m+[m[32m        self,[m
+[32m+[m[32m        request: ChatCompletionRequest,[m
+[32m+[m[32m    ) -> ChatCompletionResponse:[m
+[32m+[m[32m        self.received_request = request[m
+[32m+[m[32m        if self.error is not None:[m
+[32m+[m[32m            raise self.error[m
+[32m+[m[32m        return self.response[m
+[32m+[m
+[32m+[m[32m    async def aclose(self) -> None:[m
+[32m+[m[32m        self.closed = True[m
+ [m
+ [m
+ @pytest.fixture[m
+ async def client() -> AsyncIterator[AsyncClient]:[m
+     async with AsyncClient([m
+[31m-        transport=ASGITransport(app=app),[m
+[32m+[m[32m        transport=ASGITransport(app=api_module.app),[m
+         base_url="http://test",[m
+     ) as test_client:[m
+         yield test_client[m
+[36m@@ -28,19 +80,107 @@[m [masync def test_health_returns_ok(client: AsyncClient) -> None:[m
+     assert response.json() == {"status": "ok"}[m
+ [m
+ [m
+[31m-async def test_chat_completions_is_not_implemented(client: AsyncClient) -> None:[m
+[31m-    response = await client.post([m
+[32m+[m[32m@pytest.fixture[m
+[32m+[m[32masync def provider_client([m
+[32m+[m[32m    monkeypatch: pytest.MonkeyPatch,[m
+[32m+[m[32m) -> AsyncIterator[httpx.AsyncClient]:[m
+[32m+[m[32m    provider = MockProvider()[m
+[32m+[m[32m    monkeypatch.setattr(api_module, "GroqProvider", lambda: provider)[m
+[32m+[m[32m    async with api_module.app.router.lifespan_context(api_module.app):[m
+[32m+[m[32m        async with httpx.AsyncClient([m
+[32m+[m[32m            transport=httpx.ASGITransport(app=api_module.app),[m
+[32m+[m[32m            base_url="http://test",[m
+[32m+[m[32m        ) as test_client:[m
+[32m+[m[32m            yield test_client
