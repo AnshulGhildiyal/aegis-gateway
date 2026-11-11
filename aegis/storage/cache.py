@@ -9,8 +9,20 @@ from dataclasses import dataclass
 from typing import Protocol
 from uuid import uuid4
 
+from huggingface_hub.errors import HfHubHTTPError
 from pydantic import BaseModel
 from qdrant_client import QdrantClient, models
+from qdrant_client.http.exceptions import ApiException
+
+_EMBEDDING_OPERATION_ERRORS = (
+    OSError,
+    HfHubHTTPError,
+)
+_QDRANT_OPERATION_ERRORS = (OSError, RuntimeError, ApiException)
+
+
+class CacheOperationalError(Exception):
+    """Raised when an embedding or Qdrant backend operation fails."""
 
 
 class AsyncEmbedder(Protocol):
@@ -105,14 +117,23 @@ class SemanticCache:
         self._lock = asyncio.Lock()
         self._client = QdrantClient(path=path)
         self._collection_name = collection_name
-        if not self._client.collection_exists(collection_name):
-            self._client.create_collection(
-                collection_name=collection_name,
-                vectors_config=models.VectorParams(
-                    size=vector_size,
-                    distance=models.Distance.COSINE,
-                ),
-            )
+        try:
+            if not self._client.collection_exists(collection_name):
+                self._client.create_collection(
+                    collection_name=collection_name,
+                    vectors_config=models.VectorParams(
+                        size=vector_size,
+                        distance=models.Distance.COSINE,
+                    ),
+                )
+        except BaseException as initialization_error:
+            try:
+                self._client.close()
+            except BaseException as cleanup_error:
+                initialization_error.add_note(
+                    f"Qdrant cleanup also failed: {cleanup_error!r}"
+                )
+            raise
         self._vector_size = vector_size
 
     async def put(
@@ -123,7 +144,10 @@ class SemanticCache:
         key: CacheKey,
     ) -> None:
         """Embed and store a completion, applying TTL cleanup and LRU eviction."""
-        vectors = await self._embedder.embed([user_content])
+        try:
+            vectors = await self._embedder.embed([user_content])
+        except _EMBEDDING_OPERATION_ERRORS as error:
+            raise CacheOperationalError("Cache embedding operation failed.") from error
         vector = self._validate_vectors(vectors, expected_count=1)[0]
         now = self._clock()
         payload = {
@@ -135,7 +159,12 @@ class SemanticCache:
             "last_accessed_at": now,
         }
         async with self._lock:
-            await asyncio.to_thread(self._put_sync, vector, payload, now)
+            try:
+                await asyncio.to_thread(self._put_sync, vector, payload, now)
+            except _QDRANT_OPERATION_ERRORS as error:
+                raise CacheOperationalError(
+                    "Cache storage operation failed."
+                ) from error
 
     async def search(
         self,
@@ -147,17 +176,25 @@ class SemanticCache:
         """Return unexpired, exact-key candidates ordered by cosine similarity."""
         if limit < 1:
             raise ValueError("limit must be at least 1")
-        vectors = await self._embedder.embed([user_content])
+        try:
+            vectors = await self._embedder.embed([user_content])
+        except _EMBEDDING_OPERATION_ERRORS as error:
+            raise CacheOperationalError("Cache embedding operation failed.") from error
         vector = self._validate_vectors(vectors, expected_count=1)[0]
         now = self._clock()
         async with self._lock:
-            return await asyncio.to_thread(
-                self._search_sync,
-                vector,
-                key,
-                limit,
-                now,
-            )
+            try:
+                return await asyncio.to_thread(
+                    self._search_sync,
+                    vector,
+                    key,
+                    limit,
+                    now,
+                )
+            except _QDRANT_OPERATION_ERRORS as error:
+                raise CacheOperationalError(
+                    "Cache search operation failed."
+                ) from error
 
     def close(self) -> None:
         """Close the embedded Qdrant client."""

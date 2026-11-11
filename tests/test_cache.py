@@ -4,7 +4,8 @@ from collections.abc import Iterable
 
 import pytest
 
-from aegis.storage.cache import CacheKey, SemanticCache
+import aegis.storage.cache as cache_module
+from aegis.storage.cache import CacheKey, CacheOperationalError, SemanticCache
 
 
 class FakeEmbedder:
@@ -19,6 +20,16 @@ class FakeEmbedder:
             "query": [1.0, 0.0, 0.0],
         }
         return vectors.get(text, [0.0, 0.0, 1.0])
+
+
+class FailingEmbedder:
+    async def embed(self, texts: list[str]) -> list[list[float]]:
+        raise OSError("embedding backend unavailable")
+
+
+class BrokenEmbedder:
+    async def embed(self, texts: list[str]) -> list[list[float]]:
+        raise RuntimeError("unexpected embedding error")
 
 
 def cache_key(
@@ -165,6 +176,96 @@ async def test_wrong_embedding_dimension_is_rejected() -> None:
         instance.close()
 
 
+async def test_embedding_backend_failure_uses_cache_operational_error() -> None:
+    instance = SemanticCache(FailingEmbedder(), vector_size=3)
+    try:
+        with pytest.raises(CacheOperationalError) as raised:
+            await instance.search(user_content="query", key=cache_key())
+    finally:
+        instance.close()
+
+    assert isinstance(raised.value.__cause__, OSError)
+
+
+async def test_unclassified_embedding_error_is_not_swallowed() -> None:
+    instance = SemanticCache(BrokenEmbedder(), vector_size=3)
+    try:
+        with pytest.raises(RuntimeError, match="unexpected embedding error"):
+            await instance.search(user_content="query", key=cache_key())
+    finally:
+        instance.close()
+
+
+async def test_qdrant_runtime_failure_uses_cache_operational_error(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class FailingQdrantClient:
+        def __init__(self) -> None:
+            self.closed = False
+
+        def collection_exists(self, collection_name: str) -> bool:
+            return True
+
+        def upsert(self, **kwargs: object) -> None:
+            raise RuntimeError("qdrant unavailable")
+
+        def close(self) -> None:
+            self.closed = True
+
+    client = FailingQdrantClient()
+    monkeypatch.setattr(cache_module, "QdrantClient", lambda **kwargs: client)
+    instance = SemanticCache(FakeEmbedder(), vector_size=3)
+    try:
+        with pytest.raises(CacheOperationalError) as raised:
+            await instance.put(
+                user_content="first",
+                response={"answer": "stored"},
+                key=cache_key(),
+            )
+    finally:
+        instance.close()
+
+    assert isinstance(raised.value.__cause__, RuntimeError)
+    assert client.closed
+
+
 def test_invalid_cache_configuration_is_rejected() -> None:
     with pytest.raises(ValueError, match="max_entries"):
         SemanticCache(FakeEmbedder(), max_entries=0)
+
+
+def test_qdrant_client_closes_when_collection_initialization_fails(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    initialization_error = RuntimeError("collection creation failed")
+
+    class FailingQdrantClient:
+        def __init__(self) -> None:
+            self.closed = False
+
+        def collection_exists(self, collection_name: str) -> bool:
+            return False
+
+        def create_collection(
+            self,
+            *,
+            collection_name: str,
+            vectors_config: object,
+        ) -> None:
+            raise initialization_error
+
+        def close(self) -> None:
+            self.closed = True
+
+    client = FailingQdrantClient()
+
+    def create_qdrant_client(*, path: str) -> FailingQdrantClient:
+        return client
+
+    monkeypatch.setattr(cache_module, "QdrantClient", create_qdrant_client)
+
+    with pytest.raises(RuntimeError) as raised:
+        SemanticCache(FakeEmbedder(), vector_size=3)
+
+    assert raised.value is initialization_error
+    assert client.closed
