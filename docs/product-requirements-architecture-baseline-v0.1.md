@@ -62,7 +62,7 @@ planning premise that still needs confirmation.
 | Deployment | **Locked** | Self-hosted first, cloud-ready architecture, with future managed-cloud support. |
 | API | **Locked** | Support an OpenAI-compatible subset, initially `POST /v1/chat/completions`. Streaming is deferred. |
 | Identity | **Locked** | Instance → Tenant/Organization → Projects/Workspaces → API keys. Initially authenticate with API keys; resolve tenant identity from trusted server-side credentials; enforce strict isolation; provider credentials are administrator-managed. |
-| Inference | **Locked** | Deterministic execution → exact cache → quality-gated semantic cache → adaptive model routing/escalation → output validation. Optimize total cost per successful task. |
+| Inference | **Locked** | Deterministic execution of gateway code/rules (not a guarantee of deterministic provider-generated output) → exact cache → quality-gated semantic cache → adaptive model routing/escalation → output validation. Optimize total cost per successful task. |
 | Data | **Locked** | Metadata-only operational logging. Cache-eligible requests are cacheable by default, subject to tenant/project controls and a per-request opt-out evaluated before any cache interaction. Begin with persistent single-node storage. |
 | Quality and reliability | **Locked** | Balanced product profile and strict quality policy. The 20% inference-cost reduction is an evaluation target; 99.9% availability is a design objective. Neither is an achieved result or guarantee. |
 | Retention | **Proposed defaults** | Cache: 1 hour; metrics: 30 days; audit records: 90 days. Validate against deployment, compliance, and operator needs before release. |
@@ -133,7 +133,10 @@ planning premise that still needs confirmation.
   explicit cache policy. Temperature may be one eligibility constraint but
   does not establish determinism by itself. Multi-turn, unsupported, ambiguous,
   side-effecting, or otherwise ineligible requests bypass cache lookup and
-  storage.
+  storage. Exclude dynamic and time-sensitive requests from both exact and
+  semantic cache reuse unless an explicit freshness policy establishes that
+  reuse is safe. Semantic similarity and a non-expired TTL do not independently
+  establish freshness.
 - **CACHE-02:** Treat cache eligibility as enabled by default for eligible
   requests, subject to tenant/project policy. A per-request opt-out must be
   honored before embedding, retrieval, cache access, single-flight locking, or
@@ -207,8 +210,10 @@ planning premise that still needs confirmation.
   as long as needed for bounded stale eligibility, then delete them. Include
   response metadata identifying degraded service and the response's age/source
   without exposing prompts, completions, or secrets; define the exact
-  age/source representation in the API contract. The numeric maximum stale age
-  and any default remain unresolved product decisions.
+  age/source representation in the API contract. The exact API response
+  schema/header representation is an unresolved API-contract decision. The
+  numeric maximum stale age and any default remain unresolved product
+  decisions.
 
 ## 5. Non-functional requirements and objectives
 
@@ -342,7 +347,8 @@ process; boundaries should remain testable and replaceable.
 1. Authenticate the API key and resolve trusted tenant/project scope.
 2. Validate the supported request subset and resolve opt-out and eligibility
    before any cache-related work.
-3. Execute deterministic request policy and attempt strict exact lookup.
+3. Apply deterministic gateway rules and attempt strict exact lookup; this
+   does not guarantee deterministic provider-generated output.
 4. On an eligible exact miss, run filtered semantic retrieval and the required
    quality gates.
 5. On a miss or bypass, call the configured provider through reliability
